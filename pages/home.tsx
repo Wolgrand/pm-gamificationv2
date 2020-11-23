@@ -19,7 +19,7 @@ export default function Home() {
         </div>
         <div className="flex flex-col sm:pl-20 pt-4 px-5 mt-3">
           <h2 className="text-gray-400 font-medium sm:text-2xl text-base border-solid border-b border-gray-600">Top 3 Departamentos</h2>
-          <div className="flex-row flex mt-3 overflow-x-scroll overflow-y-hidden">
+          <div className="flex-row flex mt-3 h-full overflow-x-auto">
             <TopCard title="Departamento A" color="#f1c40f"/>
             <TopCard title="Departamento B" color="#95a5a6"/>
             <TopCard title="Departamento C" color="#e67e22"/>
