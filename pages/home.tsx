@@ -35,7 +35,7 @@ export default function Home() {
         </div>
         <div className="flex flex-col sm:pl-20 pt-4 px-5 mt-3">
           <h2 className="text-gray-400 font-medium sm:text-2xl text-base border-solid border-b border-gray-600">Ranking Gerentes de Projetos</h2>
-          <div className="flex-col flex mt-3 overflow-y-">
+          <div className="flex-col flex mt-3 overflow-y-auto">
             <RankCard title="Gerente de Projeto A" position="1º"/>
             <RankCard title="Gerente de Projeto B" position="2º"/>
             <RankCard title="Gerente de Projeto C" position="3º"/>
