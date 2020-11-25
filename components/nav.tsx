@@ -1,5 +1,4 @@
-import { NextComponentType } from 'next';
-import Image from 'next/image';
+
 import { useState } from 'react';
 import Logo from './logo';
 
@@ -25,7 +24,7 @@ const Nav = ({backButton}:Props) => {
 
       {backButton ?
         <div className="flex flex-row justify-around align-middle items-center content-center">
-          <a href="/home">
+          <a href="/">
             <svg className=" h-6 mr-3 flex " fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
           </a>
 

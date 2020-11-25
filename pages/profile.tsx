@@ -1,5 +1,5 @@
 
-import { useCallback, ChangeEvent, useState } from 'react';
+import {  useState } from 'react';
 
 import Nav from '../components/nav'
 
@@ -9,7 +9,7 @@ export default function Profile() {
 
   const [image, setImage] = useState({ preview: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', raw: '' })
 
-  const handleAvatarChange = (e) => {
+  const handleAvatarChange = (e: any) => {
     setImage({
      preview: URL.createObjectURL(e.target.files[0]),
      raw: e.target.files[0]
