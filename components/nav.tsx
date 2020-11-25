@@ -22,7 +22,7 @@ const Nav: NextComponentType = () => {
 
       <div className={"flex items-center flex-shrink-0 text-white mr-6 align-middle "}>
         <a className="text-white no-underline hover:text-white hover:no-underline" href="#">
-          <Logo />
+          <Logo width={28} />
         </a>
       </div>
       <div className="flex justify-end items-center">
