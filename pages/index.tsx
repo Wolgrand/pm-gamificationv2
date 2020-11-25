@@ -7,7 +7,7 @@ export default function Login() {
   return (
     <div className="bg-gray-700 h-screen w-screen w- flex items-stretch">
       <div className="flex flex-col mx-auto my-0 items-center place-content-center justify-center w-full">
-        <Logo width={60}/>
+        <Logo width={40}/>
         <form className="" action="">
           <h1 className="text-yellow-500 font-semibold my-12 text-center text-4xl">Faça seu login </h1>
           <div className="max-w-md mx-auto">

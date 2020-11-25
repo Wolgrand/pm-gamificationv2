@@ -24,7 +24,7 @@ const Nav = ({backButton}:Props) => {
 
       {backButton ?
         <div className="flex flex-row justify-around align-middle items-center content-center">
-          <a href="/">
+          <a href="/home">
             <svg className=" h-6 mr-3 flex " fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
           </a>
 
@@ -33,7 +33,7 @@ const Nav = ({backButton}:Props) => {
       :
       <div className={"flex items-center flex-shrink-0 text-white mr-6 align-middle "}>
       <a className="text-white no-underline hover:text-white hover:no-underline" href="/">
-        <Logo width={28} />
+        <Logo width={40} />
       </a>
     </div>
       }
