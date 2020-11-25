@@ -5,7 +5,7 @@ import Logo from '../components/logo';
 export default function Login() {
 
   return (
-    <div className="bg-gray-700 h-screen w-screen flex items-stretch">
+    <div className="bg-gray-700 h-screen w-screen w- flex items-stretch">
       <div className="flex flex-col mx-auto my-0 items-center place-content-center justify-center w-full">
         <Logo width={60}/>
         <form className="" action="">
