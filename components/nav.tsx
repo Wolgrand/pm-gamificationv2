@@ -31,7 +31,7 @@ const Nav = ({backButton}:Props) => {
           <p className="text-white mx-0 text-xl flex my-auto ">Profile</p>
         </div>
       :
-      <div className={"flex items-center flex-shrink-0 text-white mr-6 align-middle "}>
+      <div className={"flex items-center flex-shrink-0 text-white mr-6 align-middle h-auto w-20 "}>
       <a className="text-white no-underline hover:text-white hover:no-underline" href="/">
         <Logo />
       </a>
