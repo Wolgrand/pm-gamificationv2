@@ -32,7 +32,7 @@ const Nav = ({backButton}:Props) => {
         </div>
       :
       <div className={"flex items-center flex-shrink-0 text-white mr-6 align-middle h-auto w-20 "}>
-      <a className="text-white no-underline hover:text-white hover:no-underline" href="/">
+      <a className="text-white flex no-underline hover:text-white hover:no-underline" href="/">
         <Logo />
       </a>
     </div>
