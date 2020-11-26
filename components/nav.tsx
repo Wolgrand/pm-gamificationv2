@@ -20,7 +20,7 @@ const Nav = ({backButton}:Props) => {
 
 
   return (
-    <nav className=" flex flex-row  justify-between flex-nowrap bg-gray-800 px-6 py-3 fixed w-full top-0 ">
+    <nav className=" flex flex-row  justify-between flex-nowrap bg-gray-800 px-6 py-3  w-full top-0 ">
 
       {backButton ?
         <div className="flex flex-row justify-around align-middle items-center content-center">
@@ -33,7 +33,7 @@ const Nav = ({backButton}:Props) => {
       :
       <div className={"flex items-center flex-shrink-0 text-white mr-6 align-middle "}>
       <a className="text-white no-underline hover:text-white hover:no-underline" href="/">
-        <Logo width={40} />
+        <Logo width={28} />
       </a>
     </div>
       }

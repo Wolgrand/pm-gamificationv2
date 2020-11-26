@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className="h-screen w-screen flex flex-col">
       <Nav backButton={false} />
-      <main className="bg-gray-700 h-max w-auto flex-col flex pt-20 overflow-y-auto">
+      <main className="bg-gray-700 h-max w-auto flex-col flex  overflow-y-auto">
         <div className="pl-5 sm:pl-20 pt-4">
           <h1 className="text-gray-200 font-medium sm:text-4xl text-2xl">Ranking Geral</h1>
           <h3 className="text-yellow-500 mt-1 font-medium">Hoje | Dia 22 de novembro | domingo </h3>
