@@ -12,25 +12,25 @@ export default function Home() {
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700">
       <Nav backButton={false} />
-      <main className="bg-gray-700 h-max w-auto flex-col flex  overflow-y-auto my-0 md:px-60">
+      <main className="bg-gray-700 h-max w-auto flex-col flex  overflow-y-auto my-0 md:px-3.5">
         <div className="pl-5 md:pl-20 pt-4">
           <h1 className="text-gray-200 font-medium md:text-4xl text-2xl">Ranking Geral</h1>
           <h3 className="text-yellow-500 mt-1 font-medium">Hoje | Dia 22 de novembro | domingo </h3>
         </div>
-        <div className="flex flex-col md:pl-20 pt-4 px-5 mt-3 h-80 text-">
+        <div className="flex flex-col md:pl-20 pt-4 px-5 mt-3 h-96 text-">
           <h2 className="text-gray-400 font-medium md:text-2xl text-base border-solid border-b border-gray-600">Top 3 Departamentos</h2>
           <div className="flex-row flex mt-3 overflow-x-auto h-auto flex-nowrap min-h-0 ">
-            <TopCard title="DCMD" color="#f1c40f" />
-            <TopCard title="GAT" color="#95a5a6" />
-            <TopCard title="DECP" color="#e67e22" />
+            <TopCard size={28} title="DCMD" color="#f1c40f" />
+            <TopCard size={28} title="GAT" color="#95a5a6" />
+            <TopCard size={28} title="DECP" color="#e67e22" />
           </div>
         </div>
-        <div className="flex flex-col md:pl-20 pt-4 px-5 mt-3 h-80">
+        <div className="flex flex-col md:pl-20 pt-4 px-5 mt-3 h-96">
           <h2 className="text-gray-400 font-medium md:text-2xl text-base border-solid border-b border-gray-600">Top 3 Gerentes de Projetos</h2>
           <div className="flex-row flex mt-3 overflow-x-auto">
-            <TopCard title="Gerente A" color="#f1c40f"  />
-            <TopCard title="Gerente B" color="#95a5a6"  />
-            <TopCard title="Gerente C" color="#e67e22"  />
+            <TopCard size={28} title="Gerente A" color="#f1c40f"  />
+            <TopCard size={28} title="Gerente B" color="#95a5a6"  />
+            <TopCard size={28} title="Gerente C" color="#e67e22"  />
           </div>
         </div>
         <div className="flex flex-col lg:pl-20 pt-4 px-5 mt-3 mb-7">

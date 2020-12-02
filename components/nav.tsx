@@ -53,7 +53,7 @@ const Nav = ({backButton}:Props) => {
             <svg className={"absolute top-16 sm:mt-5 mt-1 right-0" + (showProfileOptions ? " visible flex" : " hidden") } height='12' width='200' stroke="none" fill='#202A38'>
               <path d='M150 0 L75 75 L225 75 Z' />
             </svg>
-            <div className={"absolute sm:mt-4 mt-0 right-0  sm:right-0.5 top-20 w-full sm:w-2/12 sm:mr-3 sm:rounded-md  bg-gray-800 bg-opacity-95   transition-all visible flex-col  " + (showProfileOptions ? " visible flex" : " hidden")}>
+            <div className={"absolute sm:mt-4 mt-0 right-0 z-50 sm:right-0.5 top-20 w-full sm:w-2/12 sm:mr-3 sm:rounded-md  bg-gray-800 bg-opacity-95   transition-all visible flex-col  " + (showProfileOptions ? " visible flex" : " hidden")}>
               <a className="text-gray-500 flex p-3 hover:bg-gray-900 rounded-md" href="/profile"><svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Meu perfil</a>
               <a className="text-gray-500 flex p-3 hover:bg-gray-900 rounded-md" href="/"><svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>Sair</a>
             </div>
