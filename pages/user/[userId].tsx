@@ -40,7 +40,7 @@ const User = () => {
           <p className="mt-4 text-xl text-center font-semibold text-white">John Doe</p>
           <p className="mt-2 text-3xl text-center font-semibold text-gray-400">2000 pts</p>
         </section>
-        <section className="relative px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col mb-6 h-auto">
+        <section className="fle px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col mb-6 h-full">
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Conquistas</p>
           <div className="grid grid-cols-4 gap-2 h-auto">
             <div className="bg-gray-900 w-full place-items-center place-content-center rounded-lg h-14 mx-auto my-0 justify-center content-center align-middle flex" >
