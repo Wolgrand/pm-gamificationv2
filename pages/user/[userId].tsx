@@ -32,7 +32,7 @@ const User = () => {
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
       <Nav backButton={true} backTitle="Usuário" />
-      <aside className="bg-gray-800 px-4 mt-6 mx-6 rounded-md flex flex-col">
+      <aside className="bg-gray-800 px-3 mt-6 mx-6 rounded-md flex flex-col">
         <section className="p-4 mx-auto my-0 pt-6 mb-4">
           <div className="flex mx-auto my-0 border-gray-200 rounded-full ">
             <img  className={" inline-block h-32 w-32 rounded-full ring-2 ring-white border-gray-200 p-1"} src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="avatar"/>
@@ -40,7 +40,7 @@ const User = () => {
           <p className="mt-4 text-xl text-center font-semibold text-white">John Doe</p>
           <p className="mt-2 text-3xl text-center font-semibold text-gray-400">2000 pts</p>
         </section>
-        <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col h-full mb-6">
+        <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col min-h-screen mb-6">
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Conquistas</p>
           <div className="grid grid-cols-4 gap-2 ">
             <div className="bg-gray-900 w-full place-items-center place-content-center rounded-lg h-14 mx-auto my-0 justify-center content-center align-middle flex" >
@@ -67,7 +67,7 @@ const User = () => {
             <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
           </div>
         </section>
-        <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col h-full mb-6">
+        <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col min-h-screen mb-6">
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Recompensas</p>
           <div className=" flex flex-col bg-gray-900 rounded-t-lg">
             <div className="flex flex-col bg-gray-900 p-2  mb-2 rounded-t-lg">
@@ -103,7 +103,7 @@ const User = () => {
       </aside>
       <main className="bg-gray-800 px-4 mt-6 mx-6 rounded-md flex flex-col mb-6">
         <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Histórico</p>
-        <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col h-full mb-6">
+        <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col min-h-screen mb-6">
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Meses</p>
           <div className="grid grid-cols-4 gap-2 ">
             <div onClick={() => handleMonthSelection(0)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Janeiro" ? "bg-yellow-600" : "bg-gray-900")} >Jan</div>
