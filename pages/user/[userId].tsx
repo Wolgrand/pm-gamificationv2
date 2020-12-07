@@ -32,7 +32,7 @@ const User = () => {
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
       <Nav backButton={true} backTitle="Usuário" />
-      <aside className="bg-gray-800 px-3 mt-6 mx-6 rounded-md flex flex-col ">
+      <aside className="bg-gray-800 px-3 mt-6 mx-6 rounded-md flex flex-col h-auto ">
         <section className="p-4 mx-auto my-0 pt-6 mb-4 flex-grow min-h-0">
           <div className="flex mx-auto my-0 border-gray-200 rounded-full flex-grow min-h-0 ">
             <img  className={" inline-block h-32 w-32 rounded-full ring-2 ring-white border-gray-200 p-1"} src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="avatar"/>
@@ -101,11 +101,11 @@ const User = () => {
           </div>
         </section>
       </aside>
-      <main className="bg-gray-800 px-4 mt-6 mx-6 rounded-md flex flex-col mb-6">
+      <main className="bg-gray-800 px-4 mt-6 mx-6 rounded-md flex flex-col mb-6 h-auto">
         <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Histórico</p>
         <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col flex-grow min-h-0 mb-6">
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Meses</p>
-          <div className="grid grid-cols-4 gap-2 flex-grow min-h-0">
+          <div className="grid grid-cols-4 gap-2">
             <div onClick={() => handleMonthSelection(0)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Janeiro" ? "bg-yellow-600" : "bg-gray-900")} >Jan</div>
             <div onClick={() => handleMonthSelection(1)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Fevereiro" ? "bg-yellow-600" : "bg-gray-900")} >Fev</div>
             <div onClick={() => handleMonthSelection(2)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Março" ? "bg-yellow-600" : "bg-gray-900")} >Mar</div>
