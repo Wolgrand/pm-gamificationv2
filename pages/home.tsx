@@ -53,7 +53,7 @@ export default function Home() {
           </a></
           div>
         </div>
-        <FloatingButton />
+        <FloatingButton usage='config'/>
       </main>
 
     </div>

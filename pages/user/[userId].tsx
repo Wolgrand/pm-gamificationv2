@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import Nav from '../../components/nav'
 import {Line} from 'rc-progress'
 import { useState } from 'react'
+import FloatingButton from '../../components/floatingButton'
 
 const User = () => {
   const router = useRouter()
@@ -153,15 +154,12 @@ const User = () => {
               <p className="text-gray-400 mt-2">Interagir no MS Teams- 5pts</p>
               <p className="text-gray-400 mt-2">Entregar A com qualidade- 15pts</p>
             </details>
-            <details className="text-white">
-              <summary>09/12/2020</summary>
-              <p className="text-gray-400 mt-2">Entregar A no prazo- 15pts</p>
-              <p className="text-gray-400 mt-2">Interagir no MS Teams- 5pts</p>
-              <p className="text-gray-400 mt-2">Entregar A com qualidade- 15pts</p>
-            </details>
+
           </div>
         </section>
+        <FloatingButton usage='newActivity'/>
       </main>
+
     </div>
 
 
