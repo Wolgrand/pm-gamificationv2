@@ -67,7 +67,7 @@ const User = () => {
             <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
           </div>
         </section>
-        <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col h-auto mb-6">
+{/*         <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col h-auto mb-6">
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Recompensas</p>
           <div className=" flex flex-col bg-gray-900 rounded-t-lg h-auto">
             <div className="flex flex-col bg-gray-900 p-2  mb-2 rounded-t-lg h-auto">
@@ -99,7 +99,7 @@ const User = () => {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </aside>
       {/* <main className="bg-gray-800 px-4 mt-6 mx-6 rounded-md flex flex-col mb-6 h-auto">
         <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Histórico</p>
