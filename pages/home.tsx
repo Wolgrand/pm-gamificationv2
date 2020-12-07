@@ -1,5 +1,5 @@
 
-
+import Link from 'next/link'
 import FloatingButton from '../components/floatingButton';
 import Nav from '../components/nav'
 import RankCard from '../components/rankCard';
@@ -36,12 +36,22 @@ export default function Home() {
         <div className="flex flex-col lg:pl-20 pt-4 px-5 mt-3 mb-7">
           <h2 className="text-gray-400 font-medium lg:text-2xl text-base border-solid border-b border-gray-600">Ranking Gerentes de Projetos</h2>
           <div className="flex-col flex mt-3 my-auto mx-0 ">
-            <RankCard title="Gerente de Projeto A" position="1º" borderColor="#f1c40f" />
-            <RankCard title="Gerente de Projeto B" position="2º" borderColor="#95a5a6"/>
-            <RankCard title="Gerente de Projeto C" position="3º" borderColor="#e67e22"/>
-            <RankCard title="Gerente de Projeto D" position="4º"/>
-            <RankCard title="Gerente de Projeto E" position="5º"/>
-          </div>
+            <a href="/user/12345">
+              <RankCard title="Gerente de Projeto A" position="1º" borderColor="#f1c40f" />
+            </a>
+            <a href="/user/12346">
+              <RankCard title="Gerente de Projeto B" position="2º" borderColor="#95a5a6"/>
+            </a>
+            <a href="/user/12347">
+              <RankCard title="Gerente de Projeto C" position="3º" borderColor="#e67e22"/>
+            </a>
+            <a href="/user/12348">
+              <RankCard title="Gerente de Projeto D" position="4º"/>
+            </a>
+            <a href="/user/12349">
+              <RankCard title="Gerente de Projeto E" position="5º"/>
+          </a></
+          div>
         </div>
         <FloatingButton />
       </main>
