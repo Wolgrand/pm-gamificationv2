@@ -101,7 +101,7 @@ const User = () => {
           </div>
         </section>
       </aside>
-      {/* <main className="bg-gray-800 px-4 mt-6 mx-6 rounded-md flex flex-col mb-6 h-auto">
+      <main className="bg-gray-800 px-4 mt-6 mx-6 rounded-md flex flex-col mb-6 flex-shrink-0">
         <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Histórico</p>
         <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col h-auto mb-6">
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Meses</p>
@@ -161,7 +161,7 @@ const User = () => {
             </details>
           </div>
         </section>
-      </main> */}
+      </main>
     </div>
 
 
