@@ -34,16 +34,16 @@ const User = () => {
       <Nav backButton={true} backTitle="Usuário" />
       <aside className="bg-gray-800 px-3 mt-6 mx-6 rounded-md flex flex-col h-auto ">
         <section className="p-4 mx-auto my-0 pt-6 mb-4 flex-grow min-h-0">
-          <div className="flex mx-auto my-0 border-gray-200 rounded-full flex-grow min-h-0 ">
+          <div className="flex mx-auto my-0 border-gray-200 rounded-full ">
             <img  className={" inline-block h-32 w-32 rounded-full ring-2 ring-white border-gray-200 p-1"} src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="avatar"/>
           </div>
           <p className="mt-4 text-xl text-center font-semibold text-white">John Doe</p>
           <p className="mt-2 text-3xl text-center font-semibold text-gray-400">2000 pts</p>
         </section>
-        <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col mb-6 flex-grow min-h-0">
+        <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col mb-6">
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Conquistas</p>
-          <div className="grid grid-cols-4 gap-2 flex-grow min-h-0 ">
-            <div className="bg-gray-900 flex-grow min-h-0 w-full place-items-center place-content-center rounded-lg h-14 mx-auto my-0 justify-center content-center align-middle flex" >
+          <div className="grid grid-cols-4 gap-2 ">
+            <div className="bg-gray-900 w-full place-items-center place-content-center rounded-lg h-14 mx-auto my-0 justify-center content-center align-middle flex" >
               <img className="w-10 h-10 rounded-full " src="https://images.unsplash.com/photo-1517488948216-e473cee81e23?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MjN8fGljb258ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60" alt="imagem"/>
             </div>
             <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
@@ -69,7 +69,7 @@ const User = () => {
         </section>
         <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col flex-grow min-h-0 mb-6">
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Recompensas</p>
-          <div className=" flex flex-col bg-gray-900 rounded-t-lg flex-grow min-h-0">
+          <div className=" flex flex-col bg-gray-900 rounded-t-lg">
             <div className="flex flex-col bg-gray-900 p-2  mb-2 rounded-t-lg">
               <p className="text-white mb-2">Caixa de Chocolate - 1000 pts</p>
               <div className="flex-row flex items-center">
