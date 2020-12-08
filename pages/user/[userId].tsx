@@ -33,8 +33,8 @@ const User = () => {
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
       <Nav backButton={true} backTitle="Usuário" />
-      <div className="md:flex-row flex-col flex md:px-10">
-      <aside className="bg-gray-800 px-3 mt-6 m-6 rounded-md flex flex-col flex-shrink-0 md:w-80 md:mr-2 ">
+      <div className="md:flex-row flex-col flex md:px-10 mb-3">
+      <aside className="bg-gray-800 px-3 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 md:w-80 md:mr-2 ">
         <section className="p-4 mx-auto my-0 pt-6 mb-4  h-auto">
           <div className="flex mx-auto my-0 border-gray-200 rounded-full h-auto ">
             <img  className={" inline-block h-32 w-32 rounded-full ring-2 ring-white border-gray-200 p-1"} src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="avatar"/>
@@ -56,17 +56,8 @@ const User = () => {
             <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
             <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
             <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
-            <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
-            <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
-            <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
-            <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
-            <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
-            <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
-            <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
-            <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
-            <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
-            <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
-            <div className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
+
+
           </div>
         </section>
         <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col h-auto mb-6">
@@ -103,7 +94,7 @@ const User = () => {
           </div>
         </section>
       </aside>
-      <main className="bg-gray-800 px-4 mt-6 mx-6 rounded-md flex flex-col mb-6 flex-shrink-0 md:w-8/12">
+      <main className="bg-gray-800 px-4 mt-2 mx-6 rounded-md flex flex-col mb-6 flex-shrink-0 md:w-8/12 md:mt-6">
         <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Histórico</p>
         <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col h-auto mb-6">
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Meses</p>
