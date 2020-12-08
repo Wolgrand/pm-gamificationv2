@@ -18,12 +18,12 @@ const Nav = ({backButton, backTitle}:Props) => {
 
 
   const handleShowProfileOptions = () => {
-    setShowNotifications(!showNotifications)
+    setShowNotifications(false)
     setShowProfileOptions(!showProfileOptions)
   }
 
   const handleShowNotifications = () => {
-    setShowProfileOptions(!showProfileOptions)
+    setShowProfileOptions(false)
     setHasNotifications(false)
     setShowNotifications(!showNotifications)
   }
