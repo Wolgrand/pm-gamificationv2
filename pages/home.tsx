@@ -6,6 +6,7 @@ import RankCard from '../components/rankCard';
 import TopCard from '../components/topCard';
 
 
+
 export default function Home() {
 
 
