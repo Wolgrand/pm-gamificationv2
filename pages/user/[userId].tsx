@@ -98,19 +98,19 @@ const User = () => {
         <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Histórico</p>
         <section className="px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col h-auto mb-6">
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Meses</p>
-          <div className="grid grid-cols-4 gap-2 h-auto md:grid-cols-6">
-            <div onClick={() => handleMonthSelection(0)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Janeiro" ? "bg-yellow-600" : "bg-gray-900")} >Jan</div>
-            <div onClick={() => handleMonthSelection(1)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Fevereiro" ? "bg-yellow-600" : "bg-gray-900")} >Fev</div>
-            <div onClick={() => handleMonthSelection(2)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Março" ? "bg-yellow-600" : "bg-gray-900")} >Mar</div>
-            <div onClick={() => handleMonthSelection(3)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Abril" ? "bg-yellow-600" : "bg-gray-900")} >Abr</div>
-            <div onClick={() => handleMonthSelection(4)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Maio" ? "bg-yellow-600" : "bg-gray-900")} >Mai</div>
-            <div onClick={() => handleMonthSelection(5)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Junho" ? "bg-yellow-600" : "bg-gray-900")} >Jun</div>
-            <div onClick={() => handleMonthSelection(6)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Julho" ? "bg-yellow-600" : "bg-gray-900")} >Jul</div>
-            <div onClick={() => handleMonthSelection(7)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Agosto" ? "bg-yellow-600" : "bg-gray-900")} >Ago</div>
-            <div onClick={() => handleMonthSelection(8)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Setembro" ? "bg-yellow-600" : "bg-gray-900")} >Set</div>
-            <div onClick={() => handleMonthSelection(9)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Outubro" ? "bg-yellow-600" : "bg-gray-900")} >Out</div>
-            <div onClick={() => handleMonthSelection(10)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Novembro" ? "bg-yellow-600" : "bg-gray-900")} >Nov</div>
-            <div onClick={() => handleMonthSelection(11)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white  " + (selectedMonth==="Dezembro" ? "bg-yellow-600" : "bg-gray-900")} >Dez</div>
+          <div className="grid grid-cols-4 gap-2 h-auto md:grid-cols-12">
+            <div onClick={() => handleMonthSelection(0)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Janeiro" ? "bg-yellow-600" : "bg-gray-900")} >Jan</div>
+            <div onClick={() => handleMonthSelection(1)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Fevereiro" ? "bg-yellow-600" : "bg-gray-900")} >Fev</div>
+            <div onClick={() => handleMonthSelection(2)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Março" ? "bg-yellow-600" : "bg-gray-900")} >Mar</div>
+            <div onClick={() => handleMonthSelection(3)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Abril" ? "bg-yellow-600" : "bg-gray-900")} >Abr</div>
+            <div onClick={() => handleMonthSelection(4)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Maio" ? "bg-yellow-600" : "bg-gray-900")} >Mai</div>
+            <div onClick={() => handleMonthSelection(5)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Junho" ? "bg-yellow-600" : "bg-gray-900")} >Jun</div>
+            <div onClick={() => handleMonthSelection(6)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Julho" ? "bg-yellow-600" : "bg-gray-900")} >Jul</div>
+            <div onClick={() => handleMonthSelection(7)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Agosto" ? "bg-yellow-600" : "bg-gray-900")} >Ago</div>
+            <div onClick={() => handleMonthSelection(8)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Setembro" ? "bg-yellow-600" : "bg-gray-900")} >Set</div>
+            <div onClick={() => handleMonthSelection(9)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Outubro" ? "bg-yellow-600" : "bg-gray-900")} >Out</div>
+            <div onClick={() => handleMonthSelection(10)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Novembro" ? "bg-yellow-600" : "bg-gray-900")} >Nov</div>
+            <div onClick={() => handleMonthSelection(11)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Dezembro" ? "bg-yellow-600" : "bg-gray-900")} >Dez</div>
           </div>
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Atividades {`${selectedMonth}`}</p>
           <div className={selectedMonth === "Novembro" ? "visible" : "hidden"}>
