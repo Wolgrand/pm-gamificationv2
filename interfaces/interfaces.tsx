@@ -1,3 +1,21 @@
+export interface ErrorResponseType {
+  error: string;
+}
+
+export interface UserSuccessResponseType {
+  _id: string;
+  name: string,
+  department: string,
+  email: string,
+  password: string,
+  position: number,
+  score: number,
+  role: 'jogador' | 'pmo',
+  rewards: string[],
+  criterias: string[],
+  achievements: string[]
+}
+
 export interface ConquistasProps {
   id: string,
   url: string,
@@ -5,10 +23,17 @@ export interface ConquistasProps {
   description: string,
   score: string,
 }
+
 export interface CriteriosProps {
   id: string,
-  icone: HTMLElement & SVGElement,
+  icone: string,
   description: string,
+  score: string,
+}
+
+export interface RewardProps {
+  id: string,
+  nome: string,
   score: string,
 }
 
