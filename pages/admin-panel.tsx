@@ -50,10 +50,9 @@ const AdminPanel = ({playerList, criteriaList}:DataProps) => {
 
 
 
-  const fetcher = (url:string) => axios.get(url);
 
-  const { data, error } = useSWR('api/user', fetcher);
-  const userList= data;
+
+
 
   const handleItemSelection = (item:string) => {
     setSelectedItem(item)
@@ -226,11 +225,11 @@ const AdminPanel = ({playerList, criteriaList}:DataProps) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
 
-  const getPlayer = await api('/api/user')
-  const players:UserSuccessResponseType[] = await getPlayer.data
+  const getPlayer = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/user`)
+  const players:UserSuccessResponseType[] = await getPlayer.json()
 
-  const getCriteria = await api('/api/criteria')
-  const criterias:CriteriosProps[] = await getCriteria.data
+  const getCriteria = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/criteria`)
+  const criterias:CriteriosProps[] = await getCriteria.json()
 
   return {
     props: {
