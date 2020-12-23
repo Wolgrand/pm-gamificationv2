@@ -10,6 +10,10 @@ import {ConquistasProps, CriteriosProps, RewardProps, UserSuccessResponseType} f
 import api from '../utils/api';
 import { GetStaticProps } from 'next';
 
+interface DataProps {
+  playerList: UserSuccessResponseType[]
+  criteriaList: CriteriosProps[]
+}
 
 
 
@@ -18,7 +22,7 @@ const Icon = React.forwardRef<SVGElement, SVGProps>((props, ref) => (
 ));
 
 
-const AdminPanel = (playerList:UserSuccessResponseType[], criteriaList:CriteriosProps[]) => {
+const AdminPanel = ({playerList, criteriaList}:DataProps) => {
   const icon = useRef<SVGElement>(null);
 
 

@@ -33,6 +33,7 @@ export default async (
 
     const { db } = await connect();
 
+
     const lowerCaseDescription = description.toLowerCase();
     const criteriaAlreadyExists = await db.collection('criterias').findOne({ description: lowerCaseDescription });
     if (criteriaAlreadyExists) {
