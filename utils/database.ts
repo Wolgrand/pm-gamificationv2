@@ -1,11 +1,14 @@
 import { MongoClient, Collection, Db } from 'mongodb';
 
+
 interface ConnectType {
   db: Collection;
   client: MongoClient;
 }
 
-const client = new MongoClient(process.env.DATABASE_URL, {
+
+
+const client = new MongoClient(String(process.env.DATABASE_URL), {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
