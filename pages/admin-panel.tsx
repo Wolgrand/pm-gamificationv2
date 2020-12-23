@@ -8,7 +8,7 @@ import Nav from '../components/nav'
 import {ConquistasProps, CriteriosProps, RewardProps, UserSuccessResponseType} from '../interfaces/interfaces'
 
 import api from '../utils/api';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps, GetStaticProps } from 'next';
 
 interface DataProps {
   playerList: UserSuccessResponseType[]
@@ -224,7 +224,7 @@ const AdminPanel = ({playerList, criteriaList}:DataProps) => {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
 
   const getPlayer = await api('/api/user')
   const players:UserSuccessResponseType[] = await getPlayer.data
