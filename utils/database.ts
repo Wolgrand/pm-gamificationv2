@@ -1,4 +1,4 @@
-import { MongoClient, Collection } from 'mongodb';
+import { MongoClient, Collection, Db } from 'mongodb';
 
 interface ConnectType {
   db: Collection;
@@ -10,9 +10,9 @@ const client = new MongoClient(process.env.DATABASE_URL, {
   useUnifiedTopology: true,
 });
 
-export default async function connect(): Promise<ConnectType> {
+export default async function connect(collection:string): Promise<ConnectType> {
   if (!client.isConnected()) await client.connect();
 
-  const db = client.db('EAC');
+  const db = client.db('EAC').collection(collection);
   return { db, client };
 }

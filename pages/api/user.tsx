@@ -41,10 +41,10 @@ export default async (
       }
 
 
-    const { db } = await connect();
+    const { db } = await connect('users');
 
     const lowerCaseEmail = email.toLowerCase();
-    const emailAlreadyExists = await db.collection('users').findOne({ email: lowerCaseEmail });
+    const emailAlreadyExists = await db.findOne({ email: lowerCaseEmail });
     if (emailAlreadyExists) {
       res
         .status(400)
@@ -52,7 +52,7 @@ export default async (
       return;
     }
 
-    const response = await db.collection('users').insertOne({
+    const response = await db.insertOne({
       name,
       department,
       email: lowerCaseEmail,
@@ -68,9 +68,9 @@ export default async (
     res.status(200).json(response.ops[0]);
   } else if (req.method === 'GET') {
 
-    const { db } = await connect();
+    const { db } = await connect('users');
 
-    const response = await db.collection('users').find().toArray();
+    const response:any = await db.find().toArray();
 
     res.status(200).json(response);
   } else {

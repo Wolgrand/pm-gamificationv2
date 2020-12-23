@@ -31,11 +31,11 @@ export default async (
       }
 
 
-    const { db } = await connect();
+    const { db } = await connect('criterias');
 
 
     const lowerCaseDescription = description.toLowerCase();
-    const criteriaAlreadyExists = await db.collection('criterias').findOne({ description: lowerCaseDescription });
+    const criteriaAlreadyExists = await db.findOne({ description: lowerCaseDescription });
     if (criteriaAlreadyExists) {
       res
         .status(400)
@@ -43,7 +43,7 @@ export default async (
       return;
     }
 
-    const response = await db.collection('criterias').insertOne({
+    const response = await db.insertOne({
       icon,
       description,
       score,
@@ -53,9 +53,9 @@ export default async (
 
   } else if (req.method === 'GET') {
 
-    const { db } = await connect();
+    const { db } = await connect('criterias');
 
-    const response = await db.collection('criterias').find().toArray();
+    const response:any = await db.find().toArray();
 
     res.status(200).json(response);
   } else {
