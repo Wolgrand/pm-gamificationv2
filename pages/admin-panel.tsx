@@ -226,15 +226,15 @@ const AdminPanel = ({playerList, criteriaList}:DataProps) => {
 export const getServerSideProps: GetServerSideProps = async () => {
 
   const getPlayer = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/user`)
-  const players:UserSuccessResponseType[] = await getPlayer.json()
+  const playerList:UserSuccessResponseType[] = await getPlayer.json()
 
   const getCriteria = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/criteria`)
-  const criterias:CriteriosProps[] = await getCriteria.json()
+  const criteriaList:CriteriosProps[] = await getCriteria.json()
 
   return {
     props: {
-      playerList: players,
-      criteriaList: criterias,
+      playerList,
+      criteriaList,
     },
 
   }
