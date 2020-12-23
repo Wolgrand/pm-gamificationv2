@@ -18,7 +18,7 @@ const Icon = React.forwardRef<SVGElement, SVGProps>((props, ref) => (
 ));
 
 
-const AdminPanel = ({ playerList, criteriaList }) => {
+const AdminPanel = (playerList:UserSuccessResponseType[], criteriaList:CriteriosProps[]) => {
   const icon = useRef<SVGElement>(null);
 
 
@@ -98,7 +98,7 @@ const AdminPanel = ({ playerList, criteriaList }) => {
                 <td className="table-cell bg-gray-900 h-20 items-center">{item.name}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center">{item.department}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center">{item.email}</td>
-                <td className="table-cell bg-gray-900 h-20 items-center"><div onClick={() => handlePasswordReset(item.nome)} className="bg-gray-700 cursor-pointer focus:border-transparent hover:opacity-80 rounded-lg">{passwordReset.includes(item.nome) ? 'Senha resetada'  : 'Resetar Senha'}</div></td>
+                <td className="table-cell bg-gray-900 h-20 items-center"><div onClick={() => handlePasswordReset(item.name)} className="bg-gray-700 cursor-pointer focus:border-transparent hover:opacity-80 rounded-lg">{passwordReset.includes(item.name) ? 'Senha resetada'  : 'Resetar Senha'}</div></td>
                 <td className="table-cell bg-gray-900 h-20 items-center">{item.position}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center">{item.score}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center">{item.role}</td>
@@ -223,10 +223,10 @@ const AdminPanel = ({ playerList, criteriaList }) => {
 export const getStaticProps: GetStaticProps = async () => {
 
   const getPlayer = await api('/api/user')
-  const players = await getPlayer.data
+  const players:UserSuccessResponseType[] = await getPlayer.data
 
   const getCriteria = await api('/api/criteria')
-  const criterias = await getCriteria.data
+  const criterias:CriteriosProps[] = await getCriteria.data
 
   return {
     props: {
