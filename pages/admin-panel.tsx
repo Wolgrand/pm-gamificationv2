@@ -225,10 +225,10 @@ const AdminPanel = ({playerList, criteriaList}:DataProps) => {
 
 export const getStaticProps: GetStaticProps = async () => {
 
-  const getPlayer = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/user`)
+  const getPlayer = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL} + /api/user`)
   const playerList:UserSuccessResponseType[] = await getPlayer.json()
 
-  const getCriteria = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/criteria`)
+  const getCriteria = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL} + /api/criteria`)
   const criteriaList:CriteriosProps[] = await getCriteria.json()
 
   return {
