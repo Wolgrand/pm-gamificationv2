@@ -25,7 +25,7 @@ const AdminPanel = ({playerList, criteriaList}:DataProps) => {
 
   const [selectedItem, setSelectedItem] = useState('jogadores')
   const [passwordReset, setPasswordReset] = useState<String[]>([])
-  const [tablePlayers, setTablePlayers] = useState<UserSuccessResponseType[]>([])
+
 
   const [tableConquista, setTableConquista] = useState<ConquistasProps[]>([
     {"url": "https://images.unsplash.com/photo-1607385140315-a64f0236f8fa?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=701&q=80", "id":"1", "description":"Descrição da conquista A", "score":"1000", "nome": "Conquista A" },
@@ -33,21 +33,13 @@ const AdminPanel = ({playerList, criteriaList}:DataProps) => {
 
   ])
 
-  const [tableCriteria, setTableCriteria] = useState<CriteriosProps[]>([
-    {"icone": "archive", "id":"1", "description":"Critério A", "score":"1000" },
-    {"icone": "backspace", "id":"2", "description":"Critério B", "score":"1000" },
 
-  ])
 
   const [tableReward, setTableReward] = useState<RewardProps[]>([
     {"id":"1", "nome":"Recompensa A", "score":"1000" },
     {"id":"2", "nome":"Recompensa B", "score":"1000" },
 
   ])
-
-
-
-
 
 
 
@@ -222,10 +214,10 @@ const AdminPanel = ({playerList, criteriaList}:DataProps) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
 
-  const getPlayer = await axios.get(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/user');
+  const getPlayer = await axios.get('https://pm-gamification.vercel.app/api/user');
   const playerList:UserSuccessResponseType[] = await getPlayer.data
 
-  const getCriteria = await axios.get(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/criteria');
+  const getCriteria = await axios.get('https://pm-gamification.vercel.app/api/criteria');
   const criteriaList:CriteriosProps[] = await getCriteria.data
 
   return {
