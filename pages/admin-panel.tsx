@@ -4,7 +4,7 @@ import Nav from '../components/nav'
 import {ConquistasProps, CriteriosProps, RewardProps, UserSuccessResponseType} from '../interfaces/interfaces'
 
 import api from '../utils/api';
-import { GetServerSideProps, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import axios from 'axios';
 
 interface DataProps {
@@ -157,7 +157,7 @@ const AdminPanel = ({playerList, criteriaList}:DataProps) => {
             {criteriaList && criteriaList.map( (item:any, index:number) => (
               <tr id={item._id} className="table-row leading-10 rounded-3xl bg-gray-900 mb-3 border-b-4 border-gray-800 text-white">
                 <td className="table-cell bg-gray-900 h-20 items-center  w-8">{index}</td>
-                <td className="table-cell bg-gray-900 h-20 items-center "><div className="text-white flex justify-center"><Icon  ref={icon} stroke="#fff" src={`http://localhost:3000/icons/${item.icon}.svg` } /></div></td>
+                <td className="table-cell bg-gray-900 h-20 items-center "><div className="text-white flex justify-center"><Icon  ref={icon} stroke="#fff" src={`${process.env.NEXT_PUBLIC_VERCEL_URL}/icons/${item.icon}.svg` } /></div></td>
                 <td className="table-cell bg-gray-900 h-20 items-center ">{item.description}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center ">{item.score}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center ">
