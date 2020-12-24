@@ -221,10 +221,10 @@ const AdminPanel = ({playerList, criteriaList}:DataProps) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
 
-  const getPlayer = await api('api/user')
+  const getPlayer = await api('/api/user')
   const playerList:UserSuccessResponseType[] = await getPlayer.data
 
-  const getCriteria = await api('api/criteria')
+  const getCriteria = await api('/api/criteria')
   const criteriaList:CriteriosProps[] = await getCriteria.data
 
   return {
