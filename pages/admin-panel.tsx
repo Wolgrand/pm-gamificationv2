@@ -5,6 +5,7 @@ import {ConquistasProps, CriteriosProps, RewardProps, UserSuccessResponseType} f
 
 import api from '../utils/api';
 import { GetServerSideProps, GetStaticProps } from 'next';
+import axios from 'axios';
 
 interface DataProps {
   playerList: UserSuccessResponseType[]
@@ -221,10 +222,10 @@ const AdminPanel = ({playerList, criteriaList}:DataProps) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
 
-  const getPlayer = await api('/api/user')
+  const getPlayer = await axios.get(process.env.NEXT_PUBLIC_URL + '/api/user');
   const playerList:UserSuccessResponseType[] = await getPlayer.data
 
-  const getCriteria = await api('/api/criteria')
+  const getCriteria = await axios.get(process.env.NEXT_PUBLIC_URL + '/api/criteria');
   const criteriaList:CriteriosProps[] = await getCriteria.data
 
   return {
