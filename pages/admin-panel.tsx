@@ -223,7 +223,7 @@ const AdminPanel = ({playerList, criteriaList}:DataProps) => {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
 
   const getPlayer = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/user`)
   const playerList:UserSuccessResponseType[] = await getPlayer.json()
