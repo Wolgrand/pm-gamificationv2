@@ -2,10 +2,20 @@ export interface ErrorResponseType {
   error: string;
 }
 
+export interface AchievementProps {
+  _id: string,
+  image_url: string,
+  title: string,
+  description: string,
+  score: number,
+
+}
+
 export interface UserSuccessResponseType {
   _id: string;
   name: string,
   department: string,
+  company: string,
   email: string,
   password: string,
   position: number,
@@ -17,7 +27,7 @@ export interface UserSuccessResponseType {
 }
 
 export interface ConquistasProps {
-  id: string,
+  _id: string,
   url: string,
   nome: string,
   description: string,
@@ -25,15 +35,15 @@ export interface ConquistasProps {
 }
 
 export interface CriteriosProps {
-  id: string,
+  _id: string,
   icone: string,
   description: string,
   score: string,
 }
 
 export interface RewardProps {
-  id: string,
-  nome: string,
+  _id: string,
+  title: string,
   score: string,
 }
 

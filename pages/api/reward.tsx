@@ -2,6 +2,7 @@ import {NextApiRequest, NextApiResponse} from 'next'
 import {UserSuccessResponseType, ErrorResponseType} from '../../interfaces/interfaces'
 import connect from '../../utils/database';
 
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<ErrorResponseType | UserSuccessResponseType>
@@ -9,68 +10,47 @@ export default async (
 
   if (req.method === 'POST') {
     const {
-      name,
-      department,
-      company,
-      email,
-      password,
-      position,
+      title,
       score,
-      role,
     }: {
-      name: string;
-      department: string;
-      company: string;
-      email: string;
-      password: string;
-      position: number;
+      title: string;
       score: number;
-      role: string;
+
 
     } = req.body;
 
       if (
-        !name ||
-        !department ||
-        !company ||
-        !email ||
-        !password ||
-        !role
+        !title ||
+        !score
+
         ) {
         res.status(400).json({ error: 'Missing body parameter' });
         return;
       }
 
 
-    const { db } = await connect('users');
+    const { db } = await connect('rewards');
 
-    const lowerCaseEmail = email.toLowerCase();
-    const emailAlreadyExists = await db.findOne({ email: lowerCaseEmail });
-    if (emailAlreadyExists) {
+
+    const lowerCaseTitle = title.toLowerCase();
+    const titleAlreadyExists = await db.findOne({ title: lowerCaseTitle });
+    if (titleAlreadyExists) {
       res
         .status(400)
-        .json({ error: `E-mail ${lowerCaseEmail} already exists` });
+        .json({ error: `Reward ${lowerCaseTitle} already exists` });
       return;
     }
 
     const response = await db.insertOne({
-      name,
-      department,
-      company,
-      email: lowerCaseEmail,
-      password,
-      position: "",
-      score: 0,
-      role,
-      rewards: [],
-      criterias: [],
-      achievements: [],
+      title,
+      score,
     });
 
     res.status(200).json(response.ops[0]);
+
   } else if (req.method === 'GET') {
 
-    const { db } = await connect('users');
+    const { db } = await connect('rewards');
 
     const response:any = await db.find().toArray();
 
