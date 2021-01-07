@@ -394,17 +394,17 @@ const AdminPanel = ({playerList, criteriaList, rewardList, achievementList}:Data
 
 export const getServerSideProps: GetServerSideProps = async () => {
 
-  const getPlayer = await axios.get(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/user');
+  const getPlayer = await axios.get('https://pm-gamification.vercel.app/api/user');
   const playerList:UserSuccessResponseType[] = await getPlayer.data
 
-  const getCriteria = await axios.get(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/criteria');
+  const getCriteria = await axios.get('https://pm-gamification.vercel.app/api/criteria');
   const criteriaList:CriteriosProps[] = await getCriteria.data
 
-  const getReward = await axios.get(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/reward');
-  const rewardList:CriteriosProps[] = await getReward.data
+  const getReward = await axios.get('https://pm-gamification.vercel.app/api/reward');
+  const rewardList:RewardProps[] = await getReward.data
 
-  const getAchievement = await axios.get(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/achievement');
-  const achievementList:CriteriosProps[] = await getAchievement.data
+  const getAchievement = await axios.get('https://pm-gamification.vercel.app/api/achievement');
+  const achievementList:AchievementProps[] = await getAchievement.data
 
   return {
     props: {
