@@ -36,7 +36,7 @@ export interface ConquistasProps {
 
 export interface CriteriosProps {
   _id: string,
-  icone: string,
+  icon: string,
   description: string,
   score: string,
 }
