@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next'
-import {UserSuccessResponseType, ErrorResponseType} from '../../interfaces/interfaces'
-import connect from '../../utils/database';
+import {UserSuccessResponseType, ErrorResponseType} from '../../../interfaces/interfaces'
+import connect from '../../../utils/database';
 
 
 export default async (

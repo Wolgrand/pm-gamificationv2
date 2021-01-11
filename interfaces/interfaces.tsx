@@ -31,20 +31,20 @@ export interface ConquistasProps {
   url: string,
   nome: string,
   description: string,
-  score: string,
+  score: number,
 }
 
 export interface CriteriosProps {
   _id: string,
   icon: string,
   description: string,
-  score: string,
+  score: number,
 }
 
 export interface RewardProps {
   _id: string,
   title: string,
-  score: string,
+  score: number,
 }
 
 export interface IconProps extends React.SVGProps<SVGSVGElement> {

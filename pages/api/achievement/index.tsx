@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next'
-import {UserSuccessResponseType, ErrorResponseType} from '../../interfaces/interfaces'
-import connect from '../../utils/database';
+import {UserSuccessResponseType, ErrorResponseType} from '../../../interfaces/interfaces'
+import connect from '../../../utils/database';
 
 
 export default async (
@@ -10,17 +10,23 @@ export default async (
 
   if (req.method === 'POST') {
     const {
+      image_url,
       title,
+      description,
       score,
     }: {
-      title: string;
-      score: number;
+      image_url: string,
+      title: string,
+      description: string,
+      score: number,
 
 
     } = req.body;
 
       if (
+        !image_url||
         !title ||
+        !description||
         !score
 
         ) {
@@ -29,7 +35,7 @@ export default async (
       }
 
 
-    const { db } = await connect('rewards');
+    const { db } = await connect('achievements');
 
 
     const lowerCaseTitle = title.toLowerCase();
@@ -42,7 +48,9 @@ export default async (
     }
 
     const response = await db.insertOne({
+      image_url,
       title,
+      description,
       score,
     });
 
@@ -50,7 +58,7 @@ export default async (
 
   } else if (req.method === 'GET') {
 
-    const { db } = await connect('rewards');
+    const { db } = await connect('achievements');
 
     const response:any = await db.find().toArray();
 
