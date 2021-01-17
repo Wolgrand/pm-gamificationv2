@@ -2,20 +2,21 @@ import React, { useCallback, useRef, useState } from 'react';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
-import fetch from '../../utils/fetch'
+import { mutate as mutateGlobal } from 'swr';
+import {useFetch} from '../../hooks/useFetch';
 import Nav from '../../components/nav'
 import Input from '../../components/Input'
 import getValidationsErrors from '../../utils/getValidationsErrors';
 import {RewardProps} from '../../interfaces/interfaces'
 
 import axios from 'axios';
-import useSWR from 'swr';
+
 
 
 
 const RewardPanel = () => {
 
-  const { data, error } = useSWR<RewardProps[]>('/api/reward', fetch)
+  const rewardData = useFetch<RewardProps[]>('/api/reward');
 
   const formRef = useRef<FormHandles>(null);
 
@@ -24,7 +25,7 @@ const RewardPanel = () => {
   const [selectedReward, setSelectedReward] = useState({
     _id:'',
     title: '',
-    score: '',
+    score: 0,
   })
 
   const handleEditReward = ({_id, title, score}:RewardProps) => {
@@ -75,8 +76,9 @@ const RewardPanel = () => {
   );
 
   const handleUpdateReward = useCallback(
-    async (data: RewardProps) => {
+    async (data: RewardProps ) => {
       try {
+
         formRef.current?.setErrors({});
          const schema = Yup.object().shape({
           title: Yup.string().required('Nome obrigatório'),
@@ -92,12 +94,21 @@ const RewardPanel = () => {
           score: data.score,
         }
 
-        try {
 
-          await axios.put(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/reward`,updatedReward)
-        } catch (error) {
-          console.log(error);
-        }
+          axios.put(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/reward/${data._id}`,updatedReward)
+
+          const updatedRewards = rewardData.data?.map(item => {
+            if (item._id === data._id) {
+              return { ...item, title: data.title, score: data.score }
+            }
+
+            return item;
+          })
+
+          rewardData.mutate(updatedRewards, true)
+          mutateGlobal(`api/rewards/${data._id}`)
+
+
 
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -110,7 +121,7 @@ const RewardPanel = () => {
         console.log(err);
       }
     },
-    [],
+    [rewardData.data, rewardData.mutate],
   );
 
   const handleDeleteReward = useCallback(
@@ -190,6 +201,10 @@ const RewardPanel = () => {
           <div className="max-w-md mx-auto ">
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around ">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+              <Input  name="_id" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="ID" defaultValue={selectedReward._id}/>
+            </div>
+            <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
+              <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
               <Input  name="title" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Nome" defaultValue={selectedReward.title}/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
@@ -214,7 +229,7 @@ const RewardPanel = () => {
             </tr>
           </thead>
           <tbody className="text-center text-white">
-            {data && data.map( (item, index) => (
+            {rewardData.data && rewardData.data.map( (item, index) => (
               <tr key={item._id} className="table-row leading-10 rounded-3xl bg-gray-900 mb-3 border-b-4 border-gray-800">
                 <td className="table-cell bg-gray-900 h-20 items-center w-8">{index +1}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center">{item.title}</td>

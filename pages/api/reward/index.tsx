@@ -55,35 +55,6 @@ export default async (
     const response:any = await db.find().toArray();
 
     res.status(200).json(response);
-  }else if (req.method === 'PUT') {
-
-    const {
-      title,
-      score,
-    }: {
-      title: string;
-      score: number;
-
-
-    } = req.body;
-
-      if (
-        !title ||
-        !score
-
-        ) {
-        res.status(400).json({ error: 'Missing body parameter' });
-        return;
-      }
-
-    const { db } = await connect('rewards');
-
-    const response:any = await db.findOneAndUpdate({title}, {$set:{
-      title,
-      score,
-    }});
-
-    res.status(200).json(response);
   }else if (req.method === 'DEL') {
 
     const {

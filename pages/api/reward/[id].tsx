@@ -28,6 +28,45 @@ export default async (
     const response:any = await db.findOneAndDelete({ _id });
 
     res.status(200).json(response);
+  }if (req.method === 'PUT') {
+
+    const {
+      title,
+      score,
+    }: {
+      title: string;
+      score: number;
+
+
+    } = req.body;
+
+      if (
+        !title ||
+        !score
+
+        ) {
+        res.status(400).json({ error: 'Missing body parameter' });
+        return;
+      }
+
+    const id = req.query.id as string;
+
+    const _id = new ObjectID(id);
+
+    const { db } = await connect('rewards');
+
+    try {
+      const response:any = await db.findOneAndUpdate({_id}, {$set:{
+        title,
+        score,
+      }});
+
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(400).json(error);
+    }
+
+
   } else {
     res.status(400).json({ error: 'Wrong request method' });
   }

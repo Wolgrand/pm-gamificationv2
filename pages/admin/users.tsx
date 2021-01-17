@@ -11,12 +11,13 @@ import {UserSuccessResponseType} from '../../interfaces/interfaces'
 
 import axios from 'axios';
 import useSWR from 'swr';
+import { GetServerSideProps } from 'next';
 
 
 
 const UserPanel = () => {
 
-  const { data, error } = useSWR<UserSuccessResponseType[]>('/api/user', fetch)
+  const { data, error } = useSWR<UserSuccessResponseType[]>('/api/user', fetch, { refreshInterval: 1000 })
 
   const formRef = useRef<FormHandles>(null);
 
@@ -327,4 +328,7 @@ const UserPanel = () => {
   )
 }
 
+
+
 export default UserPanel
+
