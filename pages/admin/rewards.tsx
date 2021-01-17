@@ -95,7 +95,7 @@ const RewardPanel = () => {
         }
 
 
-          axios.put(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/reward/${data._id}`,updatedReward)
+          axios.put(`/api/reward/${data._id}`,updatedReward)
 
           const updatedRewards = rewardData.data?.map(item => {
             if (item._id === data._id) {
