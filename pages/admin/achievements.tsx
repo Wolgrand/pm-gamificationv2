@@ -1,37 +1,30 @@
-import React, { useCallback, useRef, useState } from 'react';
-import SVG, { Props as SVGProps } from 'react-inlinesvg';
+import React, { ChangeEvent, useCallback, useRef, useState } from 'react';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
-import fetch from '../../utils/fetch'
+import { mutate as mutateGlobal } from 'swr';
+import {useFetch} from '../../hooks/useFetch';
 import Nav from '../../components/nav'
 import Input from '../../components/Input'
 import getValidationsErrors from '../../utils/getValidationsErrors';
 import {AchievementProps} from '../../interfaces/interfaces'
 
 import axios from 'axios';
-import useSWR from 'swr';
-
 
 
 
 const AchievementPanel = () => {
 
-  const { data, error } = useSWR<AchievementProps[]>('/api/achievement', fetch)
 
+  const achievementData = useFetch<AchievementProps[]>('/api/achievement');
   const formRef = useRef<FormHandles>(null);
 
-  const [selectedItem, setSelectedItem] = useState('Jogador')
+
   const [selectedModalNew, setSelectedModalNew] = useState(false)
   const [selectedModalEdit, setSelectedModalEdit] = useState(false)
-  const [selectedAchievement, setSelectedAchievement] = useState({
-    _id:'',
-    image_url: '',
-    title: '',
-    description: '',
-    score: 0,
-  })
-
+  const [selectedAchievement, setSelectedAchievement] = useState<AchievementProps>()
+  const [selectedImagePreview, setSelectedImagePreview] = useState('')
+  const [selectedImagePreviewUpdate, setSelectedImagePreviewUpdate] = useState('')
 
   const handleUpdateAchievement = useCallback(
     async (data: AchievementProps) => {
@@ -60,6 +53,20 @@ const AchievementPanel = () => {
 
         try {
           await axios.put(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/achievement/${_id}`,updateAchievement)
+          const updatedAchievement = achievementData.data?.map(item => {
+            if (item._id === data._id) {
+              return { ...item,
+                image_url: data.image_url,
+                title: data.title,
+                description: data.description,
+                score: data.score, }
+            }
+
+            return item;
+          })
+
+          achievementData.mutate(updatedAchievement, true)
+          mutateGlobal(`api/achievement/${data._id}`)
         } catch (error) {
           console.log(error);
         }
@@ -93,7 +100,8 @@ const AchievementPanel = () => {
           abortEarly: false,
         });
 
-        const newAchievement = {
+
+        const newAchievement: Omit<AchievementProps, "_id"> = {
           image_url: data.image_url,
           title: data.title,
           description: data.description,
@@ -102,6 +110,18 @@ const AchievementPanel = () => {
 
         try {
           await axios.post(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/achievement',newAchievement)
+          const updateAchievement = achievementData.data?.map(item => {
+
+            return { ...item, image_url: data.image_url,
+              title: data.title,
+              description: data.description,
+              score: data.score, }
+
+        })
+
+          achievementData.mutate(updateAchievement, true)
+          mutateGlobal(`api/achievement/${data._id}`)
+
         } catch (error) {
           console.log(error);
         }
@@ -120,14 +140,9 @@ const AchievementPanel = () => {
     [],
   );
 
-  const handleEditAchievement = ({_id, title, score, description, image_url}:AchievementProps) => {
-    setSelectedAchievement({
-      _id,
-      image_url,
-      title,
-      description,
-      score: score,
-    })
+  const handleEditAchievement = (data:AchievementProps) => {
+    setSelectedImagePreviewUpdate(data.image_url);
+    setSelectedAchievement(data)
     setSelectedModalEdit(!selectedModalEdit)
   }
 
@@ -139,6 +154,16 @@ const AchievementPanel = () => {
         try {
 
          await axios.delete(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/achievement/${_id}`)
+         const updatedAchievement = achievementData.data?.map(item => {
+          if (item._id !== _id) {
+            return { ...item }
+          }
+
+          return item;
+          })
+
+        achievementData.mutate(updatedAchievement, true)
+        mutateGlobal(`api/achievement`)
         } catch (error) {
           console.log(error);
         }
@@ -166,6 +191,16 @@ const AchievementPanel = () => {
     setSelectedModalEdit(!selectedModalEdit)
     return;
   }
+  const handleImagePreview = (event: ChangeEvent<HTMLInputElement>) => {
+    setSelectedImagePreview(event.target.value)
+    return;
+  }
+  const handleImagePreviewUpdate = (event: ChangeEvent<HTMLInputElement>) => {
+    setSelectedImagePreviewUpdate(event.target.value)
+    return;
+  }
+
+
 
 
   return (
@@ -182,9 +217,12 @@ const AchievementPanel = () => {
 
         <Form ref={formRef} className={"sm:w-11/12 mt-8 "} onSubmit={handleAddNewAchievement}>
           <div className="max-w-md mx-auto ">
-            <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around ">
+            <div className="bg-gray-900 flex px-3 py-3  ">
+              {selectedImagePreview ? <img className="flex" src={selectedImagePreview} alt="image"/> : null}
+            </div>
+            <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-              <Input  name="image_url" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Url da Imagem"/>
+              <Input  name="image_url" onChange={(value) => handleImagePreview(value)} className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Url da Imagem"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
             <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" /></svg>
@@ -217,25 +255,28 @@ const AchievementPanel = () => {
 
         <Form ref={formRef} className={"sm:w-11/12 mt-8 " } onSubmit={handleUpdateAchievement}>
           <div className="max-w-md mx-auto ">
-            <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around ">
+            <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around">
+            {selectedImagePreviewUpdate ? <img className="flex" src={selectedImagePreviewUpdate} alt="image"/> : null}
+            </div>
+            <div className="bg-gray-900 hidden items-center rounded-xl px-4 py-3 justify-around mt-2 ">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-              <Input  name="_id" readOnly className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" value={selectedAchievement._id} placeholder="Url da Imagem"/>
+              <Input  name="_id" readOnly className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" value={selectedAchievement?._id} placeholder="Url da Imagem"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-              <Input  name="image_url" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" defaultValue={selectedAchievement.image_url} placeholder="Url da Imagem"/>
+              <Input  name="image_url" onChange={(value) => handleImagePreviewUpdate(value)} className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" defaultValue={selectedAchievement?.image_url} placeholder="Url da Imagem"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
             <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" /></svg>
-              <Input  name="title" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" defaultValue={selectedAchievement.title} placeholder="Título"/>
+              <Input  name="title" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" defaultValue={selectedAchievement?.title} placeholder="Título"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
-              <Input name="description" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" defaultValue={selectedAchievement.description} placeholder="Descrição"/>
+              <Input name="description" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" defaultValue={selectedAchievement?.description} placeholder="Descrição"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-              <Input  name="score" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="number" defaultValue={selectedAchievement.score} placeholder="Pontuação"/>
+              <Input  name="score" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="number" defaultValue={selectedAchievement?.score} placeholder="Pontuação"/>
             </div>
             <button type="submit" data-testid="add-newUser-button" className="bg-gray-500 inline-block text-center items-start w-full mt-5 p-3 rounded-xl text-gray-200 text-xl "><p>Cadastrar</p></button>
           </div>
@@ -258,7 +299,7 @@ const AchievementPanel = () => {
             </tr>
           </thead>
           <tbody className="text-center text-white">
-            {data && data.map( (item, index) => (
+            {achievementData.data && achievementData.data.map( (item, index) => (
               <tr key={item._id} className="table-row leading-10 rounded-3xl bg-gray-900 mb-3 border-b-4 border-gray-800">
                 <td className="table-cell bg-gray-900 h-20 items-center w-8">{index +1}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center"><img className="rounded-full h-14 w-14 my-0 mx-auto" src={item.image_url} alt="url"/></td>

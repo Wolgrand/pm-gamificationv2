@@ -3,14 +3,15 @@ import SVG, { Props as SVGProps } from 'react-inlinesvg';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
-import fetch from '../../utils/fetch'
+import { mutate as mutateGlobal } from 'swr';
+import {useFetch} from '../../hooks/useFetch';
 import Nav from '../../components/nav'
 import Input from '../../components/Input'
 import getValidationsErrors from '../../utils/getValidationsErrors';
 import {CriteriosProps} from '../../interfaces/interfaces'
 
 import axios from 'axios';
-import useSWR from 'swr';
+
 
 
 
@@ -21,21 +22,15 @@ const Icon = React.forwardRef<SVGElement, SVGProps>((props, ref) => (
 
 const CriteriaPanel = () => {
 
-  const { data, error } = useSWR<CriteriosProps[]>('/api/criteria', fetch)
+  const criteriaData = useFetch<CriteriosProps[]>('/api/criteria');
 
   const icon = useRef<SVGElement>(null);
   const formRef = useRef<FormHandles>(null);
 
-  const [selectedItem, setSelectedItem] = useState('Jogador')
   const [selectedModalNew, setSelectedModalNew] = useState(false)
   const [selectedModalEdit, setSelectedModalEdit] = useState(false)
 
-  const [selectedCriteria, setSelectedCriteria] = useState({
-    _id:'',
-    icon: '',
-    description: '',
-    score: 0,
-  })
+  const [selectedCriteria, setSelectedCriteria] = useState<CriteriosProps>()
 
 
   const handleAddNewCriteria = useCallback(
@@ -60,6 +55,15 @@ const CriteriaPanel = () => {
 
         try {
           await axios.post(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/criteria',newCriteria)
+          const updatedCriterias = criteriaData.data?.map(item => {
+
+            return { ...item, icon: data.icon, description: data.description, score: data.score }
+
+        })
+
+          criteriaData.mutate(updatedCriterias, true)
+          mutateGlobal(`api/criteria/${data._id}`)
+
         } catch (error) {
           console.log(error);
         }
@@ -105,6 +109,18 @@ const CriteriaPanel = () => {
 
         try {
           await axios.put(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/criteria/${_id}`, updateCriteria)
+
+          const updatedCriteria = criteriaData.data?.map(item => {
+            if (item._id === data._id) {
+              return { ...item, icon: data.icon, description: data.description, score: data.score }
+            }
+
+            return item;
+          })
+
+          criteriaData.mutate(updatedCriteria, true)
+          mutateGlobal(`api/criteria/${data._id}`)
+
         } catch (error) {
           console.log(error);
         }
@@ -125,13 +141,8 @@ const CriteriaPanel = () => {
   );
 
 
-  const handleEditCriteria = ({_id, score, description, icon}:CriteriosProps) => {
-    setSelectedCriteria({
-      _id,
-      icon,
-      description,
-      score,
-    })
+  const handleEditCriteria = (data:CriteriosProps) => {
+    setSelectedCriteria(data)
     setSelectedModalEdit(!selectedModalEdit)
   }
 
@@ -152,6 +163,17 @@ const CriteriaPanel = () => {
         try {
 
          await axios.delete(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/criteria/${_id}`)
+         const updatedCriteria = criteriaData.data?.map(item => {
+          if (item._id !== _id) {
+            return { ...item }
+          }
+
+          return item;
+          })
+
+        criteriaData.mutate(updatedCriteria, true)
+        mutateGlobal(`api/criteria`)
+
         } catch (error) {
           console.log(error);
         }
@@ -214,19 +236,19 @@ const CriteriaPanel = () => {
           <div className="max-w-md mx-auto ">
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around ">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-              <Input value={selectedCriteria._id} readOnly name="_id" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Icone"/>
+              <Input value={selectedCriteria?._id} readOnly name="_id" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Id"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-              <Input defaultValue={selectedCriteria.icon}  name="icon" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Icone"/>
+              <Input defaultValue={selectedCriteria?.icon}  name="icon" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Icone"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
-              <Input defaultValue={selectedCriteria.description}  name="description" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Descrição"/>
+              <Input defaultValue={selectedCriteria?.description}  name="description" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Descrição"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-              <Input defaultValue={selectedCriteria.score} name="score" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="number" placeholder="Pontuação"/>
+              <Input defaultValue={selectedCriteria?.score} name="score" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="number" placeholder="Pontuação"/>
             </div>
             <button type="submit" data-testid="add-newUser-button" className="bg-gray-500 inline-block text-center items-start w-full mt-5 p-3 rounded-xl text-gray-200 text-xl "><p>Cadastrar</p></button>
           </div>
@@ -247,7 +269,7 @@ const CriteriaPanel = () => {
             </tr>
           </thead>
           <tbody className="text-center text-white">
-            {data && data.map( (item:any, index:number) => (
+            {criteriaData.data && criteriaData.data.map( (item:any, index:number) => (
               <tr key={item._id} className="table-row leading-10 rounded-3xl bg-gray-900 mb-3 border-b-4 border-gray-800 text-white">
                 <td className="table-cell bg-gray-900 h-20 items-center  w-8">{index + 1}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center "><div className="text-white flex justify-center"><Icon  ref={icon} stroke="#fff" src={`/icons/${item.icon}.svg` } /></div></td>

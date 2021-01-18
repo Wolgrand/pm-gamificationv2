@@ -42,6 +42,7 @@ export interface CriteriosProps {
 }
 
 export interface RewardProps {
+  id: string;
   _id: string,
   title: string,
   score: number,

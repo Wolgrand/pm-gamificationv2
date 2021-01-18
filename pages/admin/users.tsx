@@ -2,7 +2,8 @@ import React, { useCallback, useRef, useState } from 'react';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
-import fetch from '../../utils/fetch'
+import { mutate as mutateGlobal } from 'swr';
+import {useFetch} from '../../hooks/useFetch';
 import Nav from '../../components/nav'
 import Input from '../../components/Input'
 import Select from '../../components/Select'
@@ -10,14 +11,12 @@ import getValidationsErrors from '../../utils/getValidationsErrors';
 import {UserSuccessResponseType} from '../../interfaces/interfaces'
 
 import axios from 'axios';
-import useSWR from 'swr';
-import { GetServerSideProps } from 'next';
-
+import user from '../api/user';
 
 
 const UserPanel = () => {
 
-  const { data, error } = useSWR<UserSuccessResponseType[]>('/api/user', fetch, { refreshInterval: 1000 })
+  const userData = useFetch<UserSuccessResponseType[]>('/api/user');
 
   const formRef = useRef<FormHandles>(null);
 
@@ -26,16 +25,7 @@ const UserPanel = () => {
   const [selectedModalEdit, setSelectedModalEdit] = useState(false)
   const [passwordReset, setPasswordReset] = useState<String[]>([])
 
-  const [selectedUser, setSelectedUser] = useState({
-    _id:'',
-    name: '',
-    department: '',
-    company: '',
-    email: '',
-    position: 0,
-    score: 0,
-    role: '',
-  })
+  const [selectedUser, setSelectedUser] = useState<UserSuccessResponseType>()
 
 
   const handleAddNewUser = useCallback(
@@ -67,6 +57,20 @@ const UserPanel = () => {
 
         try {
           await axios.post(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/user',newUser)
+          const updateUser = userData.data?.map(item => {
+
+            return { ...item,
+              name: data.name,
+              department: data.department,
+              company: data.company,
+              email: data.email,
+              role: data.role,
+              password: '123456' }
+
+        })
+
+          userData.mutate(updateUser, true)
+          mutateGlobal(`api/user/${data._id}`)
         } catch (error) {
           console.log(error);
         }
@@ -107,7 +111,7 @@ const UserPanel = () => {
           abortEarly: false,
         });
 
-        const updateUser = {
+        const updatedUser = {
           name: data.name,
           department: data.department,
           company: data.company,
@@ -116,7 +120,22 @@ const UserPanel = () => {
         }
 
         try {
-          await axios.put(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/user/${_id}`, updateUser)
+          await axios.put(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/user/${_id}`, updatedUser)
+          const updateUser = userData.data?.map(item => {
+            if (item._id === data._id) {
+              return { ...item,
+                name: data.name,
+                department: data.department,
+                company: data.company,
+                email: data.email,
+                role: data.role, }
+            }
+
+            return item;
+          })
+
+          userData.mutate(updateUser, true)
+          mutateGlobal(`api/user/${data._id}`)
         } catch (error) {
           console.log(error);
         }
@@ -144,6 +163,16 @@ const UserPanel = () => {
         try {
 
          await axios.delete(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/user/${_id}`)
+         const updatedUser = userData.data?.map(item => {
+          if (item._id !== _id) {
+            return { ...item }
+          }
+
+          return item;
+          })
+
+        userData.mutate(updatedUser, true)
+        mutateGlobal(`api/user`)
         } catch (error) {
           console.log(error);
         }
@@ -167,17 +196,8 @@ const UserPanel = () => {
     { value: 'PMO', label: 'PMO' },
   ]
 
-  const handleEditUser = ({_id, name, department, company, email, position, score,  role}:UserSuccessResponseType) => {
-    setSelectedUser({
-      _id,
-      name,
-      department,
-      company,
-      email,
-      position,
-      score,
-      role,
-    })
+  const handleEditUser = (data:UserSuccessResponseType) => {
+    setSelectedUser(data)
     setSelectedModalEdit(!selectedModalEdit)
   }
 
@@ -251,28 +271,28 @@ const UserPanel = () => {
           <div className="max-w-md mx-auto ">
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around ">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-              <Input  name="_id" value={selectedUser._id} readOnly className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Nome"/>
+              <Input  name="_id" value={selectedUser?._id} readOnly className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Nome"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-              <Input defaultValue={selectedUser.name} name="name" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Nome"/>
+              <Input defaultValue={selectedUser?.name} name="name" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Nome"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-              <Input defaultValue={selectedUser.department}  name="department" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Departamento"/>
+              <Input defaultValue={selectedUser?.department}  name="department" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Departamento"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-              <Input defaultValue={selectedUser.company}  name="company" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Empresa"/>
+              <Input defaultValue={selectedUser?.company}  name="company" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Empresa"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-              <Input defaultValue={selectedUser.email}  name="email" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="E-mail"/>
+              <Input defaultValue={selectedUser?.email}  name="email" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="E-mail"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2 ">
             <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
 
-              <Select defaultValue={{ value: selectedUser.role, label: selectedUser.role }} className="bg-transparent text-white inline-block placeholder-gray-700 text-lg focus:bg-transparent w-full" name="role" placeholder="Escolha o grupo:" options={groupOptions}>              </Select>
+              <Select defaultValue={{ value: selectedUser?.role, label: selectedUser?.role }} className="bg-transparent text-white inline-block placeholder-gray-700 text-lg focus:bg-transparent w-full" name="role" placeholder="Escolha o grupo:" options={groupOptions}>              </Select>
             </div>
 
             <button type="submit" data-testid="add-newUser-button" className="bg-gray-500 inline-block text-center items-start w-full mt-5 p-3 rounded-xl text-gray-200 text-xl "><p>Cadastrar</p></button>
@@ -287,29 +307,29 @@ const UserPanel = () => {
         <table className="table-auto ">
           <thead id="table-jogadores" className="text-gray-300 border-b-2 border-gray-400 font-normal">
             <tr>
-              <th>#</th>
-              <th>Nome</th>
-              <th>Departamento</th>
-              <th>E-mail</th>
-              <th>Senha</th>
-              <th>Posição</th>
-              <th>Pontuação</th>
-              <th>Grupo</th>
-              <th>Ação</th>
+              <th className="">#</th>
+              <th className="">Nome</th>
+              <th className="hidden sm:visible">Departamento</th>
+              <th className="hidden sm:visible">E-mail</th>
+              <th className="hidden sm:visible">Senha</th>
+              <th className="hidden sm:visible">Posição</th>
+              <th className="hidden sm:visible">Pontuação</th>
+              <th className="hidden sm:visible">Grupo</th>
+              <th className="">Ação</th>
             </tr>
           </thead>
           <tbody className="text-center text-white mt-4">
-            {data && data.map( (item:UserSuccessResponseType, index:number) => (
+            {userData.data && userData.data.map( (item:UserSuccessResponseType, index:number) => (
               <tr key={item._id} className="table-row leading-10 rounded-3xl bg-gray-900 mb-3 border-b-4 border-gray-800">
                 <td className="table-cell bg-gray-900 h-20 items-center w-8">{index + 1}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center">{item.name}</td>
-                <td className="table-cell bg-gray-900 h-20 items-center">{item.department}</td>
-                <td className="table-cell bg-gray-900 h-20 items-center">{item.email}</td>
-                <td className="table-cell bg-gray-900 h-20 items-center"><div onClick={() => handlePasswordReset(item.name)} className="bg-gray-700 cursor-pointer focus:border-transparent hover:opacity-80 rounded-lg">{passwordReset.includes(item.name) ? 'Senha resetada'  : 'Resetar Senha'}</div></td>
-                <td className="table-cell bg-gray-900 h-20 items-center">{item.position}</td>
-                <td className="table-cell bg-gray-900 h-20 items-center">{item.score}</td>
-                <td className="table-cell bg-gray-900 h-20 items-center">{item.role}</td>
-                <td className="table-cell bg-gray-900 h-20 items-center">
+                <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.department}</td>
+                <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.email}</td>
+                <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell"><div onClick={() => handlePasswordReset(item.name)} className="bg-gray-700 cursor-pointer focus:border-transparent hover:opacity-80 rounded-lg">{passwordReset.includes(item.name) ? 'Senha resetada'  : 'Resetar Senha'}</div></td>
+                <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.position}</td>
+                <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.score}</td>
+                <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.role}</td>
+                <td className="table-cell bg-gray-900 h-20 items-center ">
                   <div className="flex flex-row justify-center text-gray-300">
                     <div onClick={()=>handleEditUser(item)}  className="hover:bg-gray-700 cursor-pointer p-2 rounded-full">
                       <svg  className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
