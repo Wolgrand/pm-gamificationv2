@@ -3,12 +3,28 @@ import Image from 'next/image'
 
 interface CardProps {
   title: string;
-  position: string;
-  borderColor?: string;
+  position: number;
+  score: number;
 }
 
-const RankCard= ({title, position, borderColor}:CardProps):any => {
+const RankCard= ({title, position, score}:CardProps):any => {
 
+  let borderColor = '';
+
+  switch (position) {
+    case 1:
+      borderColor = "#f1c40f"
+      break;
+    case 2:
+      borderColor = "#95a5a6"
+      break;
+    case 3:
+      borderColor = "#e67e22"
+      break;
+
+    default:
+      break;
+  }
 
   return (
   <div className={"flex-row flex flex-initial  items-center justify-between mr-2 mt-3 w-full lg:w-5/6 px-3 py-5 lg:py-5 bg-gray-900 rounded-lg flex-shrink-0 hover:bg-opacity-80 cursor-pointer shadow-lg"} style={{ borderLeft: borderColor ? `5px solid ${borderColor} ` : "0"}}>
@@ -20,7 +36,7 @@ const RankCard= ({title, position, borderColor}:CardProps):any => {
         <strong className="text-gray-300 mx-2 ">{title}</strong>
       </div>
 
-      <span className="text-gray-400">3679 pts</span>
+      <span className="text-gray-400">{score} pts</span>
   </div>
   );
 };

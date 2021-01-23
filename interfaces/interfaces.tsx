@@ -10,6 +10,11 @@ export interface AchievementProps {
   score: number,
 
 }
+export interface DepartmentProps {
+  department: string,
+  average: number,
+  position: number
+}
 
 export interface UserSuccessResponseType {
   _id: string;
@@ -18,6 +23,20 @@ export interface UserSuccessResponseType {
   company: string,
   email: string,
   password: string,
+  position: number,
+  score: number,
+  role: 'jogador' | 'pmo',
+  rewards: string[],
+  criterias: string[],
+  achievements: string[]
+}
+
+export interface PlayerRankPros {
+  _id: string;
+  name: string,
+  department: string,
+  company: string,
+  email: string,
   position: number,
   score: number,
   role: 'jogador' | 'pmo',

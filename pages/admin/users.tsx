@@ -309,12 +309,12 @@ const UserPanel = () => {
             <tr>
               <th className="">#</th>
               <th className="">Nome</th>
-              <th className="hidden sm:visible">Departamento</th>
-              <th className="hidden sm:visible">E-mail</th>
-              <th className="hidden sm:visible">Senha</th>
-              <th className="hidden sm:visible">Posição</th>
-              <th className="hidden sm:visible">Pontuação</th>
-              <th className="hidden sm:visible">Grupo</th>
+              <th className="">Departamento</th>
+              <th className="">E-mail</th>
+              <th className="">Senha</th>
+              <th className="">Posição</th>
+              <th className="">Pontuação</th>
+              <th className="">Grupo</th>
               <th className="">Ação</th>
             </tr>
           </thead>
