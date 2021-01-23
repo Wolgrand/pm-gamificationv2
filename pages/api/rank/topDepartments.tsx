@@ -3,6 +3,11 @@ import {UserSuccessResponseType, ErrorResponseType, PlayerRankPros, DepartmentPr
 import connect from '../../../utils/database';
 
 
+interface PlayerRankProsExtends extends PlayerRankPros {
+  average?: number,
+  department: string,
+}
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<ErrorResponseType | PlayerRankPros[]>
@@ -15,7 +20,12 @@ export default async (
     const response:UserSuccessResponseType[] = await db.find( { role: 'Jogador' } ).toArray();
 
 
+
     const departmentTotalScore:any = [];
+
+
+
+
       Array.from(new Set(response.map(x => x.department))).forEach(x => {
         departmentTotalScore.push(
           response
@@ -28,9 +38,11 @@ export default async (
                 item => item.department === x,
               ).length;
               const average = Math.ceil(departmentSum / countDepartment);
-              item['department'] = x;
-              item['average'] = average;
-              return item;
+              const data = {
+                department: x,
+                average: average
+              }
+              return data;
             }, {}),
         );
       });
