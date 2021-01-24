@@ -1,8 +1,63 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { Form } from '@unform/web';
+import * as Yup from 'yup';
+import { useAuth } from '../hooks/auth';
+import { useToast } from '../hooks/toast';
 import Logo from '../components/logo';
+import { useCallback, useRef } from 'react';
+import { FormHandles } from '@unform/core';
+import getValidationsErrors from '../utils/getValidationsErrors';
+import { SignInFormatData } from '../interfaces/interfaces';
+import Input from '../components/Input'
 
 
 export default function Login() {
+
+  const formRef = useRef<FormHandles>(null);
+  const { signIn } = useAuth();
+  const { addToast } = useToast();
+  const history = useRouter();
+
+
+  const handleSubmit = useCallback(
+    async (data: SignInFormatData) => {
+      try {
+        formRef.current?.setErrors({});
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('E-mail obrigatório')
+            .email('Digite um email válido'),
+          password: Yup.string().required('Senha obrigatória'),
+        });
+
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
+        await signIn({
+          email: data.email,
+          password: data.password,
+        });
+
+        history.push('/home');
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationsErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+        addToast({
+          type: 'error',
+          title: 'Erro na autenticação',
+          description: 'Ocorreu um erro ao fazer login, check as credenciais.',
+        });
+      }
+    },
+    [signIn, addToast, history],
+  );
 
   return (
     <div className="bg-gray-700 h-screen w-screen w- flex items-stretch p-11">
@@ -11,26 +66,21 @@ export default function Login() {
           <Logo />
         </div>
 
-        <form className="sm:w-11/12" action="">
+        <Form ref={formRef} onSubmit={handleSubmit} className="sm:w-11/12">
           <h1 className="text-yellow-500 font-semibold my-12 text-center text-4xl flex-col flex">Faça seu login </h1>
           <div className="max-w-md mx-auto ">
-            <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around ">
+            <div className="bg-gray-900 flex rounded-xl px-4 py-3 justify-self-end align-middle items-center">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-              <input className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="E-mail"/>
+              <Input  name="email" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="E-mail"/>
             </div>
-            <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2 ">
-            <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-              <input className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="password" placeholder="Senha"/>
+            <div className="bg-gray-900 flex rounded-xl px-4 py-3 justify-self-end align-middle items-center mt-2 ">
+              <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+              <Input  name="password" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="password" placeholder="Senha"/>
             </div>
-            <Link href="/home">
-              <button className="bg-yellow-500 inline-block text-center items-start w-full mt-5 p-3 rounded-xl text-gray-900 text-xl ">Entrar</button>
-            </Link>
-
+            <button type="submit" className="bg-yellow-500 inline-block text-center items-start w-full mt-5 p-3 rounded-xl text-gray-900 text-xl ">Entrar</button>
             <p className="text-yellow-500 text-center mt-4">Esqueceu a senha ?</p>
           </div>
-
-
-        </form>
+        </Form>
       </div>
     </div>
   )

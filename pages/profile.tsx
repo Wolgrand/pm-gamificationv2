@@ -1,14 +1,28 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router';
 import {  useState } from 'react';
 
 import Nav from '../components/nav'
+import { useAuth } from '../hooks/auth';
 
 
 
 
 export default function Profile() {
 
+
+  const router = useRouter()
+  const { signOut, user } = useAuth();
+
+  if (typeof window !== 'undefined') {
+    if (user === undefined){
+      router.push('/');
+    }
+  }
+
   const [image, setImage] = useState({ preview: 'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', raw: '' })
+
+
 
   const handleAvatarChange = (e: any) => {
     setImage({

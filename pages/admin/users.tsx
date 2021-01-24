@@ -9,12 +9,23 @@ import Input from '../../components/Input'
 import Select from '../../components/Select'
 import getValidationsErrors from '../../utils/getValidationsErrors';
 import {UserSuccessResponseType} from '../../interfaces/interfaces'
+import { useRouter } from 'next/router';
+import { useAuth } from '../../hooks/auth';
 
 import axios from 'axios';
 import user from '../api/user';
 
 
 const UserPanel = () => {
+
+  const router = useRouter()
+  const { signOut, user } = useAuth();
+
+  if (typeof window !== 'undefined') {
+    if (user === undefined){
+      router.push('/');
+    }
+  }
 
   const userData = useFetch<UserSuccessResponseType[]>('/api/user');
 

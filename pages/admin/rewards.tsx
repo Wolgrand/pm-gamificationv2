@@ -8,11 +8,22 @@ import Nav from '../../components/nav'
 import Input from '../../components/Input'
 import getValidationsErrors from '../../utils/getValidationsErrors';
 import {RewardProps} from '../../interfaces/interfaces'
+import { useRouter } from 'next/router';
+import { useAuth } from '../../hooks/auth';
 
 import axios from 'axios';
 
 
 const RewardPanel = () => {
+
+  const router = useRouter()
+  const { signOut, user } = useAuth();
+
+  if (typeof window !== 'undefined') {
+    if (user === undefined){
+      router.push('/');
+    }
+  }
 
   const rewardData = useFetch<RewardProps[]>('/api/reward');
 

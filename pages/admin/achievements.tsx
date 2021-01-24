@@ -10,11 +10,21 @@ import getValidationsErrors from '../../utils/getValidationsErrors';
 import {AchievementProps} from '../../interfaces/interfaces'
 
 import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useAuth } from '../../hooks/auth';
 
 
 
 const AchievementPanel = () => {
 
+  const router = useRouter()
+  const { signOut, user } = useAuth();
+
+  if (typeof window !== 'undefined') {
+    if (user === undefined){
+      router.push('/');
+    }
+  }
 
   const achievementData = useFetch<AchievementProps[]>('/api/achievement');
   const formRef = useRef<FormHandles>(null);

@@ -1,4 +1,3 @@
-
 import Link from 'next/link'
 import { isToday, format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -8,15 +7,25 @@ import RankCard from '../components/rankCard';
 import TopCard from '../components/topCard';
 import { useMemo } from 'react';
 import { useFetch } from '../hooks/useFetch';
+import { useAuth } from '../hooks/auth';
 import { DepartmentProps, PlayerRankPros } from '../interfaces/interfaces';
+import { useRouter } from 'next/router'
 
 
 
 export default function Home() {
 
+  const router = useRouter()
+  const { signOut, user } = useAuth();
   const topPlayersData = useFetch<PlayerRankPros[]>('/api/rank/topPlayers');
   const topDepartmentsData = useFetch<DepartmentProps[]>('/api/rank/topDepartments');
   const playerListData = useFetch<PlayerRankPros[]>('/api/rank/players');
+
+  if (typeof window !== 'undefined') {
+    if (user === undefined){
+      router.push('/');
+    }
+  }
 
   const getTodayDate = useMemo(() => {
     return format(new Date(), " 'Dia' dd 'de' MMMM", {
@@ -41,16 +50,16 @@ export default function Home() {
         <div className="flex flex-col md:pl-20 pt-4 px-5 mt-3 h-96 text-">
           <h2 className="text-gray-400 font-medium md:text-2xl text-base border-solid border-b border-gray-600">Top 3 Departamentos</h2>
           <div className="flex-row flex mt-3 overflow-x-auto h-auto flex-nowrap min-h-0 ">
-            {topDepartmentsData.data && topDepartmentsData.data.map(item =>
-              <TopCard size={28} title={item.department} score={item.average} position={item.position}  />
+            {topDepartmentsData.data && topDepartmentsData.data.map((item, index) =>
+              <TopCard key={index} size={28} title={item.department} score={item.average} position={item.position}  />
             )}
           </div>
         </div>
         <div className="flex flex-col md:pl-20 pt-4 px-5 mt-3 h-96">
           <h2 className="text-gray-400 font-medium md:text-2xl text-base border-solid border-b border-gray-600">Top 3 Gerentes de Projetos</h2>
           <div className="flex-row flex mt-3 overflow-x-auto">
-            {topPlayersData.data?.map(item =>
-              <TopCard size={28} title={item.name} score={item.score} position={item.position}  />
+            {topPlayersData.data?.map((item, index) =>
+              <TopCard key={index} size={28} title={item.name} score={item.score} position={item.position}  />
             )}
           </div>
         </div>
@@ -73,5 +82,6 @@ export default function Home() {
 
   )
 }
+
 
 

@@ -1,6 +1,8 @@
+import { hash } from 'bcryptjs';
 import {NextApiRequest, NextApiResponse} from 'next'
 import {UserSuccessResponseType, ErrorResponseType} from '../../../interfaces/interfaces'
 import connect from '../../../utils/database';
+import { generateHash } from '../../../utils/providers/BCryptHashProvider';
 
 export default async (
   req: NextApiRequest,
@@ -41,6 +43,7 @@ export default async (
         return;
       }
 
+    const hashedPassword = await generateHash(password);
 
     const { db } = await connect('users');
 
@@ -58,7 +61,7 @@ export default async (
       department,
       company,
       email: lowerCaseEmail,
-      password,
+      password:hashedPassword,
       position: "",
       score: 0,
       role,

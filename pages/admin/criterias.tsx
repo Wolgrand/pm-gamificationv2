@@ -9,6 +9,8 @@ import Nav from '../../components/nav'
 import Input from '../../components/Input'
 import getValidationsErrors from '../../utils/getValidationsErrors';
 import {CriteriosProps} from '../../interfaces/interfaces'
+import { useRouter } from 'next/router';
+import { useAuth } from '../../hooks/auth';
 
 import axios from 'axios';
 
@@ -21,6 +23,15 @@ const Icon = React.forwardRef<SVGElement, SVGProps>((props, ref) => (
 
 
 const CriteriaPanel = () => {
+
+  const router = useRouter()
+  const { signOut, user } = useAuth();
+
+  if (typeof window !== 'undefined') {
+    if (user === undefined){
+      router.push('/');
+    }
+  }
 
   const criteriaData = useFetch<CriteriosProps[]>('/api/criteria');
 
