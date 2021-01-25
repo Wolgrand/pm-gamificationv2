@@ -229,7 +229,7 @@ const UserPanel = () => {
   }
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-hidden">
+    <div className="h-auto w-auto flex flex-col bg-gray-700 ">
       <Nav backButton={true} configMenu={true} backTitle="Painel de Usuários" />
 
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
@@ -314,7 +314,7 @@ const UserPanel = () => {
 
       <div onClick={() => handleModalNewSelection()} className="rounded-full flex bg-gray-900 text-gray-100 w-14 h-14 absolute top-3/4 right-16 justify-center content-center p-3 hover:opacity-60 cursor-pointer"><svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg></div>
 
-      <section id="table-jogadores" className={"bg-gray-800 px-6 py-4 mt-6 mx-6 rounded-md flex flex-col  flex-shrink-0 w-11/12 md:mt-6 md:mx-12 "}>
+      <section id="table-jogadores" className={"bg-gray-800 px-6 py-4 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 w-11/12 md:mt-6 md:mx-12 "}>
         <table className="table-auto ">
           <thead id="table-jogadores" className="text-gray-300 border-b-2 border-gray-400 font-normal">
             <tr>

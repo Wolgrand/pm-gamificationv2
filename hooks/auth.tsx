@@ -37,6 +37,7 @@ interface AuthContextData {
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
+
 export const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>(() => {
 
