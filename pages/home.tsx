@@ -26,6 +26,8 @@ const Home = () => {
     if (!user) {
       Router.replace("/");
     }
+
+
   }, [user]);
 
   const getTodayDate = useMemo(() => {
@@ -43,7 +45,7 @@ const Home = () => {
   if(user){
     return (
       <div className="h-screen w-screen flex flex-col bg-gray-700">
-        <Nav backButton={false} />
+        <Nav backButton={false} userName={user.name} />
         <main className="bg-gray-700 h-max w-auto flex-col flex  overflow-y-auto my-0 md:px-3.5">
           <div className="pl-5 md:pl-20 pt-4">
             <h1 className="text-gray-200 font-medium md:text-4xl text-2xl">Ranking Geral</h1>
@@ -77,13 +79,14 @@ const Home = () => {
               )}
               </div>
           </div>
-          <FloatingButton usage='config'/>
+          <FloatingButton usage='config' link="/admin/users"/>
         </main>
 
       </div>
 
     )
   } else {
+
     return null;
   }
 }

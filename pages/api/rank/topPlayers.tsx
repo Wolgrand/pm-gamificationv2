@@ -12,7 +12,12 @@ export default async (
 
     const { db } = await connect('users');
 
-    const response:any = await db.find( { role: 'Jogador' } ).toArray();
+    const response:UserSuccessResponseType[] = await db.find( { role: 'Jogador' } ).toArray();
+
+    response.map(async item =>
+      await db.findOneAndUpdate({_id:item._id}, {$set:{
+        old_position:item.position,
+      }}))
 
     const playerRank:UserSuccessResponseType[] = [];
 

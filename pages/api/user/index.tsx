@@ -17,7 +17,6 @@ export default async (
       email,
       password,
       position,
-      score,
       role,
     }: {
       name: string;
@@ -26,7 +25,6 @@ export default async (
       email: string;
       password: string;
       position: number;
-      score: number;
       role: string;
 
     } = req.body;
@@ -64,6 +62,7 @@ export default async (
       password:hashedPassword,
       position: "",
       score: 0,
+      old_position: "",
       role,
       rewards: [],
       criterias: [],

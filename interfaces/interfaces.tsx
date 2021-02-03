@@ -35,10 +35,11 @@ export interface UserSuccessResponseType {
   password: string,
   position: number,
   score: number,
+  old_position: number,
   role: 'jogador' | 'pmo',
-  rewards: string[],
-  criterias: string[],
-  achievements: string[]
+  rewards: RewardProps[],
+  criterias: CriteriosProps[],
+  achievements: ConquistasProps[]
 }
 export interface UserWithoutPassword {
   _id: string;
@@ -48,11 +49,12 @@ export interface UserWithoutPassword {
   email: string,
   password?: string,
   position: number,
+  old_position: number,
   score: number,
   role: 'jogador' | 'pmo',
-  rewards: string[],
-  criterias: string[],
-  achievements: string[]
+  rewards: RewardProps[],
+  criterias: CriteriosProps[],
+  achievements: ConquistasProps[]
 }
 
 export interface PlayerRankPros {
@@ -63,10 +65,11 @@ export interface PlayerRankPros {
   email: string,
   position: number,
   score: number,
+  old_position: number,
   role: 'jogador' | 'pmo',
-  rewards: string[],
-  criterias: string[],
-  achievements: string[]
+  rewards: RewardProps[],
+  criterias: CriteriosProps[],
+  achievements: ConquistasProps[]
 }
 
 export interface ConquistasProps {

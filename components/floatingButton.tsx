@@ -1,20 +1,28 @@
 import { NextComponentType } from 'next';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 
 interface Props {
   width?: number;
   usage: 'config' | 'newActivity';
+  link:string;
 }
 
-const FloatingButton = ({usage}: Props) => {
+const FloatingButton = ({usage, link}: Props) => {
 
+  const history = useRouter();
+
+  const handleSubmit:any = () => {
+    history.push(link)
+  }
 
   return (
-    <button  id="nav-toggle" className={"fixed block sm:hidden items-center hover:opacity-100 opacity-50  bottom-6 right-6 w-16 h-16 rounded-full text-gray-500  hover:bg-gray-900 hover:text-gray-300 hover:border-gray-300 shadow-2xl " + (usage === 'config' ? 'bg-gray-800' : 'bg-gray-900')}>
+    <button onClick={()=>handleSubmit()} id="nav-toggle" className={"fixed block  items-center hover:opacity-100 opacity-30 bottom-6 right-6 w-16 h-16 rounded-full text-gray-900  shadow-2xl " + (usage === 'config' ? 'bg-white' : 'bg-white')}>
       { usage === "config"
         ?
-         <svg className="w-7 h-7 my-0 mx-auto" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-        : <svg className="w-7 h-7 my-0 mx-auto" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+         <svg className="w-7 h-7 my-0 mx-auto" fill="none" stroke="#000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        : <svg className="w-7 h-7 my-0 mx-auto" fill="none" stroke="#000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
       }
 
     </button>

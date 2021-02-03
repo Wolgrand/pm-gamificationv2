@@ -8,10 +8,11 @@ interface Props {
   backButton?: boolean;
   backTitle?:string;
   configMenu?: boolean;
+  userName?:string;
 }
 
 
-const Nav = ({backButton, backTitle, configMenu}:Props) => {
+const Nav = ({backButton, backTitle, configMenu, userName}:Props) => {
 
 
   const [showProfileOptions, setShowProfileOptions] = useState(false);
@@ -35,7 +36,7 @@ const Nav = ({backButton, backTitle, configMenu}:Props) => {
 
 
   return (
-    <nav className=" flex flex-row  justify-between flex-nowrap bg-gray-800 px-6 py-3  w-full top-0" style={{minHeight:60}}>
+    <header className=" flex flex-row  justify-between flex-nowrap bg-gray-800 px-6 py-3  w-full top-0" style={{minHeight:60}}>
 
       {backButton ?
         <div className="flex flex-row justify-around align-middle items-center content-center">
@@ -120,8 +121,8 @@ const Nav = ({backButton, backTitle, configMenu}:Props) => {
             </span>
           </button>
           <div className="flex flex-row items-center">
-            <p className="mr-5 ml-3 hidden text-lg text-gray-200 md:block">John Doe</p>
-            <div className="cursor-pointer" onClick={handleShowProfileOptions}>
+            <p className="mr-5 ml-3 hidden text-lg text-gray-200 md:block">{userName}</p>
+            <div className="z-50 cursor-pointer" onClick={handleShowProfileOptions}>
               <img  className={" inline-block h-10 x-14 rounded-full ring-2 ring-white"} src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
             </div>
             <div>
@@ -179,7 +180,7 @@ const Nav = ({backButton, backTitle, configMenu}:Props) => {
 
       </div>
 
-	</nav>
+	</header>
 
   );
   }

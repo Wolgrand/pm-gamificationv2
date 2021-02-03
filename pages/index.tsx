@@ -2,11 +2,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
+import { useCallback, useEffect, useRef } from 'react';
+import { FormHandles } from '@unform/core';
+import Router from "next/router";
 import { useAuth } from '../hooks/auth';
 import { useToast } from '../hooks/toast';
 import Logo from '../components/logo';
-import { useCallback, useRef } from 'react';
-import { FormHandles } from '@unform/core';
 import getValidationsErrors from '../utils/getValidationsErrors';
 import { SignInFormatData } from '../interfaces/interfaces';
 import Input from '../components/Input'
@@ -15,9 +16,17 @@ import Input from '../components/Input'
 export default function Login() {
 
   const formRef = useRef<FormHandles>(null);
-  const { signIn } = useAuth();
+  const { signIn, user } = useAuth();
   const { addToast } = useToast();
   const history = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      Router.replace("/home");
+    }
+
+
+  }, [user]);
 
 
   const handleSubmit = useCallback(
