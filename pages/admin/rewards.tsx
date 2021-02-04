@@ -57,7 +57,7 @@ const RewardPanel = () => {
         }
 
         try {
-          await axios.post(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/reward',newReward)
+          await axios.post('/api/reward',newReward)
 
           const updatedRewards = rewardData.data?.map(item => {
 
