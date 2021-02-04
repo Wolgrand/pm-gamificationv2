@@ -142,7 +142,7 @@ const RewardPanel = () => {
 
         try {
 
-         await axios.delete(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/reward/${_id}`)
+         await axios.delete(`/api/reward/${_id}`)
          const updatedRewards = rewardData.data?.map(item => {
           if (item._id !== _id) {
             return { ...item }

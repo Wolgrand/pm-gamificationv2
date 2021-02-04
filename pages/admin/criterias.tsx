@@ -65,7 +65,7 @@ const CriteriaPanel = () => {
         }
 
         try {
-          await axios.post(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/criteria',newCriteria)
+          await axios.post('/api/criteria',newCriteria)
           const updatedCriterias = criteriaData.data?.map(item => {
 
             return { ...item, icon: data.icon, description: data.description, score: data.score }
@@ -119,7 +119,7 @@ const CriteriaPanel = () => {
         }
 
         try {
-          await axios.put(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/criteria/${_id}`, updateCriteria)
+          await axios.put(`/api/criteria/${_id}`, updateCriteria)
 
           const updatedCriteria = criteriaData.data?.map(item => {
             if (item._id === data._id) {
@@ -173,7 +173,7 @@ const CriteriaPanel = () => {
 
         try {
 
-         await axios.delete(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/criteria/${_id}`)
+         await axios.delete(`/api/criteria/${_id}`)
          const updatedCriteria = criteriaData.data?.map(item => {
           if (item._id !== _id) {
             return { ...item }

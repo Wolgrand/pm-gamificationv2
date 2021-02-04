@@ -67,7 +67,7 @@ const UserPanel = () => {
         }
 
         try {
-          await axios.post(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/user',newUser)
+          await axios.post('/api/user',newUser)
           const updateUser = userData.data?.map(item => {
 
             return { ...item,
@@ -131,7 +131,7 @@ const UserPanel = () => {
         }
 
         try {
-          await axios.put(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/user/${_id}`, updatedUser)
+          await axios.put(`/api/user/${_id}`, updatedUser)
           const updateUser = userData.data?.map(item => {
             if (item._id === data._id) {
               return { ...item,
@@ -173,7 +173,7 @@ const UserPanel = () => {
 
         try {
 
-         await axios.delete(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/user/${_id}`)
+         await axios.delete(`/api/user/${_id}`)
          const updatedUser = userData.data?.map(item => {
           if (item._id !== _id) {
             return { ...item }

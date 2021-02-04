@@ -62,7 +62,7 @@ const AchievementPanel = () => {
         }
 
         try {
-          await axios.put(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/achievement/${_id}`,updateAchievement)
+          await axios.put(`/api/achievement/${_id}`,updateAchievement)
           const updatedAchievement = achievementData.data?.map(item => {
             if (item._id === data._id) {
               return { ...item,
@@ -119,7 +119,7 @@ const AchievementPanel = () => {
         }
 
         try {
-          await axios.post(process.env.NEXT_PUBLIC_VERCEL_URL + '/api/achievement',newAchievement)
+          await axios.post('/api/achievement',newAchievement)
           const updateAchievement = achievementData.data?.map(item => {
 
             return { ...item, image_url: data.image_url,
@@ -163,7 +163,7 @@ const AchievementPanel = () => {
 
         try {
 
-         await axios.delete(process.env.NEXT_PUBLIC_VERCEL_URL + `/api/achievement/${_id}`)
+         await axios.delete(`/api/achievement/${_id}`)
          const updatedAchievement = achievementData.data?.map(item => {
           if (item._id !== _id) {
             return { ...item }
