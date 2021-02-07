@@ -8,6 +8,16 @@ export interface AchievementProps {
   title: string,
   description: string,
   score: number,
+}
+
+export interface AchievementData {
+  id: string,
+  month: number,
+  day: number,
+  image_url: string,
+  title: string,
+  description: string,
+  score: number,
 
 }
 export interface DepartmentProps {
@@ -69,7 +79,7 @@ export interface PlayerRankPros {
   role: 'jogador' | 'pmo',
   rewards: RewardProps[],
   criterias: CriteriosProps[],
-  achievements: ConquistasProps[]
+  achievements: AchievementData[]
 }
 
 export interface ConquistasProps {

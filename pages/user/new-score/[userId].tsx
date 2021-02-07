@@ -1,13 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import SVG, { Props as SVGProps } from 'react-inlinesvg';
 import { v4 as uuid } from 'uuid'
 import Router, { useRouter } from "next/router";
 import Nav from '../../../components/nav'
-import {Line} from 'rc-progress'
-import FloatingButton from '../../../components/floatingButton'
 import { useFetch } from '../../../hooks/useFetch'
 import { AchievementProps, ConquistasProps, CriteriosProps, PlayerRankPros, RewardProps } from '../../../interfaces/interfaces'
 import { useAuth } from "../../../hooks/auth";
+import axios from 'axios';
 
 const Icon = React.forwardRef<SVGElement, SVGProps>((props, ref) => (
   <SVG innerRef={ref} title="MyLogo" {...props} />
@@ -16,7 +15,6 @@ const Icon = React.forwardRef<SVGElement, SVGProps>((props, ref) => (
 const NewScore = () => {
 
   const { signOut, user } = useAuth();
-  const icon = useRef<SVGElement>(null);
   const router = useRouter()
   const { userId } = router.query;
   const [newScore, setNewScore] = useState(0)
@@ -68,6 +66,28 @@ const NewScore = () => {
     const filteredItems = selectedCriterias.filter((item) => item._id !== criteria._id);
     setSelectedCriterias(filteredItems);
   }
+
+  const handleSaveNewScore = useCallback(
+    async () => {
+
+          const today = new Date;
+           selectedAchievements.map(async item =>{
+            await axios.put(`/api/new-score/achievement/${userId}`,{
+            id: uuid(),
+            month: today.getMonth() + 1 ,
+            day: today.getDate(),
+            image_url: item.image_url,
+            description: item.description,
+            title: item.title,
+            score: Number(item.score)
+          } )
+        })
+
+
+
+    },
+    [],
+  );
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
@@ -123,7 +143,7 @@ const NewScore = () => {
           <div className="flex justify-between mt-2 flex-row md:flex-row w-auto border-gray-400 border-b-2 ">
             <p className="md:text-lg text-left font-semibold text-white justify-start mb-2 ">Pontuação: {newScore}</p>
             <div className=" flex flex-row hover:opacity-40 cursor-pointer justify-center align-middle">
-              <p className="md:text-lg text-left font-semibold text-gray-400 justify-start mb-2 ">Salvar +</p>
+              <button onClick={()=>handleSaveNewScore()} className={"md:text-lg text-left font-semibold text-gray-400 justify-start mb-2 " + (selectedAchievements.length>0 ? '' : 'cursor-not-allowed')}>Salvar +</button>
             </div>
           </div>
           <section className="mt-5">
