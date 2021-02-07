@@ -49,7 +49,7 @@ export interface UserSuccessResponseType {
   role: 'jogador' | 'pmo',
   rewards: RewardProps[],
   criterias: CriteriosProps[],
-  achievements: ConquistasProps[]
+  achievements: AchievementData[]
 }
 export interface UserWithoutPassword {
   _id: string;
@@ -64,7 +64,7 @@ export interface UserWithoutPassword {
   role: 'jogador' | 'pmo',
   rewards: RewardProps[],
   criterias: CriteriosProps[],
-  achievements: ConquistasProps[]
+  achievements: AchievementData[]
 }
 
 export interface PlayerRankPros {
