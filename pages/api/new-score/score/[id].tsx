@@ -12,25 +12,14 @@ export default async (
   if (req.method === 'PUT') {
 
     const {
-      id,
-      month,
-      day,
-      description,
       score,
     }: {
-      id: string,
-      month: number,
-      day: number,
-      description: string,
       score: number,
     } = req.body;
 
+    console.log(score);
 
        if (
-        !id ||
-        !month ||
-        !day ||
-        !description ||
         !score
         ) {
         res.status(400).json({ error: 'Missing body parameter' });
@@ -52,17 +41,9 @@ export default async (
     }
 
     try {
-
-
-      const response:any = await db.findOneAndUpdate({_id}, {$push:{
-        criterias:{
-          id,
-          month,
-          day,
-          description,
-          score
-        }
-      }});
+      const response:any = await db.findOneAndUpdate({_id}, {$set :{
+        score: score
+      }})
 
       res.status(200).json(response);
     } catch (error) {
@@ -70,49 +51,6 @@ export default async (
     }
 
 
-  }if (req.method === 'DELETE') {
-
-    const {
-      id
-    }: {
-      id: string,
-    } = req.body;
-
-    const userId = req.query.id as string;
-
-    const _id = new ObjectID(userId);
-
-    const { db } = await connect('users');
-
-    const checkIfUserExist = await db.findOne({ _id });
-    if (!checkIfUserExist) {
-      res
-        .status(400)
-        .json({ error: `User not find` });
-      return;
-    }
-
-    const filterCriterias = checkIfUserExist.criterias.filter((item:any)=>{
-     return item.id !== id
-    })
-
-
-     const response:any = await db.findOneAndUpdate({_id}, {$set:{
-      criterias: filterCriterias
-    }});
-
-    const filterCriteria = checkIfUserExist.criterias.filter((item:any)=>{
-      return item.id === id
-     })
-
-     filterCriteria.map(async (item: CriteriaData) => {
-      await db.findOneAndUpdate({_id}, {$set :{
-        score: checkIfUserExist.score - item.score
-      }})
-     })
-
-
-    res.status(200).json(response);
   }else if (req.method === 'GET') {
 
     const id = req.query.id as string;

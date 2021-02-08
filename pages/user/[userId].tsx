@@ -59,7 +59,6 @@ const User = () => {
   useEffect(() => {
       const today = new Date
       const thisMonth = today.getMonth() + 1
-      setSelectedMonth(months[thisMonth])
       handleMonthSelection(thisMonth)
       }, []);
 
@@ -71,6 +70,18 @@ const User = () => {
       await axios.delete(`/api/new-score/achievement/${userId}`, {
         data: achievement
       })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleDeleteCriteria = async (id:string) => {
+    try {
+      const criteria = {id}
+      await axios.delete(`/api/new-score/criteria/${userId}`, {
+        data: criteria
+      })
+
     } catch (error) {
       console.log(error);
     }
@@ -183,7 +194,7 @@ const User = () => {
                 <summary className="">{item}/{selectedMonthRewards}/2021</summary>
                 {
                   playerData.data?.criterias.filter(criteria=> criteria.day === item).map((item, index) => (
-                    <p key={index} className="flex text-gray-400 mt-2">{item.description} - {item.score}pts{user.role==='pmo' ? <svg onClick={()=>handleDeleteAchievement(item.id)} className="w-5 h-5 ml-5 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>:null}</p>
+                    <p key={index} className="flex text-gray-400 mt-2">{item.description} - {item.score}pts{user.role==='pmo' ? <svg onClick={()=>handleDeleteCriteria(item.id)} className="w-5 h-5 ml-5 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>:null}</p>
                   ))
                 }
                 </details>

@@ -57,7 +57,11 @@ export default async (
       return;
     }
 
+
+
     try {
+
+
       const response:any = await db.findOneAndUpdate({_id}, {$push:{
         achievements:{
           id,
@@ -105,6 +109,17 @@ export default async (
      const response:any = await db.findOneAndUpdate({_id}, {$set:{
       achievements: filterAchievements
     }});
+
+    const filterAchievement = checkIfUserExist.achievements.filter((item:any)=>{
+      return item.id === achievementId
+     })
+
+
+     filterAchievement.map(async (item: AchievementData) => {
+      await db.findOneAndUpdate({_id}, {$set :{
+        score: checkIfUserExist.score - item.score
+      }})
+     })
 
 
 

@@ -88,6 +88,7 @@ export default async (
       return;
     }
 
+
     const response:any = await db.findOneAndDelete({ _id });
 
     res.status(200).json(response);

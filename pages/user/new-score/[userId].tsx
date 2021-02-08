@@ -13,6 +13,10 @@ const Icon = React.forwardRef<SVGElement, SVGProps>((props, ref) => (
   <SVG innerRef={ref} title="MyLogo" {...props} />
 ));
 
+const calculateSumScore = (obj:any) => obj
+  .map((items:any) => items.score)
+  .reduce((prev:any, curr:any) => prev + curr, 0);
+
 const NewScore = () => {
 
   const { signOut, user } = useAuth();
@@ -72,9 +76,13 @@ const NewScore = () => {
     setSelectedCriterias(filteredItems);
   }
 
-  const handleSaveNewScore = () => {
+  const handleSaveNewScore = async () => {
     const today = new Date;
+    const sumAchievements = calculateSumScore(selectedAchievements)
+    const sumCriterias = calculateSumScore(selectedCriterias)
+    const newScore = Number(sumAchievements) + Number(sumCriterias) + Number(playerData.data?.score)
 
+    console.log(newScore);
 
     try {
       if (selectedAchievements.length > 0){
@@ -133,6 +141,11 @@ const NewScore = () => {
         description: 'A consquista não pode ser salva devido a um erro interno!',
       });
     }
+
+
+    await axios.put(`/api/new-score/score/${userId}`, {
+      score:newScore
+    })
   }
 
 
