@@ -20,6 +20,14 @@ export interface AchievementData {
   score: number,
 
 }
+export interface CriteriaData {
+  id: string,
+  month: number,
+  day: number,
+  description: string,
+  score: number,
+
+}
 export interface DepartmentProps {
   department: string,
   average: number,
@@ -48,7 +56,7 @@ export interface UserSuccessResponseType {
   old_position: number,
   role: 'jogador' | 'pmo',
   rewards: RewardProps[],
-  criterias: CriteriosProps[],
+  criterias: CriteriaData[],
   achievements: AchievementData[]
 }
 export interface UserWithoutPassword {
@@ -63,7 +71,7 @@ export interface UserWithoutPassword {
   score: number,
   role: 'jogador' | 'pmo',
   rewards: RewardProps[],
-  criterias: CriteriosProps[],
+  criterias: CriteriaData[],
   achievements: AchievementData[]
 }
 
@@ -78,7 +86,7 @@ export interface PlayerRankPros {
   old_position: number,
   role: 'jogador' | 'pmo',
   rewards: RewardProps[],
-  criterias: CriteriosProps[],
+  criterias: CriteriaData[],
   achievements: AchievementData[]
 }
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -9,7 +9,7 @@ import Input from '../../components/Input'
 import Select from '../../components/Select'
 import getValidationsErrors from '../../utils/getValidationsErrors';
 import {UserSuccessResponseType} from '../../interfaces/interfaces'
-import { useRouter } from 'next/router';
+import Router, {useRouter } from 'next/router';
 import { useAuth } from '../../hooks/auth';
 
 import axios from 'axios';
@@ -26,6 +26,15 @@ const UserPanel = () => {
       router.push('/');
     }
   }
+
+  useEffect(() => {
+    if (!user) {
+      Router.replace("/");
+    }
+
+    if (user.role === 'jogador')
+    Router.replace("/");
+      }, [user]);
 
   const userData = useFetch<UserSuccessResponseType[]>('/api/user');
 
@@ -230,7 +239,7 @@ const UserPanel = () => {
 
   return (
     <div className="h-auto w-auto flex flex-col bg-gray-700 ">
-      <Nav backButton={true} configMenu={true} backTitle="Painel de Usuários" />
+      <Nav backURL="home" backButton={true} configMenu={true} backTitle="Painel de Usuários" />
 
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
         <div className="flex flex-row justify-between align-middle content-between border-gray-200 border-b-2">

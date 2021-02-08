@@ -10,11 +10,9 @@ export default async (
 
   if (req.method === 'POST') {
     const {
-      icon,
       description,
       score,
     }: {
-      icon: string;
       description: string;
       score: string;
 
@@ -22,7 +20,6 @@ export default async (
     } = req.body;
 
       if (
-        !icon ||
         !description ||
         !score
 
@@ -45,7 +42,6 @@ export default async (
     }
 
     const response = await db.insertOne({
-      icon,
       description,
       score,
     });

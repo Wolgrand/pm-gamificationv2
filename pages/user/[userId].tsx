@@ -10,30 +10,6 @@ import axios from "axios";
 
 const User = () => {
 
-  const { signOut, user } = useAuth();
-  const router = useRouter()
-  const { userId } = router.query;
-  const [selectedMonth, setSelectedMonth] = useState('Janeiro')
-  //const [selectedMonthRewards, setSelectedMonthRewards] = useState<AchievementData[]>([])
-  const [selectedMonthRewards, setSelectedMonthRewards] = useState(0)
-  const [achievementGridArray, setAchievementGridArray] = useState<Number[]>([])
-  const playerData = useFetch<PlayerRankPros>(`/api/user/${userId}`);
-  const rewardsList = useFetch<RewardProps[]>(`/api/reward`);
-  const achievementData = useFetch<AchievementProps[]>('/api/achievement');
-
-  useEffect(() => {
-    if (!user) {
-      Router.replace("/");
-    }
-    const totalAchievements = achievementData.data ? achievementData.data.length : 0
-    const totalPlayerAchievements = playerData.data ? playerData.data.achievements.length:0
-    const totalEmptyGrid = totalAchievements - totalPlayerAchievements
-    const emptyAchievementsArray =  Array.from(Array(totalEmptyGrid).keys())
-    setAchievementGridArray(emptyAchievementsArray)
-    console.log(achievementGridArray);
-
-      }, [user]);
-
   const months = [
     "Janeiro",
     "Janeiro",
@@ -49,6 +25,45 @@ const User = () => {
     "Novembro",
     "Dezembro"
   ]
+
+  const { signOut, user } = useAuth();
+  const router = useRouter()
+  const { userId } = router.query;
+  const [selectedMonth, setSelectedMonth] = useState('Janeiro')
+  //const [selectedMonthRewards, setSelectedMonthRewards] = useState<AchievementData[]>([])
+  const [selectedMonthRewards, setSelectedMonthRewards] = useState(0)
+  const [achievementGridArray, setAchievementGridArray] = useState<Number[]>([])
+  const playerData = useFetch<PlayerRankPros>(`/api/user/${userId}`);
+  const rewardsList = useFetch<RewardProps[]>(`/api/reward`);
+  const achievementData = useFetch<AchievementProps[]>('/api/achievement');
+
+  useEffect(() => {
+    if (!user) {
+      Router.replace("/");
+    }
+
+    if (user.role === 'jogador') {
+      Router.replace("/");
+    }
+
+
+    const totalAchievements = achievementData.data ? achievementData.data.length : 0
+    const totalPlayerAchievements = playerData.data ? playerData.data.achievements.length:0
+    const totalEmptyGrid = totalAchievements - totalPlayerAchievements
+    const emptyAchievementsArray =  Array.from(Array(totalEmptyGrid).keys())
+    setAchievementGridArray(emptyAchievementsArray)
+
+
+      }, [user]);
+
+  useEffect(() => {
+      const today = new Date
+      const thisMonth = today.getMonth() + 1
+      setSelectedMonth(months[thisMonth])
+      handleMonthSelection(thisMonth)
+      }, []);
+
+
 
   const handleDeleteAchievement = async (id:string) => {
     try {
@@ -77,7 +92,7 @@ const User = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
-      <Nav backButton={true} backTitle="Usuário" />
+      <Nav backButton={true} backTitle="Home" backURL="home" />
       <div className="md:flex-row flex-col flex md:px-10 mb-3">
       <aside className="bg-gray-800 px-3 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 md:w-80 md:mr-2 ">
         <section className="p-4 mx-auto my-0 pt-6 mb-4  h-auto">
@@ -146,7 +161,8 @@ const User = () => {
             <div onClick={() => handleMonthSelection(11)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Novembro" ? "bg-yellow-600" : "bg-gray-900")} >Nov</div>
             <div onClick={() => handleMonthSelection(12)} className={"bg-gray-900 w-full rounded-lg text-center mx-auto p-2 my-0 text-white cursor-pointer  " + (selectedMonth==="Dezembro" ? "bg-yellow-600" : "bg-gray-900")} >Dez</div>
           </div>
-          <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Atividades {`${selectedMonth}`}</p>
+
+          <p className="mt-6 text-lg text-left font-semibold text-gray-200 justify-start mb-4 border-gray-400 border-b-2">Conquistas:</p>
             { playerData.data?.achievements.filter(item=>item.month === selectedMonthRewards).map(achievement => achievement.day).filter((value, index, self) => self.indexOf(value) === index).map((item,index)=>(
               <div key={index}>
                 <details className="text-white flex flex-row mb-5">
@@ -154,6 +170,20 @@ const User = () => {
                 {
                   playerData.data?.achievements.filter(achievement=> achievement.day === item).map((item, index) => (
                     <p key={index} className="flex text-gray-400 mt-2">{item.title} - {item.score}pts{user.role==='pmo' ? <svg onClick={()=>handleDeleteAchievement(item.id)} className="w-5 h-5 ml-5 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>:null}</p>
+                  ))
+                }
+                </details>
+              </div>
+            ))}
+
+          <p className="mt-6 text-lg text-left font-semibold text-gray-200 justify-start  mb-4 border-gray-400 border-b-2">Entregas:</p>
+            { playerData.data?.criterias.filter(item=>item.month === selectedMonthRewards).map(criteria => criteria.day).filter((value, index, self) => self.indexOf(value) === index).map((item,index)=>(
+              <div key={index}>
+                <details className="text-white flex flex-row mb-5">
+                <summary className="">{item}/{selectedMonthRewards}/2021</summary>
+                {
+                  playerData.data?.criterias.filter(criteria=> criteria.day === item).map((item, index) => (
+                    <p key={index} className="flex text-gray-400 mt-2">{item.description} - {item.score}pts{user.role==='pmo' ? <svg onClick={()=>handleDeleteAchievement(item.id)} className="w-5 h-5 ml-5 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>:null}</p>
                   ))
                 }
                 </details>

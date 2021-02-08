@@ -7,6 +7,7 @@ import { useFetch } from '../../../hooks/useFetch'
 import { AchievementProps, ConquistasProps, CriteriosProps, PlayerRankPros, RewardProps } from '../../../interfaces/interfaces'
 import { useAuth } from "../../../hooks/auth";
 import axios from 'axios';
+import { useToast } from '../../../hooks/toast';
 
 const Icon = React.forwardRef<SVGElement, SVGProps>((props, ref) => (
   <SVG innerRef={ref} title="MyLogo" {...props} />
@@ -16,8 +17,10 @@ const NewScore = () => {
 
   const { signOut, user } = useAuth();
   const router = useRouter()
+  const { addToast } = useToast();
   const { userId } = router.query;
   const [newScore, setNewScore] = useState(0)
+  const [loadingNewScoreSubmit, setLoadingNewScoreSubmit] = useState(false)
   const [openCriterias, setOpenCriterias] = useState(false)
   const [openAchievements, setOpenAchievements] = useState(false)
   const [selectedAchievements, setSelectedAchievements] = useState<AchievementProps[]>([])
@@ -31,6 +34,8 @@ const NewScore = () => {
       Router.replace("/");
     }
 
+    if (user.role === 'jogador')
+    Router.replace("/");
       }, [user]);
 
   const handleOpenCriteriaList = () => {
@@ -67,31 +72,75 @@ const NewScore = () => {
     setSelectedCriterias(filteredItems);
   }
 
-  const handleSaveNewScore = useCallback(
-    async () => {
-
-          const today = new Date;
-           selectedAchievements.map(async item =>{
-            await axios.put(`/api/new-score/achievement/${userId}`,{
-            id: uuid(),
-            month: today.getMonth() + 1 ,
-            day: today.getDate(),
-            image_url: item.image_url,
-            description: item.description,
-            title: item.title,
-            score: Number(item.score)
-          } )
-        })
+  const handleSaveNewScore = () => {
+    const today = new Date;
 
 
+    try {
+      if (selectedAchievements.length > 0){
+        setLoadingNewScoreSubmit(true)
+        selectedAchievements.map(async item =>{
+          await axios.put(`/api/new-score/achievement/${userId}`,{
+                id: uuid(),
+                month: today.getMonth() + 1 ,
+                day: today.getDate(),
+                image_url: item.image_url,
+                description: item.description,
+                title: item.title,
+                score: Number(item.score)
+              } )
+              addToast({
+                type: 'success',
+                title: 'Conquista salva com sucesso',
+                description: 'A consquista selecionada foi atribuída ao jogador com sucesso!',
+              });
+              setLoadingNewScoreSubmit(false)
+      })}
 
-    },
-    [],
-  );
+    } catch (error) {
+      addToast({
+        type: 'error',
+        title: 'Erro ao salvar a conquista!',
+        description: 'A consquista não pode ser salva devido a um erro interno!',
+      });
+    }
+
+    try {
+      if (selectedCriterias.length > 0){
+        selectedCriterias.map(async item =>{
+          await axios.put(`/api/new-score/criteria/${userId}`,{
+                id: uuid(),
+                month: today.getMonth() + 1 ,
+                day: today.getDate(),
+                description: item.description,
+                score: Number(item.score)
+              } )
+              addToast({
+                type: 'success',
+                title: 'Entrega salva com sucesso',
+                description: 'A entregas selecionada foi atribuída ao jogador com sucesso!',
+              });
+
+              setLoadingNewScoreSubmit(false)
+      })}
+
+
+
+    } catch (error) {
+      addToast({
+        type: 'error',
+        title: 'Erro ao salvar a entrega!',
+        description: 'A consquista não pode ser salva devido a um erro interno!',
+      });
+    }
+  }
+
+
+
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
-      <Nav backButton={true} backTitle="Usuário" />
+      <Nav backButton={true} backTitle={playerData.data?.name} backURL={`user/${userId}`} />
       <div className="md:flex-row flex-col flex md:px-10 mb-3 justify-center">
       <aside className=" md:px-3 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 w-12/12 md:w-4/12 md:mr-2 ">
         <section className="bg-gray-800 p-4 pt-6 mb-4 flex h-auto justify-center sm:flex-row flex-col">
@@ -143,7 +192,11 @@ const NewScore = () => {
           <div className="flex justify-between mt-2 flex-row md:flex-row w-auto border-gray-400 border-b-2 ">
             <p className="md:text-lg text-left font-semibold text-white justify-start mb-2 ">Pontuação: {newScore}</p>
             <div className=" flex flex-row hover:opacity-40 cursor-pointer justify-center align-middle">
-              <button onClick={()=>handleSaveNewScore()} className={"md:text-lg text-left font-semibold text-gray-400 justify-start mb-2 " + (selectedAchievements.length>0 ? '' : 'cursor-not-allowed')}>Salvar +</button>
+              {loadingNewScoreSubmit
+                ? <svg className="w-7 h-7 animate-spin" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                : <button onClick={()=> handleSaveNewScore()} className={"md:text-lg text-left font-semibold text-gray-400 justify-start mb-2 " + (selectedAchievements.length>0 || selectedCriterias.length>0 ? '' : 'cursor-not-allowed')}>Salvar +</button>
+              }
+
             </div>
           </div>
           <section className="mt-5">

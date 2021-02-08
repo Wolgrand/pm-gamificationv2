@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useRef, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -10,7 +10,7 @@ import getValidationsErrors from '../../utils/getValidationsErrors';
 import {AchievementProps} from '../../interfaces/interfaces'
 
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import Router, {useRouter } from 'next/router';
 import { useAuth } from '../../hooks/auth';
 
 
@@ -25,6 +25,18 @@ const AchievementPanel = () => {
       router.push('/');
     }
   }
+
+  useEffect(() => {
+    if (!user) {
+      Router.replace("/");
+    }
+
+    if (user.role === 'jogador')
+    Router.replace("/");
+      }, [user]);
+
+
+
 
   const achievementData = useFetch<AchievementProps[]>('/api/achievement');
   const formRef = useRef<FormHandles>(null);
@@ -215,7 +227,7 @@ const AchievementPanel = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-hidden">
-      <Nav backButton={true} configMenu={true} backTitle="Painel de Conquistas" />
+      <Nav backButton={true} configMenu={true} backTitle="Painel de Conquistas" backURL="home" />
 
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
         <div className="flex flex-row justify-between align-middle content-between border-gray-200 border-b-2">

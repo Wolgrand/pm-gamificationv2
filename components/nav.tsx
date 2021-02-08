@@ -9,10 +9,11 @@ interface Props {
   backTitle?:string;
   configMenu?: boolean;
   userName?:string;
+  backURL?:string;
 }
 
 
-const Nav = ({backButton, backTitle, configMenu, userName}:Props) => {
+const Nav = ({backButton, backTitle, configMenu, userName, backURL}:Props) => {
 
 
   const [showProfileOptions, setShowProfileOptions] = useState(false);
@@ -40,7 +41,7 @@ const Nav = ({backButton, backTitle, configMenu, userName}:Props) => {
 
       {backButton ?
         <div className="flex flex-row justify-around align-middle items-center content-center">
-          <Link  href="/home">
+          <Link  href={backURL ? `/${backURL}` : '/home'}>
             <a>
               <svg className=" h-6 mr-3 flex " fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             </a>

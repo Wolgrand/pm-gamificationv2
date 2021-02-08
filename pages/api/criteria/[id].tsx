@@ -12,17 +12,14 @@ export default async (
   if (req.method === 'PUT') {
 
     const {
-      icon,
       description,
       score,
     }: {
-      icon: string;
       description: string;
       score: string;
     } = req.body;
 
       if (
-        !icon ||
         !description ||
         !score
 
@@ -39,7 +36,6 @@ export default async (
 
     try {
       const response:any = await db.findOneAndUpdate({_id}, {$set:{
-        icon,
         description,
         score,
       }});

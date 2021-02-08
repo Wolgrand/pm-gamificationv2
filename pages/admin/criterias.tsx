@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import SVG, { Props as SVGProps } from 'react-inlinesvg';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
@@ -9,7 +9,7 @@ import Nav from '../../components/nav'
 import Input from '../../components/Input'
 import getValidationsErrors from '../../utils/getValidationsErrors';
 import {CriteriosProps} from '../../interfaces/interfaces'
-import { useRouter } from 'next/router';
+import  Router, {useRouter } from 'next/router';
 import { useAuth } from '../../hooks/auth';
 
 import axios from 'axios';
@@ -32,6 +32,15 @@ const CriteriaPanel = () => {
       router.push('/');
     }
   }
+
+  useEffect(() => {
+    if (!user) {
+      Router.replace("/");
+    }
+
+    if (user.role === 'jogador')
+    Router.replace("/");
+      }, [user]);
 
   const criteriaData = useFetch<CriteriosProps[]>('/api/criteria');
 
@@ -103,7 +112,6 @@ const CriteriaPanel = () => {
       try {
         formRef.current?.setErrors({});
          const schema = Yup.object().shape({
-          icon: Yup.string().required('Icone obrigatório'),
           description: Yup.string().required('Descrição obrigatória'),
           score: Yup.number().required('Pontuação obrigatória'),
         });
@@ -113,7 +121,6 @@ const CriteriaPanel = () => {
         });
 
         const updateCriteria = {
-          icon: data.icon,
           description: data.description,
           score: data.score,
         }
@@ -123,7 +130,7 @@ const CriteriaPanel = () => {
 
           const updatedCriteria = criteriaData.data?.map(item => {
             if (item._id === data._id) {
-              return { ...item, icon: data.icon, description: data.description, score: data.score }
+              return { ...item, description: data.description, score: data.score }
             }
 
             return item;
@@ -206,7 +213,7 @@ const CriteriaPanel = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-hidden">
-      <Nav backButton={true} configMenu={true} backTitle="Painel de Critério" />
+      <Nav backURL="home" backButton={true} configMenu={true} backTitle="Painel de Critério" />
 
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
         <div className="flex flex-row justify-between align-middle content-between border-gray-200 border-b-2">
@@ -218,10 +225,6 @@ const CriteriaPanel = () => {
 
         <Form ref={formRef} className={"sm:w-11/12 mt-8 "} onSubmit={handleAddNewCriteria}>
           <div className="max-w-md mx-auto ">
-            <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around ">
-              <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-              <Input  name="icon" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Icone"/>
-            </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
               <Input  name="description" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Descrição"/>
@@ -250,10 +253,6 @@ const CriteriaPanel = () => {
               <Input value={selectedCriteria?._id} readOnly name="_id" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Id"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
-              <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-              <Input defaultValue={selectedCriteria?.icon}  name="icon" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Icone"/>
-            </div>
-            <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
               <Input defaultValue={selectedCriteria?.description}  name="description" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Descrição"/>
             </div>
@@ -273,7 +272,6 @@ const CriteriaPanel = () => {
           <thead className="text-white border-b-2 border-gray-400 font-normal">
             <tr>
               <th>#</th>
-              <th>Icone</th>
               <th>Descrição</th>
               <th>Pontuação</th>
               <th>Ação</th>
@@ -283,7 +281,6 @@ const CriteriaPanel = () => {
             {criteriaData.data && criteriaData.data.map( (item:any, index:number) => (
               <tr key={item._id} className="table-row leading-10 rounded-3xl bg-gray-900 mb-3 border-b-4 border-gray-800 text-white">
                 <td className="table-cell bg-gray-900 h-20 items-center  w-8">{index + 1}</td>
-                <td className="table-cell bg-gray-900 h-20 items-center "><div className="text-white flex justify-center"><Icon  ref={icon} stroke="#fff" src={`/icons/${item.icon}.svg` } /></div></td>
                 <td className="table-cell bg-gray-900 h-20 items-center ">{item.description}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center ">{item.score}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center ">

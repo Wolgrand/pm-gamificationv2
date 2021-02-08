@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -8,7 +8,7 @@ import Nav from '../../components/nav'
 import Input from '../../components/Input'
 import getValidationsErrors from '../../utils/getValidationsErrors';
 import {RewardProps} from '../../interfaces/interfaces'
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useAuth } from '../../hooks/auth';
 
 import axios from 'axios';
@@ -24,6 +24,16 @@ const RewardPanel = () => {
       router.push('/');
     }
   }
+
+  useEffect(() => {
+    if (!user) {
+      Router.replace("/");
+    }
+
+    if (user.role === 'jogador')
+    Router.replace("/");
+      }, [user]);
+
 
   const rewardData = useFetch<RewardProps[]>('/api/reward');
 
@@ -183,7 +193,7 @@ const RewardPanel = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-hidden">
-      <Nav backButton={true} configMenu={true} backTitle="Painel de Recompensas" />
+      <Nav backURL="home" backButton={true} configMenu={true} backTitle="Painel de Recompensas" />
 
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
         <div className="flex flex-row justify-between align-middle content-between border-gray-200 border-b-2">
