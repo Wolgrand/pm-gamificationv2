@@ -146,6 +146,7 @@ const NewScore = () => {
     await axios.put(`/api/new-score/score/${userId}`, {
       score:newScore
     })
+    await axios.get(`/api/rank/getRank`);
   }
 
 
@@ -189,7 +190,7 @@ const NewScore = () => {
         </section>
         <section className="bg-gray-800 p-3 mb-4 flex h-auto justify-center flex-col">
           <div className="flex flex-row justify-between align-middle text-center" onClick={()=> handleOpenCriteriaList()}>
-            <p className="flex text-center font-semibold text-white">Critérios</p>
+            <p className="flex text-center font-semibold text-white">Entregas</p>
             <p className="flex cursor-pointer text-xl text-center font-semibold text-white">{openCriterias ? "-" : "+"}</p>
           </div>
           <div className={"sm:w-11/12 p-2  " + (openCriterias ? "visible" : "hidden")}>
@@ -226,7 +227,7 @@ const NewScore = () => {
             </div>
           </section>
           <section id="Criterias" className="mt-5">
-              <p className="text-left font-semibold text-white justify-start mb-2 ">Critérios:</p>
+              <p className="text-left font-semibold text-white justify-start mb-2 ">Entregas:</p>
             <div>
               {
                 selectedCriterias && selectedCriterias.map(item => (

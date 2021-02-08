@@ -73,7 +73,7 @@ const Home = () => {
               {playerListData.data?.map(item=>
                 <Link key={item._id} href={`/user/${item._id}`}>
                   <a>
-                    <RankCard  title={item.name} score={item.score} position={item.position} />
+                    <RankCard  title={item.name} score={item.score} position={item.position} oldPosition={item.old_position}/>
                   </a>
                 </Link>
               )}
