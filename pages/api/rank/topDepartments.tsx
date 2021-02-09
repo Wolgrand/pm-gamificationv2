@@ -70,7 +70,9 @@ export default async (
         }
       }
 
+      departmentTotalScore.sort((a:any, b:any) => parseFloat(a.position) - parseFloat(b.position));
       const top3 = departmentTotalScore.slice(0,3)
+
 
 
      res.status(200).json(top3);
