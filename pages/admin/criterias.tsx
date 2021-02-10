@@ -17,11 +17,6 @@ import axios from 'axios';
 
 
 
-const Icon = React.forwardRef<SVGElement, SVGProps>((props, ref) => (
-  <SVG innerRef={ref} title="MyLogo" {...props} />
-));
-
-
 const CriteriaPanel = () => {
 
   const router = useRouter()
@@ -44,7 +39,7 @@ const CriteriaPanel = () => {
 
   const criteriaData = useFetch<CriteriosProps[]>('/api/criteria');
 
-  const icon = useRef<SVGElement>(null);
+
   const formRef = useRef<FormHandles>(null);
 
   const [selectedModalNew, setSelectedModalNew] = useState(false)
@@ -58,7 +53,6 @@ const CriteriaPanel = () => {
       try {
         formRef.current?.setErrors({});
          const schema = Yup.object().shape({
-          icon: Yup.string().required('Icone obrigatório'),
           description: Yup.string().required('Descrição obrigatória'),
           score: Yup.number().required('Pontuação obrigatória'),
         });
@@ -68,7 +62,6 @@ const CriteriaPanel = () => {
         });
 
         const newCriteria = {
-          icon: data.icon,
           description: data.description,
           score: data.score,
         }
@@ -77,7 +70,7 @@ const CriteriaPanel = () => {
           await axios.post('/api/criteria',newCriteria)
           const updatedCriterias = criteriaData.data?.map(item => {
 
-            return { ...item, icon: data.icon, description: data.description, score: data.score }
+            return { ...item, description: data.description, score: data.score }
 
         })
 

@@ -107,7 +107,7 @@ export default async (
 
      filterCriteria.map(async (item: CriteriaData) => {
       await db.findOneAndUpdate({_id}, {$set :{
-        score: checkIfUserExist.score - item.score
+        score: Number(checkIfUserExist.score) - Number(item.score)
       }})
      })
 
