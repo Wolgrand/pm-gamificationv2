@@ -34,7 +34,7 @@ export default function Profile() {
 
   return (
     <div className="bg-gray-700 w-full">
-      <Nav backButton={true} backTitle="Profile" />
+      <Nav userName={user ? user.name : "jogador"} backButton={true} backTitle="Profile" />
        <div className="flex flex-col items-center justify-center -mt-5 mx-auto w-full ">
         <form className="my-5 mx-0 w-full text-center flex flex-col ">
           <div className="h-20 bg-gray-800" ></div>
