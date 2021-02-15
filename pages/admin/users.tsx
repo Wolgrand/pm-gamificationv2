@@ -239,7 +239,7 @@ const UserPanel = () => {
 
   return (
     <div className="h-auto w-auto flex flex-col bg-gray-700 ">
-      <Nav backURL="home" backButton={true} configMenu={true} backTitle="Painel de Usuários" />
+      <Nav userName={user ? user.name : "jogador"} backURL="home" backButton={true} configMenu={true} backTitle="Painel de Usuários" />
 
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
         <div className="flex flex-row justify-between align-middle content-between border-gray-200 border-b-2">
