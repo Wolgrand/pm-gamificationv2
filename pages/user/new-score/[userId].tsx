@@ -15,7 +15,7 @@ const Icon = React.forwardRef<SVGElement, SVGProps>((props, ref) => (
 
 const calculateSumScore = (obj:any) => obj
   .map((items:any) => items.score)
-  .reduce((prev:any, curr:any) => prev + curr, 0);
+  .reduce((prev:number, curr:number) => prev + curr, 0);
 
 const NewScore = () => {
 
@@ -25,8 +25,8 @@ const NewScore = () => {
   const { userId } = router.query;
   const [newScore, setNewScore] = useState(0)
   const [loadingNewScoreSubmit, setLoadingNewScoreSubmit] = useState(false)
-  const [openCriterias, setOpenCriterias] = useState(false)
-  const [openAchievements, setOpenAchievements] = useState(false)
+  const [openCriterias, setOpenCriterias] = useState(true)
+  const [openAchievements, setOpenAchievements] = useState(true)
   const [selectedAchievements, setSelectedAchievements] = useState<AchievementProps[]>([])
   const [selectedCriterias, setSelectedCriterias] = useState<any[]>([])
   const playerData = useFetch<PlayerRankPros>(`/api/user/${userId}`);
@@ -154,7 +154,7 @@ const NewScore = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
-      <Nav backButton={true} backTitle={playerData.data?.name} backURL={`user/${userId}`} />
+      <Nav userName={user.name} backButton={true} backTitle={playerData.data?.name} backURL={`user/${userId}`} />
       <div className="md:flex-row flex-col flex md:px-10 mb-3 justify-center">
       <aside className=" md:px-3 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 w-12/12 md:w-4/12 md:mr-2 ">
         <section className="bg-gray-800 p-4 pt-6 mb-4 flex h-auto justify-center sm:flex-row flex-col">

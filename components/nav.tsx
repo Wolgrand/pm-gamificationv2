@@ -1,6 +1,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import Avatar from './Avatar';
 import Logo from './logo';
 import Tooltip from './TooltipMenu';
 
@@ -8,7 +9,7 @@ interface Props {
   backButton?: boolean;
   backTitle?:string;
   configMenu?: boolean;
-  userName?:string;
+  userName:string;
   backURL?:string;
 }
 
@@ -124,7 +125,7 @@ const Nav = ({backButton, backTitle, configMenu, userName, backURL}:Props) => {
           <div className="flex flex-row items-center">
             <p className="mr-5 ml-3 hidden text-lg text-gray-200 md:block">{userName}</p>
             <div className="z-50 cursor-pointer" onClick={handleShowProfileOptions}>
-              <img  className={" inline-block h-10 x-14 rounded-full ring-2 ring-white"} src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+              <Avatar name={userName}/>
             </div>
             <div>
               <svg className={"absolute top-16 sm:mt-5 mt-1 right-0" + (showProfileOptions ? " visible flex" : " hidden") } height='12' width='200' stroke="none" fill='#202A38'>

@@ -7,6 +7,7 @@ import { useFetch } from '../../hooks/useFetch'
 import { AchievementData, AchievementProps, ConquistasProps, PlayerRankPros, RewardProps } from '../../interfaces/interfaces'
 import { useAuth } from "../../hooks/auth";
 import axios from "axios";
+import Avatar from "../../components/Avatar";
 
 const User = () => {
 
@@ -109,12 +110,12 @@ const User = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
-      <Nav backButton={true} backTitle="Home" backURL="home" />
+      <Nav userName={user ? user.name : 'jogador'} backButton={true} backTitle="Home" backURL="home" />
       <div className="md:flex-row flex-col flex md:px-10 mb-3">
       <aside className="bg-gray-800 px-3 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 md:w-80 md:mr-2 ">
-        <section className="p-4 mx-auto my-0 pt-6 mb-4  h-auto">
-          <div className="flex mx-auto my-0 border-gray-200 rounded-full h-auto ">
-            <img  className={" inline-block h-32 w-32 rounded-full ring-2 ring-white border-gray-200 p-1"} src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="avatar"/>
+        <section className="p-4 mx-auto my-0 pt-6 mb-4  h-auto justify-center">
+          <div className="flex border-gray-200 rounded-full mx-auto my-0 justify-center">
+            <Avatar name={playerData.data ? playerData.data.name : "Player Name"} size={128} fontSize={5} />
           </div>
           <p className="mt-4 text-xl text-center font-semibold text-white">{playerData.data?.name}</p>
           <p className="mt-2 text-3xl text-center font-semibold text-gray-400">{playerData.data?.score} pts</p>

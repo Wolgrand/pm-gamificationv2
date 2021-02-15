@@ -1,6 +1,7 @@
 import { NextComponentType, NextPageContext } from 'next';
 import Image from 'next/image'
 import { AchievementData } from '../interfaces/interfaces';
+import Avatar from './Avatar';
 
 interface CardProps {
   title: string;
@@ -38,7 +39,7 @@ const RankCard= ({title, position, score, oldPosition, achievements}:CardProps):
       <div className="flex-row flex align-middle">
       <p className="text-gray-400 lg:mr-5 h-full my-auto mx-0 align-middle inline-block">{position}</p>
       <div className="flex flex-row align-middle justify-around text-center py-1">
-        <img  className={" h-12 rounded-full ring-2 ring-white hidden lg:flex "} src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+        <Avatar name={title} />
         <span className="flex justify-center place-items-center ml-5">
           {positionGap!==0 ? <p className="text-center text-gray-300">{positionGap}</p> : null}
           {positionGap>0 ? <svg className="w-6 h-6" fill="none" stroke="green" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg> : null}
