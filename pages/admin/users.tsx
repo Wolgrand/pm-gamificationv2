@@ -240,7 +240,7 @@ const UserPanel = () => {
   }
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-gray-700 ">
+    <div className="h-full w-full flex flex-col bg-gray-700 overflow-y-scroll">
       <Nav userName={user ? user.name : "jogador"} backURL="home" backButton={true} configMenu={true} backTitle="Painel de Usuários" />
 
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
