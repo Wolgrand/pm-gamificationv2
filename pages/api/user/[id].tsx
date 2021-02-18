@@ -18,6 +18,7 @@ export default async (
       email,
       position,
       score,
+      multiply,
       role,
     }: {
       name: string;
@@ -26,6 +27,7 @@ export default async (
       email: string;
       position: number;
       score: number;
+      multiply: number;
       role: string;
 
     } = req.body;
@@ -63,6 +65,7 @@ export default async (
         email,
         position,
         score,
+        multiply,
         role,
       }});
 

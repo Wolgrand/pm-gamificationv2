@@ -62,6 +62,7 @@ export default async (
       password:hashedPassword,
       position: "",
       score: 0,
+      multiply: 1,
       old_position: "",
       role,
       rewards: [],
