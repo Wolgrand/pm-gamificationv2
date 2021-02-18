@@ -72,7 +72,7 @@ const UserPanel = () => {
           company: data.company,
           email: data.email,
           role: data.role,
-          password: 123456
+          password: '123456'
         }
 
         try {
@@ -240,7 +240,7 @@ const UserPanel = () => {
   }
 
   return (
-    <div className="h-auto w-auto flex flex-col bg-gray-700 ">
+    <div className="h-screen w-screen flex flex-col bg-gray-700 ">
       <Nav userName={user ? user.name : "jogador"} backURL="home" backButton={true} configMenu={true} backTitle="Painel de Usuários" />
 
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
@@ -293,15 +293,15 @@ const UserPanel = () => {
           <div className="max-w-md mx-auto ">
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around ">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-              <Input  name="_id" value={selectedUser?._id} readOnly className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Nome"/>
+              <Input  name="_id" value={selectedUser?._id} readOnly className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="ID"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
               <Input defaultValue={selectedUser?.name} name="name" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="text" placeholder="Nome"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
-              <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-              <Input defaultValue={selectedUser?.multiply} name="multiply" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="number" min="1" placeholder="Nome"/>
+            <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 11l7-7 7 7M5 19l7-7 7 7" /></svg>
+              <Input defaultValue={selectedUser?.multiply} name="multiply" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="number" step=".01" min="1" placeholder="Multiplicador"/>
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
@@ -338,7 +338,7 @@ const UserPanel = () => {
               <th className="">Departamento</th>
               <th className="">E-mail</th>
               <th className="">Senha</th>
-              <th className="">Posição</th>
+              <th className="">Multiplicador</th>
               <th className="">Pontuação</th>
               <th className="">Grupo</th>
               <th className="">Ação</th>
@@ -352,7 +352,7 @@ const UserPanel = () => {
                 <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.department}</td>
                 <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.email}</td>
                 <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell"><div onClick={() => handlePasswordReset(item.name)} className="bg-gray-700 cursor-pointer focus:border-transparent hover:opacity-80 rounded-lg">{passwordReset.includes(item.name) ? 'Senha resetada'  : 'Resetar Senha'}</div></td>
-                <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.position}</td>
+                <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.multiply}</td>
                 <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.score}</td>
                 <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.role}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center ">

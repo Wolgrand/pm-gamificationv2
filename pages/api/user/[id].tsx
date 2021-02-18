@@ -64,7 +64,6 @@ export default async (
         company,
         email,
         position,
-        score,
         multiply,
         role,
       }});

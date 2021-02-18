@@ -73,7 +73,7 @@ const Home = () => {
               {playerListData.data?.map(item=>
                 <Link key={item._id} href={`/user/${item._id}`}>
                   <a>
-                    <RankCard achievements={item.achievements} title={item.name} score={item.score} position={item.position} oldPosition={item.old_position}/>
+                    <RankCard key={item._id} achievements={item.achievements} title={item.name} score={item.score} position={item.position} oldPosition={item.old_position}/>
                   </a>
                 </Link>
               )}

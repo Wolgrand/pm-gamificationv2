@@ -16,7 +16,6 @@ export default async (
       company,
       email,
       password,
-      position,
       role,
     }: {
       name: string;
@@ -24,7 +23,6 @@ export default async (
       company: string;
       email: string;
       password: string;
-      position: number;
       role: string;
 
     } = req.body;
