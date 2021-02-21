@@ -40,8 +40,8 @@ const RankCard= ({title, position, score, oldPosition, achievements}:CardProps):
       <div className="flex-row flex align-middle">
       <p className="text-gray-400 lg:mr-5 h-full my-auto mx-0 align-middle inline-block">{position}</p>
       <div className="flex flex-row align-middle justify-around text-center py-1">
-        <div className="hidden lg:visible">
-        <Avatar name={title} />
+        <div className="hidden lg:block">
+        <Avatar name={title} fontSize={1}/>
         </div>
 
         <span className="flex justify-center place-items-center ml-5">

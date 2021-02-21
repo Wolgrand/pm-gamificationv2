@@ -114,11 +114,22 @@ const User = () => {
       <div className="md:flex-row flex-col flex md:px-10 mb-3">
       <aside className="bg-gray-800 px-3 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 md:w-80 md:mr-2 ">
         <section className="p-4 mx-auto my-0 pt-6 mb-4  h-auto justify-center">
-          <div className="flex border-gray-200 rounded-full mx-auto my-0 justify-center">
-            <Avatar name={playerData.data ? playerData.data.name : "Player Name"} size={128} fontSize={5} />
-          </div>
-          <p className="mt-4 text-xl text-center font-semibold text-white">{playerData.data?.name}</p>
-          <p className="mt-2 text-3xl text-center font-semibold text-gray-400">{playerData.data?.score} pts</p>
+            <div className="relative flex mx-auto my-0 justify-center border-gray-200">
+              <Avatar name={playerData.data ? playerData.data.name : "Player Name"} size={128} fontSize={4} />
+              <div className="text-center left-24 absolute top-24 w-7 h-7 bg-gray-200 rounded-full">
+                <p className="mx-auto my-0 text-xl text-center text-gray-800">{playerData.data?.position}</p>
+              </div>
+            </div>
+
+            <div className="flex flex-row justify-center mt-4">
+                <p className="text-xl text-center font-semibold text-white">{playerData.data?.name}</p>
+            </div>
+
+            <div className="flex flex-row">
+              <p className="mt-2 text-3xl text-center font-semibold text-gray-400">{playerData.data?.score} pts</p>
+            </div>
+
+
         </section>
         <section className="fle px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col mb-6 " >
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Conquistas</p>
