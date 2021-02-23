@@ -61,7 +61,7 @@ const NewScore = () => {
 
     const newID = uuid();
     selectedAchievement._id = newID
-    selectedAchievement.score = playerData.data ? Math.ceil(Number(selectedAchievement.score)*playerData.data.multiply) :Number(selectedAchievement.score)
+    selectedAchievement.score = Number(selectedAchievement.score)
     setSelectedAchievements([...selectedAchievements, selectedAchievement])
   }
 
@@ -70,7 +70,7 @@ const NewScore = () => {
 
     const newID = new Date();
     selectedCriteria._id = String(newID.getMilliseconds())
-    selectedCriteria.score = playerData.data ? Math.ceil(Number(selectedCriteria.score)*playerData.data.multiply) : Number(selectedCriteria.score)
+    selectedCriteria.score = Number(selectedCriteria.score)
     setSelectedCriterias([...selectedCriterias, selectedCriteria])
   }
 
@@ -93,7 +93,7 @@ const NewScore = () => {
 
     selectedPlayer ? selectedPlayer.score = newScore : null
 
-    console.log(newScore);
+
 
     try {
       if (selectedAchievements.length > 0){
@@ -117,6 +117,7 @@ const NewScore = () => {
               )
               setLoadingNewScoreSubmit(false)
       })}
+      setSelectedAchievements([])
 
     } catch (error) {
       addToast({
@@ -146,6 +147,7 @@ const NewScore = () => {
       })}
 
 
+      setSelectedCriterias([])
 
     } catch (error) {
       addToast({
@@ -160,6 +162,7 @@ const NewScore = () => {
       score:newScore
     })
     await axios.get(`/api/rank/getRank`);
+    setNewScore(0)
   }
 
 
@@ -236,7 +239,7 @@ const NewScore = () => {
               {
                 selectedAchievements && selectedAchievements.map(item => (
                   <div key={item._id} className="flex flex-row bg-gray-700 rounded-md mb-2 p-1 align-middle">
-                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.title} - {item.score} pts</p>
+                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.title} - {playerData.data ? Math.ceil(item.score*playerData.data?.multiply) : item.score} pts</p>
                     <svg onClick={()=>deleteAchievement(item)} className="w-5 h-5 cursor-pointer rounded-full hover:opacity-40" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                   </div>
                 ))
@@ -249,7 +252,7 @@ const NewScore = () => {
               {
                 selectedCriterias && selectedCriterias.map(item => (
                   <div key={item._id} className="flex flex-row bg-gray-700 rounded-md mb-2 p-1 align-middle">
-                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.description} - {item.score} pts</p>
+                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.description} - {playerData.data ? Math.ceil(item.score*playerData.data?.multiply) : item.score} pts</p>
                     <svg onClick={()=>deleteCriteria(item)} className="w-5 h-5 cursor-pointer rounded-full hover:opacity-40" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                   </div>
                 ))

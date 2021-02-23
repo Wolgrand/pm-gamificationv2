@@ -58,6 +58,7 @@ const User = () => {
       const today = new Date
       const thisMonth = today.getMonth() + 1
       handleMonthSelection(thisMonth)
+      setSelectedMonth(months[thisMonth])
       }, []);
 
 
@@ -189,7 +190,8 @@ const User = () => {
           </div>
 
           <p className="mt-6 text-lg text-left font-semibold text-gray-200 justify-start mb-4 border-gray-400 border-b-2">Conquistas:</p>
-            { playerData.data?.achievements.filter(item=>item.month === selectedMonthRewards).map(achievement => achievement.day).filter((value, index, self) => self.indexOf(value) === index).map((item,index)=>(
+            { playerData.data && playerData.data?.achievements.filter(item=>item.month === selectedMonthRewards).length > 0
+              ? playerData.data?.achievements.filter(item=>item.month === selectedMonthRewards).map(achievement => achievement.day).filter((value, index, self) => self.indexOf(value) === index).map((item,index)=>(
               <div key={index}>
                 <details className="text-white flex flex-row mb-5">
                 <summary className="">{item}/{selectedMonthRewards}/2021</summary>
@@ -207,12 +209,18 @@ const User = () => {
                 }
                 </details>
               </div>
-            ))}
+            ))
+            :
+            <p className="text-white">Não foram registradas conquistas no período</p>
+            }
 
           <p className="mt-6 text-lg text-left font-semibold text-gray-200 justify-start  mb-4 border-gray-400 border-b-2">Entregas:</p>
-            { playerData.data?.criterias.filter(item=>item.month === selectedMonthRewards).map(criteria => criteria.day).filter((value, index, self) => self.indexOf(value) === index).map((item,index)=>(
+            { playerData.data && playerData.data?.criterias.filter(item=>item.month === selectedMonthRewards).length > 0 ?
+
+            playerData.data?.criterias.filter(item=>item.month === selectedMonthRewards).map(criteria => criteria.day).filter((value, index, self) => self.indexOf(value) === index).map((item,index)=>(
               <div key={index}>
                 <details className="text-white flex flex-row mb-5">
+
                 <summary className="">{item}/{selectedMonthRewards}/2021</summary>
                 {
                   playerData.data?.criterias.filter(criteria=> criteria.day === item).map((item, index) => (
@@ -228,9 +236,15 @@ const User = () => {
                 }
                 </details>
               </div>
-            ))}
+            ))
+          :
+            <p className="text-white">Não foram registradas entregas no período</p>
+          }
         </section>
-        <FloatingButton usage='newActivity' link={`/user/new-score/${userId}`}/>
+        {
+          user && user.role === 'PMO' ? <FloatingButton usage='newActivity' link={`/user/new-score/${userId}`}/> : null
+        }
+
       </main>
       </div>
     </div>
