@@ -33,7 +33,7 @@ const CriteriaPanel = () => {
       Router.replace("/");
     }
 
-    if (user.role === 'jogador')
+    if (user.role === 'Jogador')
     Router.replace("/");
       }, [user]);
 
