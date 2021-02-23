@@ -43,9 +43,6 @@ const User = () => {
       Router.replace("/");
     }
 
-    if (user.role === 'jogador') {
-      Router.replace("/");
-    }
 
 
     const totalAchievements = achievementData.data ? achievementData.data.length : 0
