@@ -79,7 +79,7 @@ const Home = () => {
               )}
               </div>
           </div>
-          <FloatingButton usage='config' link="/admin/users"/>
+
         </main>
 
       </div>

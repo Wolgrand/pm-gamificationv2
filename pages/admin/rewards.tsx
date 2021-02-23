@@ -30,8 +30,9 @@ const RewardPanel = () => {
       Router.replace("/");
     }
 
-    if (user.role === 'jogador')
-    Router.replace("/");
+    if (user.role === 'Jogador'){
+      Router.replace("/");
+    }
       }, [user]);
 
 
@@ -128,7 +129,7 @@ const RewardPanel = () => {
 
           rewardData.mutate(updatedRewards, true)
           mutateGlobal(`api/rewards/${data._id}`)
-
+          setSelectedModalEdit(!selectedModalEdit)
 
 
       } catch (err) {
@@ -192,7 +193,7 @@ const RewardPanel = () => {
 
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-hidden">
+    <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
       <Nav userName={user ? user.name : "jogador"} backURL="home" backButton={true} configMenu={true} backTitle="Painel de Recompensas" />
 
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
@@ -242,14 +243,14 @@ const RewardPanel = () => {
             <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
               <Input  name="score" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="number" placeholder="Pontuação" defaultValue={selectedReward?.score}/>
             </div>
-            <button type="submit" data-testid="add-newUser-button" className="bg-gray-500 inline-block text-center items-start w-full mt-5 p-3 rounded-xl text-gray-200 text-xl "><p>Cadastrar</p></button>
+            <button type="submit" data-testid="add-newUser-button" className="bg-gray-500 inline-block text-center items-start w-full mt-5 p-3 rounded-xl text-gray-200 text-xl "><p>Atualizar</p></button>
 
           </div>
         </Form>
       </aside>
 
       <div onClick={() => handleModalNewSelection()} className="rounded-full flex bg-gray-900 text-gray-100 w-14 h-14 absolute top-3/4 right-16 justify-center content-center p-3 hover:opacity-60 cursor-pointer"><svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg></div>
-      <section id="table-recompensas" className={"bg-gray-800 px-6 py-4 mt-6 mx-6 rounded-md flex flex-col  flex-shrink-0 w-11/12 md:mt-6 md:mx-12 "}>
+      <section id="table-recompensas" className={"bg-gray-800 px-6 py-4 mt-6 mx-6 rounded-md flex flex-col  flex-shrink-0 w-11/12 md:mt-6 md:mx-12 mb-5"}>
         <table>
           <thead className="text-gray-300 border-b-2 border-gray-400 font-normal">
             <tr>

@@ -16,7 +16,6 @@ export default async (
       department,
       company,
       email,
-      position,
       score,
       multiply,
       role,
@@ -25,7 +24,6 @@ export default async (
       department: string;
       company: string;
       email: string;
-      position: number;
       score: number;
       multiply: number;
       role: string;
@@ -63,7 +61,6 @@ export default async (
         department,
         company,
         email,
-        position,
         multiply,
         role,
       }});

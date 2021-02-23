@@ -32,8 +32,9 @@ const UserPanel = () => {
       Router.replace("/");
     }
 
-    if (user.role === 'jogador')
-    Router.replace("/");
+    if (user.role === 'Jogador'){
+      Router.replace("/");
+    }
       }, [user]);
 
   const userData = useFetch<UserSuccessResponseType[]>('/api/user');
@@ -112,6 +113,8 @@ const UserPanel = () => {
 
   const handleUpdateUser = useCallback(
     async (data: UserSuccessResponseType) => {
+
+      console.log(data);
 
       const {_id} = data;
 
@@ -240,7 +243,7 @@ const UserPanel = () => {
   }
 
   return (
-    <div className="h-full w-full flex flex-col bg-gray-700 overflow-y-scroll">
+    <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-scroll">
       <Nav userName={user ? user.name : "jogador"} backURL="home" backButton={true} configMenu={true} backTitle="Painel de Usuários" />
 
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
@@ -321,7 +324,7 @@ const UserPanel = () => {
               <Select defaultValue={{ value: selectedUser?.role, label: selectedUser?.role }} className="bg-transparent text-white inline-block placeholder-gray-700 text-lg focus:bg-transparent w-full" name="role" placeholder="Escolha o grupo:" options={groupOptions}>              </Select>
             </div>
 
-            <button type="submit" data-testid="add-newUser-button" className="bg-gray-500 inline-block text-center items-start w-full mt-5 p-3 rounded-xl text-gray-200 text-xl "><p>Cadastrar</p></button>
+            <button type="submit" data-testid="add-newUser-button" className="bg-gray-500 inline-block text-center items-start w-full mt-5 p-3 rounded-xl text-gray-200 text-xl "><p>Atualizar</p></button>
 
           </div>
         </Form>
@@ -329,7 +332,7 @@ const UserPanel = () => {
 
       <div onClick={() => handleModalNewSelection()} className="rounded-full flex bg-gray-900 text-gray-100 w-14 h-14 absolute top-3/4 right-16 justify-center content-center p-3 hover:opacity-60 cursor-pointer"><svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg></div>
 
-      <section id="table-jogadores" className={"bg-gray-800 px-6 py-4 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 w-11/12 md:mt-6 md:mx-12 "}>
+      <section id="table-jogadores" className={"bg-gray-800 px-6 py-4 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 w-11/12 md:mt-6 md:mx-12 mb-5"}>
         <table className="table-auto ">
           <thead id="table-jogadores" className="text-gray-300 border-b-2 border-gray-400 font-normal">
             <tr>

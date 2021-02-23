@@ -11,8 +11,8 @@ export interface ToastMessage {
 }
 
 interface ToastContextData {
-  addToast(message: Omit<ToastMessage, 'id'>): void;
-  removeToast(id: string): void;
+  addToast(message: Omit<ToastMessage, 'id'>): any;
+  removeToast(id: string): any;
 }
 
 const ToastContext = createContext<ToastContextData>({} as ToastContextData);

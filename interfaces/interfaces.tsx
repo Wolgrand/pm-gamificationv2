@@ -55,7 +55,7 @@ export interface UserSuccessResponseType {
   score: number,
   multiply: number,
   old_position: number,
-  role: 'jogador' | 'pmo',
+  role: 'Jogador' | 'PMO',
   rewards: RewardProps[],
   criterias: CriteriaData[],
   achievements: AchievementData[]
@@ -71,7 +71,7 @@ export interface UserWithoutPassword {
   old_position: number,
   score: number,
   multiply: number,
-  role: 'jogador' | 'pmo',
+  role: 'Jogador' | 'PMO',
   rewards: RewardProps[],
   criterias: CriteriaData[],
   achievements: AchievementData[]
@@ -87,7 +87,7 @@ export interface PlayerRankPros {
   score: number,
   multiply: number,
   old_position: number,
-  role: 'jogador' | 'pmo',
+  role: 'Jogador' | 'PMO',
   rewards: RewardProps[],
   criterias: CriteriaData[],
   achievements: AchievementData[]

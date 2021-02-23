@@ -8,6 +8,7 @@ import { AchievementProps, ConquistasProps, CriteriosProps, PlayerRankPros, Rewa
 import { useAuth } from "../../../hooks/auth";
 import axios from 'axios';
 import { useToast } from '../../../hooks/toast';
+import Avatar from '../../../components/Avatar';
 
 const Icon = React.forwardRef<SVGElement, SVGProps>((props, ref) => (
   <SVG innerRef={ref} title="MyLogo" {...props} />
@@ -25,9 +26,10 @@ const NewScore = () => {
   const { userId } = router.query;
   const [newScore, setNewScore] = useState(0)
   const [loadingNewScoreSubmit, setLoadingNewScoreSubmit] = useState(false)
-  const [openCriterias, setOpenCriterias] = useState(true)
-  const [openAchievements, setOpenAchievements] = useState(true)
+  const [openCriterias, setOpenCriterias] = useState(false)
+  const [openAchievements, setOpenAchievements] = useState(false)
   const [selectedAchievements, setSelectedAchievements] = useState<AchievementProps[]>([])
+  const [selectedPlayer, setSelectedPlayer] = useState<PlayerRankPros>()
   const [selectedCriterias, setSelectedCriterias] = useState<any[]>([])
   const playerData = useFetch<PlayerRankPros>(`/api/user/${userId}`);
   const CriteriasList = useFetch<CriteriosProps[]>(`/api/criteria`);
@@ -38,9 +40,14 @@ const NewScore = () => {
       Router.replace("/");
     }
 
-    if (user.role === 'jogador')
-    Router.replace("/");
+    if (user.role === 'Jogador'){
+      Router.replace("/");
+    }
       }, [user]);
+
+  useEffect(() => {
+    setSelectedPlayer(playerData.data)
+      }, [playerData]);
 
   const handleOpenCriteriaList = () => {
     setOpenCriterias(!openCriterias)
@@ -50,23 +57,25 @@ const NewScore = () => {
   }
 
   const handleSelectedAchievements = (selectedAchievement:AchievementProps) => {
-    setNewScore(Number(newScore) + Number(selectedAchievement.score) )
+    setNewScore(Number(newScore) + (playerData.data ? Math.ceil(Number(selectedAchievement.score)*playerData.data.multiply) :Number(selectedAchievement.score)) )
 
     const newID = uuid();
     selectedAchievement._id = newID
+    selectedAchievement.score = playerData.data ? Math.ceil(Number(selectedAchievement.score)*playerData.data.multiply) :Number(selectedAchievement.score)
     setSelectedAchievements([...selectedAchievements, selectedAchievement])
   }
 
   const handleSelectedCriterias = (selectedCriteria:CriteriosProps) => {
-    setNewScore(Number(newScore) + Number(selectedCriteria.score) )
+    setNewScore(Number(newScore) + (playerData.data ? Math.ceil(Number(selectedCriteria.score)*playerData.data.multiply) : Number(selectedCriteria.score) ) )
 
     const newID = new Date();
     selectedCriteria._id = String(newID.getMilliseconds())
+    selectedCriteria.score = playerData.data ? Math.ceil(Number(selectedCriteria.score)*playerData.data.multiply) : Number(selectedCriteria.score)
     setSelectedCriterias([...selectedCriterias, selectedCriteria])
   }
 
   const deleteAchievement = (achievement:AchievementProps) => {
-    setNewScore(Number(newScore) - Number(achievement.score) )
+    setNewScore(Number(newScore) - Number(achievement.score))
     const filteredItems = selectedAchievements.filter((item) => item._id !== achievement._id);
     setSelectedAchievements(filteredItems);
   }
@@ -82,6 +91,8 @@ const NewScore = () => {
     const sumCriterias = calculateSumScore(selectedCriterias)
     const newScore = Number(sumAchievements) + Number(sumCriterias) + Number(playerData.data?.score)
 
+    selectedPlayer ? selectedPlayer.score = newScore : null
+
     console.log(newScore);
 
     try {
@@ -95,13 +106,15 @@ const NewScore = () => {
                 image_url: item.image_url,
                 description: item.description,
                 title: item.title,
-                score: Number(item.score)
-              } )
-              addToast({
-                type: 'success',
-                title: 'Conquista salva com sucesso',
-                description: 'A consquista selecionada foi atribuída ao jogador com sucesso!',
-              });
+                score: playerData.data ? Number(item.score) * playerData.data.multiply : Number(item.score),
+              } ).then(
+                addToast({
+                  type: 'success',
+                  title: 'Conquista salva com sucesso',
+                  description: 'A consquista selecionada foi atribuída ao jogador com sucesso!',
+                })
+
+              )
               setLoadingNewScoreSubmit(false)
       })}
 
@@ -121,7 +134,7 @@ const NewScore = () => {
                 month: today.getMonth() + 1 ,
                 day: today.getDate(),
                 description: item.description,
-                score: Number(item.score)
+                score: playerData.data ? Number(item.score) * playerData.data.multiply : Number(item.score) ,
               } )
               addToast({
                 type: 'success',
@@ -154,25 +167,29 @@ const NewScore = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
-      <Nav userName={user ? user.name : "Jogador"} backButton={true} backTitle={playerData.data?.name} backURL={`user/${userId}`} />
+      <Nav userName={user ? user.name : "Jogador"} backButton={true} backTitle={selectedPlayer?.name} backURL={`user/${userId}`} />
       <div className="md:flex-row flex-col flex md:px-10 mb-3 justify-center">
       <aside className=" md:px-3 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 w-12/12 md:w-4/12 md:mr-2 ">
         <section className="bg-gray-800 p-4 pt-6 mb-4 flex h-auto justify-center sm:flex-row flex-col">
           <div className="flex border-gray-200 mx-0 my-auto rounded-full h-auto md:mr-5 mb-2 justify-center">
-            <img  className={" h-24 w-24 mx-0 my-auto flex rounded-full ring-2 ring-white border-gray-200 p-1"} src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="avatar"/>
+            <Avatar name={selectedPlayer ? selectedPlayer.name : 'Jogador'} size={128} fontSize={2.5}/>
           </div>
           <div className="flex flex-col justify-around">
             <span className="flex flex-row">
               <p className="flex text-center font-semibold text-white">Nome:</p>
-              <p className="text-gray-400 ml-2">{playerData.data?.name}</p>
+              <p className="text-gray-400 ml-2">{selectedPlayer?.name}</p>
             </span>
             <span className="flex flex-row">
               <p className="flex text-center font-semibold text-white">Departamento:</p>
-              <p className="text-gray-400 ml-2">{playerData.data?.department}</p>
+              <p className="text-gray-400 ml-2">{selectedPlayer?.department}</p>
             </span>
             <span className="flex flex-row">
               <p className="flex text-center font-semibold text-white">Pontuação:</p>
-              <p className="text-gray-400 ml-2">{playerData.data?.score}</p>
+              <p className="text-gray-400 ml-2">{selectedPlayer?.score} pts</p>
+            </span>
+            <span className="flex flex-row">
+              <p className="flex text-center font-semibold text-white">Posição:</p>
+              <p className="text-gray-400 ml-2">{selectedPlayer?.position}º</p>
             </span>
           </div>
         </section>
@@ -183,7 +200,7 @@ const NewScore = () => {
           </div>
           <div className={"sm:w-11/12 p-2  " + (openAchievements ? "visible" : "hidden")}>
             {achievementData && achievementData.data?.map( (item, index) => (
-              <p key={index}  onClick={()=>handleSelectedAchievements(item)} className="flex cursor-pointer text-center rounded-md w-full mb-2 px-2 bg-gray-700 text-white">{item.title} - {item.score}pts</p>
+              <p key={index}  onClick={()=>handleSelectedAchievements(item)} className="flex cursor-pointer text-center rounded-md w-full mb-2 px-2 bg-gray-700 text-white">{item.title} - {playerData.data ? Math.ceil(item.score*playerData.data?.multiply) : item.score} pts</p>
             ))}
 
           </div>
@@ -195,7 +212,7 @@ const NewScore = () => {
           </div>
           <div className={"sm:w-11/12 p-2  " + (openCriterias ? "visible" : "hidden")}>
             {CriteriasList && CriteriasList.data?.map( (item, index) => (
-              <p key={index} onClick={()=>handleSelectedCriterias(item)} className="flex cursor-pointer text-center rounded-md w-full mb-2 px-2 bg-gray-700 text-white">{item.description} - {item.score}pts</p>
+              <p key={index} onClick={()=>handleSelectedCriterias(item)} className="flex cursor-pointer text-center rounded-md w-full mb-2 px-2 bg-gray-700 text-white">{item.description} - {playerData.data ? Math.ceil(item.score*playerData.data?.multiply) : item.score} pts</p>
             ))}
 
           </div>
@@ -219,7 +236,7 @@ const NewScore = () => {
               {
                 selectedAchievements && selectedAchievements.map(item => (
                   <div key={item._id} className="flex flex-row bg-gray-700 rounded-md mb-2 p-1 align-middle">
-                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.title} - {item.score}pts</p>
+                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.title} - {item.score} pts</p>
                     <svg onClick={()=>deleteAchievement(item)} className="w-5 h-5 cursor-pointer rounded-full hover:opacity-40" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                   </div>
                 ))
@@ -232,11 +249,12 @@ const NewScore = () => {
               {
                 selectedCriterias && selectedCriterias.map(item => (
                   <div key={item._id} className="flex flex-row bg-gray-700 rounded-md mb-2 p-1 align-middle">
-                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.description} - {item.score}pts</p>
+                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.description} - {item.score} pts</p>
                     <svg onClick={()=>deleteCriteria(item)} className="w-5 h-5 cursor-pointer rounded-full hover:opacity-40" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                   </div>
                 ))
               }
+
             </div>
           </section>
         </main>

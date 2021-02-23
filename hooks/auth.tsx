@@ -11,7 +11,7 @@ interface User {
   password?: string,
   position: number,
   score: number,
-  role: 'jogador' | 'pmo',
+  role: 'Jogador' | 'PMO',
   rewards: string[],
   criterias: string[],
   achievements: string[]
