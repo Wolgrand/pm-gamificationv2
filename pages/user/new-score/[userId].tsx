@@ -203,22 +203,26 @@ const NewScore = () => {
           <div className="flex border-gray-200 mx-0 my-auto rounded-full h-auto md:mr-5 mb-2 justify-center">
             <Avatar name={selectedPlayer ? selectedPlayer.name : 'Jogador'} size={128} fontSize={2.5}/>
           </div>
-          <div className="flex flex-col justify-around">
-            <span className="flex flex-row">
+          <div className="flex flex-col justify-around text-center ">
+            <span className="flex flex-row sm:justify-start justify-center">
               <p className="flex text-center font-semibold text-white">Nome:</p>
               <p className="text-gray-400 ml-2">{selectedPlayer?.name}</p>
             </span>
-            <span className="flex flex-row">
+            <span className="flex flex-row sm:justify-start justify-center">
               <p className="flex text-center font-semibold text-white">Departamento:</p>
               <p className="text-gray-400 ml-2">{selectedPlayer?.department}</p>
             </span>
-            <span className="flex flex-row">
+            <span className="flex flex-row sm:justify-start justify-center">
               <p className="flex text-center font-semibold text-white">Pontuação:</p>
               <p className="text-gray-400 ml-2">{selectedPlayer?.score} pts</p>
             </span>
-            <span className="flex flex-row">
+            <span className="flex flex-row sm:justify-start justify-center">
               <p className="flex text-center font-semibold text-white">Posição:</p>
               <p className="text-gray-400 ml-2">{selectedPlayer?.position}º</p>
+            </span>
+            <span className="flex flex-row sm:justify-start justify-center">
+              <p className="flex text-center font-semibold text-white">Multiplicador:</p>
+              <p className="text-gray-400 ml-2">{selectedPlayer?.multiply}x</p>
             </span>
           </div>
         </section>
@@ -229,7 +233,7 @@ const NewScore = () => {
           </div>
           <div className={"sm:w-11/12 justify-center text-sm text-center p-2 grid grid-cols-2 sm:grid-cols-3 gap-2 " + (openAchievements ? "visible" : "hidden")}>
             {achievement?.map( (item, index) => (
-              <div className="flex h-14 text-center justify-center bg-gray-700 align-middle content-center rounded-md w-20">
+              <div className="flex h-14 text-center justify-center bg-gray-700 align-middle content-center rounded-md w-full">
                 <p key={index}  onClick={()=>handleSelectedAchievements(item)} className=" flex mx-0 my-auto align-middle justify-center cursor-pointer text-center  w-full text-white">{item.title}</p>
               </div>
             ))}
@@ -241,9 +245,11 @@ const NewScore = () => {
             <p className="flex text-center font-semibold text-white">Entregas</p>
             <p className="flex cursor-pointer text-xl text-center font-semibold text-white">{openCriterias ? "-" : "+"}</p>
           </div>
-          <div className={"sm:w-11/12 justify-center text-center grid grid-cols-2 gap-2 text-xs sm:text-sm align-middle justify-items-center  " + (openCriterias ? "visible" : "hidden")}>
+          <div className={"sm:w-11/12 justify-center text-center grid grid-cols-2 p-2 gap-2 text-xs sm:text-sm align-middle justify-items-center  " + (openCriterias ? "visible" : "hidden")}>
             {criteria?.map( (item, index) => (
-              <p key={index} onClick={()=>handleSelectedCriterias(item)} className="flex p-2 h-14 mx-auto my-0 justify-center align-middle cursor-pointer content-around text-center rounded-md w-full  bg-gray-700 text-white">{item.description}</p>
+              <div className="flex h-14 text-center p-2 justify-center bg-gray-700 align-middle content-center rounded-md w-full">
+                <p key={index} onClick={()=>handleSelectedCriterias(item)} className="flex mx-0 my-auto align-middle justify-center cursor-pointer text-center  w-full text-white">{item.description}</p>
+              </div>
             ))}
 
           </div>
