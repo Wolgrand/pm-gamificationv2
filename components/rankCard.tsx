@@ -5,13 +5,14 @@ import Avatar from './Avatar';
 
 interface CardProps {
   title: string;
+  key:string;
   position: number;
   score: number;
   oldPosition: number;
   achievements: AchievementData[]
 }
 
-const RankCard= ({title, position, score, oldPosition, achievements}:CardProps):any => {
+const RankCard= ({title, position, score, oldPosition, achievements, key}:CardProps):any => {
 
   let borderColor = '';
 
@@ -36,7 +37,7 @@ const RankCard= ({title, position, score, oldPosition, achievements}:CardProps):
 
 
   return (
-  <div className={"flex-row flex align-middle  items-center justify-between mr-2 mt-3 w-full lg:w-4/6 px-3 py-5 lg:py-5 bg-gray-900 rounded-lg flex-shrink-0 hover:bg-opacity-80 cursor-pointer shadow-lg"} style={{ borderLeft: borderColor ? `5px solid ${borderColor} ` : "0"}}>
+  <div key={key} className={"flex-row flex align-middle  items-center justify-between mr-2 mt-3 w-full lg:w-4/6 px-3 py-5 lg:py-5 bg-gray-900 rounded-lg flex-shrink-0 hover:bg-opacity-80 cursor-pointer shadow-lg"} style={{ borderLeft: borderColor ? `5px solid ${borderColor} ` : "0"}}>
       <div className="flex-row flex align-middle">
       <p className="text-gray-400 lg:mr-5 h-full my-auto mx-0 align-middle inline-block">{position}</p>
       <div className="flex flex-row align-middle justify-around text-center py-1">

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import SVG, { Props as SVGProps } from 'react-inlinesvg';
 import { v4 as uuid } from 'uuid'
 import Router, { useRouter } from "next/router";
@@ -30,10 +30,35 @@ const NewScore = () => {
   const [openAchievements, setOpenAchievements] = useState(false)
   const [selectedAchievements, setSelectedAchievements] = useState<AchievementProps[]>([])
   const [selectedPlayer, setSelectedPlayer] = useState<PlayerRankPros>()
+  const [updatedCriterias, setUpdatedCriterias] = useState<CriteriosProps[]>([])
   const [selectedCriterias, setSelectedCriterias] = useState<any[]>([])
   const playerData = useFetch<PlayerRankPros>(`/api/user/${userId}`);
   const CriteriasList = useFetch<CriteriosProps[]>(`/api/criteria`);
   const achievementData = useFetch<AchievementProps[]>('/api/achievement');
+
+  let criteria: CriteriosProps[] = []
+    CriteriasList.data ? CriteriasList.data.map(item =>
+      criteria.push({
+        _id: item._id,
+        description: item.description,
+        icon: item.icon,
+        score: Math.fround(item.score * (playerData.data ? playerData.data.multiply : 1))
+      })
+      ): null
+
+
+  let achievement: AchievementProps[] = []
+    achievementData.data ? achievementData.data.map(item =>
+      achievement.push({
+        _id: item._id,
+        image_url: item.image_url,
+        title: item.title,
+        description: item.description,
+        score: Math.fround(item.score * (playerData.data ? playerData.data.multiply : 1))
+      })
+      ): null
+
+
 
   useEffect(() => {
     if (!user) {
@@ -49,6 +74,8 @@ const NewScore = () => {
     setSelectedPlayer(playerData.data)
       }, [playerData]);
 
+
+
   const handleOpenCriteriaList = () => {
     setOpenCriterias(!openCriterias)
   }
@@ -57,20 +84,18 @@ const NewScore = () => {
   }
 
   const handleSelectedAchievements = (selectedAchievement:AchievementProps) => {
-    setNewScore(Number(newScore) + (playerData.data ? Math.ceil(Number(selectedAchievement.score)*playerData.data.multiply) :Number(selectedAchievement.score)) )
+    setNewScore(Number(newScore) + selectedAchievement.score)
 
     const newID = uuid();
     selectedAchievement._id = newID
-    selectedAchievement.score = Number(selectedAchievement.score)
     setSelectedAchievements([...selectedAchievements, selectedAchievement])
   }
 
   const handleSelectedCriterias = (selectedCriteria:CriteriosProps) => {
-    setNewScore(Number(newScore) + (playerData.data ? Math.ceil(Number(selectedCriteria.score)*playerData.data.multiply) : Number(selectedCriteria.score) ) )
+    setNewScore(Number(newScore) + selectedCriteria.score)
 
     const newID = new Date();
     selectedCriteria._id = String(newID.getMilliseconds())
-    selectedCriteria.score = Number(selectedCriteria.score)
     setSelectedCriterias([...selectedCriterias, selectedCriteria])
   }
 
@@ -87,6 +112,7 @@ const NewScore = () => {
 
   const handleSaveNewScore = async () => {
     const today = new Date;
+    console.log(selectedCriterias)
     const sumAchievements = calculateSumScore(selectedAchievements)
     const sumCriterias = calculateSumScore(selectedCriterias)
     const newScore = Number(sumAchievements) + Number(sumCriterias) + Number(playerData.data?.score)
@@ -97,7 +123,7 @@ const NewScore = () => {
 
     try {
       if (selectedAchievements.length > 0){
-        setLoadingNewScoreSubmit(true)
+
         selectedAchievements.map(async item =>{
           await axios.put(`/api/new-score/achievement/${userId}`,{
                 id: uuid(),
@@ -115,7 +141,7 @@ const NewScore = () => {
                 })
 
               )
-              setLoadingNewScoreSubmit(false)
+
       })}
       setSelectedAchievements([])
 
@@ -143,7 +169,7 @@ const NewScore = () => {
                 description: 'A entregas selecionada foi atribuída ao jogador com sucesso!',
               });
 
-              setLoadingNewScoreSubmit(false)
+
       })}
 
 
@@ -201,9 +227,11 @@ const NewScore = () => {
             <p className="flex text-center font-semibold text-white">Conquistas</p>
             <p className="flex cursor-pointer text-xl text-center font-semibold text-white">{openAchievements ? "-" : "+"}</p>
           </div>
-          <div className={"sm:w-11/12 p-2  " + (openAchievements ? "visible" : "hidden")}>
-            {achievementData && achievementData.data?.map( (item, index) => (
-              <p key={index}  onClick={()=>handleSelectedAchievements(item)} className="flex cursor-pointer text-center rounded-md w-full mb-2 px-2 bg-gray-700 text-white">{item.title} - {playerData.data ? Math.ceil(item.score*playerData.data?.multiply) : item.score} pts</p>
+          <div className={"sm:w-11/12 justify-center text-sm text-center p-2 grid grid-cols-2 sm:grid-cols-3 gap-2 " + (openAchievements ? "visible" : "hidden")}>
+            {achievement?.map( (item, index) => (
+              <div className="flex h-14 text-center justify-center bg-gray-700 align-middle content-center rounded-md w-20">
+                <p key={index}  onClick={()=>handleSelectedAchievements(item)} className=" flex mx-0 my-auto align-middle justify-center cursor-pointer text-center  w-full text-white">{item.title}</p>
+              </div>
             ))}
 
           </div>
@@ -213,9 +241,9 @@ const NewScore = () => {
             <p className="flex text-center font-semibold text-white">Entregas</p>
             <p className="flex cursor-pointer text-xl text-center font-semibold text-white">{openCriterias ? "-" : "+"}</p>
           </div>
-          <div className={"sm:w-11/12 p-2  " + (openCriterias ? "visible" : "hidden")}>
-            {CriteriasList && CriteriasList.data?.map( (item, index) => (
-              <p key={index} onClick={()=>handleSelectedCriterias(item)} className="flex cursor-pointer text-center rounded-md w-full mb-2 px-2 bg-gray-700 text-white">{item.description} - {playerData.data ? Math.ceil(item.score*playerData.data?.multiply) : item.score} pts</p>
+          <div className={"sm:w-11/12 justify-center text-center grid grid-cols-2 gap-2 text-xs sm:text-sm align-middle justify-items-center  " + (openCriterias ? "visible" : "hidden")}>
+            {criteria?.map( (item, index) => (
+              <p key={index} onClick={()=>handleSelectedCriterias(item)} className="flex p-2 h-14 mx-auto my-0 justify-center align-middle cursor-pointer content-around text-center rounded-md w-full  bg-gray-700 text-white">{item.description}</p>
             ))}
 
           </div>
@@ -239,7 +267,7 @@ const NewScore = () => {
               {
                 selectedAchievements && selectedAchievements.map(item => (
                   <div key={item._id} className="flex flex-row bg-gray-700 rounded-md mb-2 p-1 align-middle">
-                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.title} - {playerData.data ? Math.ceil(item.score*playerData.data?.multiply) : item.score} pts</p>
+                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.title} - {item.score} pts</p>
                     <svg onClick={()=>deleteAchievement(item)} className="w-5 h-5 cursor-pointer rounded-full hover:opacity-40" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                   </div>
                 ))
@@ -252,7 +280,7 @@ const NewScore = () => {
               {
                 selectedCriterias && selectedCriterias.map(item => (
                   <div key={item._id} className="flex flex-row bg-gray-700 rounded-md mb-2 p-1 align-middle">
-                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.description} - {playerData.data ? Math.ceil(item.score*playerData.data?.multiply) : item.score} pts</p>
+                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.description} - {item.score} pts</p>
                     <svg onClick={()=>deleteCriteria(item)} className="w-5 h-5 cursor-pointer rounded-full hover:opacity-40" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                   </div>
                 ))
