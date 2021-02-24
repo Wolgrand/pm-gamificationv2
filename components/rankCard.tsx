@@ -2,6 +2,7 @@ import { NextComponentType, NextPageContext } from 'next';
 import Image from 'next/image'
 import { AchievementData } from '../interfaces/interfaces';
 import Avatar from './Avatar';
+import Tooltip from './Tooltip';
 
 interface CardProps {
   title: string;
@@ -61,7 +62,7 @@ const RankCard= ({title, position, score, oldPosition, achievements, key}:CardPr
       <div className="flex-row justify-self-end hidden lg:flex w-1/4">
         {achievements.length >0 ?
           achievements.slice(0,3).map(item=>(
-            <img className="inline-block -ml-5 rounded-full object-fill w-12 " src={item.image_url} alt={item.title}/>
+              <img className="inline-block -ml-5 rounded-full object-fill w-12 " src={item.image_url} alt={item.title}/>
           ))
 
         : null}

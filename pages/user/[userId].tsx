@@ -8,6 +8,7 @@ import { AchievementData, AchievementProps, ConquistasProps, PlayerRankPros, Rew
 import { useAuth } from "../../hooks/auth";
 import axios from "axios";
 import Avatar from "../../components/Avatar";
+import Tooltip from "../../components/Tooltip";
 
 const User = () => {
 
@@ -38,21 +39,7 @@ const User = () => {
   const rewardsList = useFetch<RewardProps[]>(`/api/reward`);
   const achievementData = useFetch<AchievementProps[]>('/api/achievement');
 
-  useEffect(() => {
-    if (!user) {
-      Router.replace("/");
-    }
 
-
-
-    const totalAchievements = achievementData.data ? achievementData.data.length : 0
-    const totalPlayerAchievements = playerData.data ? playerData.data.achievements.length:0
-    const totalEmptyGrid = totalAchievements - totalPlayerAchievements
-    const emptyAchievementsArray =  Array.from(Array(totalEmptyGrid).keys())
-    setAchievementGridArray(emptyAchievementsArray)
-
-
-      }, [user]);
 
   useEffect(() => {
       const today = new Date
@@ -132,16 +119,17 @@ const User = () => {
         <section className="fle px-2 border-t-2 border-gray-400 border-opacity-20 flex flex-col mb-6 " >
           <p className="mt-6 text-lg text-left font-semibold text-white justify-start mb-4">Conquistas</p>
           <div className="grid grid-cols-4 gap-2 h-auto md:grid-cols-3">
-            { playerData.data?.achievements.map(item => (
-              <div key={item.id} className="bg-gray-900 w-full place-items-center place-content-center rounded-lg h-14 mx-auto my-0 justify-center content-center align-middle flex" >
-               <img className="w-10 h-10 rounded-full " src={item.image_url} alt={item.title}/>
-              </div>
-            ))}
+            {
+              achievementData.data?.map(item =>(
 
-
-            { achievementGridArray.map((item, index)=>(
-              <div key={index} className="bg-gray-900 w-full rounded-lg border-4 border-gray-900 h-14 min-w-max" />
-            ))}
+                <div key={item._id} className={"bg-gray-900 w-full relative place-items-center place-content-center rounded-lg h-14 mx-auto my-0 justify-center content-center align-middle flex " } >
+                  <Tooltip key={item._id} className=" z-30 text-center" title={String(item.title) + "-" + String(item.score)+"pts"}>
+                    <div className={"absolute z-20 w-10 rounded-full opacity-80 h-10 " + (playerData.data?.achievements.find((a) => a.title === item.title) ? "" : "bg-gray-900")}></div>
+                      <img className="w-10 h-10 rounded-full " src={item.image_url} alt={item.title}/>
+                    </Tooltip>
+               </div>
+              ))
+            }
 
           </div>
         </section>
