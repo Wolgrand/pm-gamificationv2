@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FormHandles } from '@unform/core';
 import Router from "next/router";
 import { useAuth } from '../hooks/auth';
@@ -19,6 +19,7 @@ export default function Login() {
   const { signIn, user } = useAuth();
   const { addToast } = useToast();
   const history = useRouter();
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -31,6 +32,7 @@ export default function Login() {
 
   const handleSubmit = useCallback(
     async (data: SignInFormatData) => {
+      setLoading(true)
       try {
         formRef.current?.setErrors({});
         const schema = Yup.object().shape({
@@ -48,16 +50,18 @@ export default function Login() {
           email: data.email,
           password: data.password,
         });
-
+        setLoading(false)
         history.push('/home');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationsErrors(err);
 
           formRef.current?.setErrors(errors);
+          setLoading(false)
 
           return;
         }
+        setLoading(false)
         addToast({
           type: 'error',
           title: 'Erro na autenticação',
@@ -86,7 +90,15 @@ export default function Login() {
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
               <Input  name="password" className="bg-transparent text-white inline-block placeholder-white text-lg focus:bg-transparent w-full" type="password" placeholder="Senha"/>
             </div>
-            <button type="submit" className="bg-yellow-500 inline-block text-center items-start w-full mt-5 p-3 rounded-xl text-gray-900 text-xl ">Entrar</button>
+            <button type="submit" className="bg-yellow-500 inline-block justify-center text-center items-start w-full mt-5 p-3 rounded-xl text-gray-900 text-xl ">
+              <p>
+              {loading
+                ? <svg className="w-7 text-center h-7 animate-spin my-0 mx-auto" fill="none" stroke="#000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                : "Entrar"
+              }
+              </p>
+
+            </button>
             <p className="text-yellow-500 text-center mt-4">Esqueceu a senha ?</p>
           </div>
         </Form>

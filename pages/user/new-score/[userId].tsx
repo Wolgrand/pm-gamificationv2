@@ -42,7 +42,7 @@ const NewScore = () => {
         _id: item._id,
         description: item.description,
         icon: item.icon,
-        score: Math.fround(item.score * (playerData.data ? playerData.data.multiply : 1))
+        score: item.score * (playerData.data ? playerData.data.multiply : 1)
       })
       ): null
 
@@ -54,7 +54,7 @@ const NewScore = () => {
         image_url: item.image_url,
         title: item.title,
         description: item.description,
-        score: Math.fround(item.score * (playerData.data ? playerData.data.multiply : 1))
+        score: item.score * (playerData.data ? playerData.data.multiply : 1)
       })
       ): null
 
@@ -108,6 +108,12 @@ const NewScore = () => {
     setNewScore(Number(newScore) - Number(criteria.score) )
     const filteredItems = selectedCriterias.filter((item) => item._id !== criteria._id);
     setSelectedCriterias(filteredItems);
+  }
+
+  const handleClearSelections = () => {
+    setNewScore(0);
+    setSelectedCriterias([]);
+    setSelectedAchievements([]);
   }
 
   const handleSaveNewScore = async () => {
@@ -214,7 +220,7 @@ const NewScore = () => {
             </span>
             <span className="flex flex-row sm:justify-start justify-center">
               <p className="flex text-center font-semibold text-white">Pontuação:</p>
-              <p className="text-gray-400 ml-2">{selectedPlayer?.score} pts</p>
+              <p className="text-gray-400 ml-2">{selectedPlayer?.score.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} pts</p>
             </span>
             <span className="flex flex-row sm:justify-start justify-center">
               <p className="flex text-center font-semibold text-white">Posição:</p>
@@ -233,7 +239,7 @@ const NewScore = () => {
           </div>
           <div className={"sm:w-11/12 justify-center text-sm text-center p-2 grid grid-cols-2 sm:grid-cols-3 gap-2 " + (openAchievements ? "visible" : "hidden")}>
             {achievement?.map( (item, index) => (
-              <div className="flex h-14 text-center justify-center bg-gray-700 align-middle content-center rounded-md w-full">
+              <div className="flex h-14 text-center justify-center bg-gray-700 align-middle content-center hover:bg-gray-600 rounded-md w-full">
                 <p key={index}  onClick={()=>handleSelectedAchievements(item)} className=" flex mx-0 my-auto align-middle justify-center cursor-pointer text-center  w-full text-white">{item.title}</p>
               </div>
             ))}
@@ -247,7 +253,7 @@ const NewScore = () => {
           </div>
           <div className={"sm:w-11/12 justify-center text-center grid grid-cols-2 p-2 gap-2 text-xs sm:text-sm align-middle justify-items-center  " + (openCriterias ? "visible" : "hidden")}>
             {criteria?.map( (item, index) => (
-              <div className="flex h-14 text-center p-2 justify-center bg-gray-700 align-middle content-center rounded-md w-full">
+              <div className="flex h-14 text-center p-2 justify-center bg-gray-700 align-middle content-center hover:bg-gray-600 rounded-md w-full">
                 <p key={index} onClick={()=>handleSelectedCriterias(item)} className="flex mx-0 my-auto align-middle justify-center cursor-pointer text-center  w-full text-white">{item.description}</p>
               </div>
             ))}
@@ -258,11 +264,12 @@ const NewScore = () => {
       </aside>
         <main className="bg-gray-800 px-4 mt-2 mx-6 rounded-md flex flex-col mb-6 flex-shrink-0 md:w-6/12 md:mt-6">
           <div className="flex justify-between mt-2 flex-row md:flex-row w-auto border-gray-400 border-b-2 ">
-            <p className="md:text-lg text-left font-semibold text-white justify-start mb-2 ">Pontuação: {newScore}</p>
-            <div className=" flex flex-row hover:opacity-40 cursor-pointer justify-center align-middle">
+            <p className="md:text-lg text-left font-semibold text-white justify-start mb-2 ">Pontuação: {newScore.toLocaleString('pt-BR', { maximumFractionDigits: 2 })}</p>
+            <div className=" flex flex-row  justify-center align-middle">
+            <svg onClick={()=>handleClearSelections()} className="w-6 h-6 cursor-pointer rounded-full hover:opacity-40 mr-5" fill="none" stroke="rgba(156, 163, 175)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
               {loadingNewScoreSubmit
                 ? <svg className="w-7 h-7 animate-spin" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                : <button onClick={()=> handleSaveNewScore()} className={"md:text-lg text-left font-semibold text-gray-400 justify-start mb-2 " + (selectedAchievements.length>0 || selectedCriterias.length>0 ? '' : 'cursor-not-allowed')}>Salvar +</button>
+                : <button onClick={()=> handleSaveNewScore()} className={"md:text-lg text-left hover:opacity-40 cursor-pointer font-semibold text-gray-400 justify-start mb-2 " + (selectedAchievements.length>0 || selectedCriterias.length>0 ? '' : 'cursor-not-allowed')}>Salvar +</button>
               }
 
             </div>
@@ -273,7 +280,7 @@ const NewScore = () => {
               {
                 selectedAchievements && selectedAchievements.map(item => (
                   <div key={item._id} className="flex flex-row bg-gray-700 rounded-md mb-2 p-1 align-middle">
-                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.title} - {item.score} pts</p>
+                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.title} - {item.score.toLocaleString('pt-BR', { maximumFractionDigits: 2 })} pts</p>
                     <svg onClick={()=>deleteAchievement(item)} className="w-5 h-5 cursor-pointer rounded-full hover:opacity-40" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                   </div>
                 ))
@@ -285,8 +292,8 @@ const NewScore = () => {
             <div>
               {
                 selectedCriterias && selectedCriterias.map(item => (
-                  <div key={item._id} className="flex flex-row bg-gray-700 rounded-md mb-2 p-1 align-middle">
-                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.description} - {item.score} pts</p>
+                  <div key={item._id} className="flex flex-row bg-gray-700 rounded-md mb-2 p-1 align-middle ">
+                    <p className="flex text-center rounded-md w-full px-2  text-white">{item.description} - {item.score.toLocaleString('pt-BR', { maximumFractionDigits: 2 })} pts</p>
                     <svg onClick={()=>deleteCriteria(item)} className="w-5 h-5 cursor-pointer rounded-full hover:opacity-40" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                   </div>
                 ))

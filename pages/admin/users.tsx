@@ -235,9 +235,10 @@ const UserPanel = () => {
     return;
   }
 
-  const handlePasswordReset = (item:string) => {
-    console.log(item);
-    setPasswordReset([...passwordReset, item])
+  const handlePasswordReset = async (id:string) => {
+    const passwordReseted = '123456'
+    await axios.put(`/api/password-reset/${id}`, passwordReseted)
+    setPasswordReset([...passwordReset, id])
 
     return;
   }
@@ -354,9 +355,9 @@ const UserPanel = () => {
                 <td className="table-cell bg-gray-900 h-20 items-center">{item.name}</td>
                 <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.department}</td>
                 <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.email}</td>
-                <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell"><div onClick={() => handlePasswordReset(item.name)} className="bg-gray-700 cursor-pointer focus:border-transparent hover:opacity-80 rounded-lg">{passwordReset.includes(item.name) ? 'Senha resetada'  : 'Resetar Senha'}</div></td>
+                <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell"><div onClick={() => handlePasswordReset(item._id)} className="bg-gray-700 cursor-pointer focus:border-transparent hover:opacity-80 rounded-lg">{passwordReset.includes(item._id) ? 'Senha resetada'  : 'Resetar Senha'}</div></td>
                 <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.multiply}</td>
-                <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.score}</td>
+                <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.score ? item.score.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) : item.score}</td>
                 <td className=" bg-gray-900 h-20 items-center hidden sm:table-cell">{item.role}</td>
                 <td className="table-cell bg-gray-900 h-20 items-center ">
                   <div className="flex flex-row justify-center text-gray-300">

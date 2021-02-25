@@ -74,7 +74,7 @@ const RankCard= ({title, position, score, oldPosition, achievements, key}:CardPr
 
       </div>
 
-      <span className="text-gray-400">{score} pts</span>
+      <span className="text-gray-400">{score.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} pts</span>
   </div>
   );
 };

@@ -111,7 +111,7 @@ const User = () => {
             </div>
 
             <div className="flex flex-row">
-              <p className="mt-2 text-3xl text-center font-semibold text-gray-400">{playerData.data?.score} pts</p>
+              <p className="mt-2 text-3xl text-center font-semibold text-gray-400">{playerData.data?.score.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} pts</p>
             </div>
 
 
@@ -185,7 +185,7 @@ const User = () => {
                 <summary className="">{item}/{selectedMonthRewards}/2021</summary>
                 {
                   playerData.data?.achievements.filter(achievement=> achievement.day === item).map((item, index) => (
-                    <p key={index} className="flex text-gray-400 mt-2">{item.title} - {item.score}pts
+                    <p key={index} className="flex text-gray-400 mt-2">{item.title} - {item.score.toLocaleString('pt-BR', { maximumFractionDigits: 2 })}pts
                       {
                         loadingDeleteItem.includes(item.id)
                         ? <svg className="w-5 h-5 ml-5 animate-spin" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
@@ -212,7 +212,7 @@ const User = () => {
                 <summary className="">{item}/{selectedMonthRewards}/2021</summary>
                 {
                   playerData.data?.criterias.filter(criteria=> criteria.day === item).map((item, index) => (
-                    <p key={index} className="flex text-gray-400 mt-2">{item.description} - {item.score}pts
+                    <p key={index} className="flex text-gray-400 mt-2">{item.description} - {item.score.toLocaleString('pt-BR', { maximumFractionDigits: 2 })}pts
                       {
                         loadingDeleteItem.includes(item.id)
                         ? <svg className="w-5 h-5 animate-spin ml-5" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
