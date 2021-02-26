@@ -1,8 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router';
 import {  useState } from 'react';
-
-import Nav from '../components/nav'
 import { useAuth } from '../hooks/auth';
 
 
@@ -34,7 +32,6 @@ export default function Profile() {
 
   return (
     <div className="bg-gray-700 w-full">
-      <Nav userName={user ? user.name : "jogador"} backButton={true} backTitle="Profile" />
        <div className="flex flex-col items-center justify-center -mt-5 mx-auto w-full ">
         <form className="my-5 mx-0 w-full text-center flex flex-col ">
           <div className="h-20 bg-gray-800" ></div>

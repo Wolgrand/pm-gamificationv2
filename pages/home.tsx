@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { isToday, format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import FloatingButton from '../components/floatingButton';
-import Nav from '../components/nav'
 import RankCard from '../components/rankCard';
 import TopCard from '../components/topCard';
 import { useFetch } from '../hooks/useFetch';
@@ -45,7 +44,6 @@ const Home = () => {
   if(user){
     return (
       <div className="h-screen w-screen flex flex-col bg-gray-700">
-        <Nav backButton={false} userName={user.name} />
         <main className="bg-gray-700 h-max w-auto flex-col flex overflow-y-auto my-0 ">
           <div className=" lg:pl-20 pl-5 pt-4">
             <h1 className="text-gray-200 font-medium md:text-4xl text-2xl">Ranking Geral</h1>

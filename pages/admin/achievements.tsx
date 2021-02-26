@@ -4,7 +4,6 @@ import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
 import { mutate as mutateGlobal } from 'swr';
 import {useFetch} from '../../hooks/useFetch';
-import Nav from '../../components/nav'
 import Input from '../../components/Input'
 import getValidationsErrors from '../../utils/getValidationsErrors';
 import {AchievementProps} from '../../interfaces/interfaces'
@@ -228,8 +227,6 @@ const AchievementPanel = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-scroll">
-      <Nav userName={user ? user.name : "jogador"} backButton={true} configMenu={true} backTitle="Painel de Conquistas" backURL="home" />
-
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
         <div className="flex flex-row justify-between align-middle content-between border-gray-200 border-b-2">
           <p className="py-2 text-2xl">{'Adicionar Conquista'}</p>

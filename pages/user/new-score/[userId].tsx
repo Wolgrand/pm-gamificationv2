@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import SVG, { Props as SVGProps } from 'react-inlinesvg';
 import { v4 as uuid } from 'uuid'
 import Router, { useRouter } from "next/router";
-import Nav from '../../../components/nav'
 import { useFetch } from '../../../hooks/useFetch'
 import { AchievementProps, ConquistasProps, CriteriosProps, PlayerRankPros, RewardProps } from '../../../interfaces/interfaces'
 import { useAuth } from "../../../hooks/auth";
@@ -202,7 +201,6 @@ const NewScore = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
-      <Nav userName={user ? user.name : "Jogador"} backButton={true} backTitle={selectedPlayer?.name} backURL={`user/${userId}`} />
       <div className="md:flex-row flex-col flex md:px-10 mb-3 justify-center">
       <aside className=" md:px-3 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 w-12/12 md:w-4/12 md:mr-2 ">
         <section className="bg-gray-800 p-4 pt-6 mb-4 flex h-auto justify-center sm:flex-row flex-col">

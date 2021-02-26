@@ -1,5 +1,4 @@
 import Router, { useRouter } from "next/router";
-import Nav from '../../components/nav'
 import {Line} from 'rc-progress'
 import { useEffect, useState } from 'react'
 import FloatingButton from '../../components/floatingButton'
@@ -95,7 +94,6 @@ const User = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
-      <Nav userName={user ? user.name : 'jogador'} backButton={true} backTitle="Home" backURL="home" />
       <div className="md:flex-row flex-col flex md:px-10 mb-3">
       <aside className="bg-gray-800 px-3 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 md:w-80 md:mr-2 ">
         <section className="p-4 mx-auto my-0 pt-6 mb-4  h-auto justify-center">

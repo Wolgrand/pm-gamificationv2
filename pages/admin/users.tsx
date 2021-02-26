@@ -4,7 +4,6 @@ import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
 import { mutate as mutateGlobal } from 'swr';
 import {useFetch} from '../../hooks/useFetch';
-import Nav from '../../components/nav'
 import Input from '../../components/Input'
 import Select from '../../components/Select'
 import getValidationsErrors from '../../utils/getValidationsErrors';
@@ -245,7 +244,6 @@ const UserPanel = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-scroll">
-      <Nav userName={user ? user.name : "jogador"} backURL="home" backButton={true} configMenu={true} backTitle="Painel de Usuários" />
 
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
         <div className="flex flex-row justify-between align-middle content-between border-gray-200 border-b-2">
