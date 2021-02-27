@@ -3,11 +3,14 @@ import {Line} from 'rc-progress'
 import { useEffect, useState } from 'react'
 import FloatingButton from '../../components/floatingButton'
 import { useFetch } from '../../hooks/useFetch'
-import { AchievementData, AchievementProps, ConquistasProps, PlayerRankPros, RewardProps } from '../../interfaces/interfaces'
+import { AchievementData, AchievementProps, ConquistasProps, CriteriaData, PlayerRankPros, RewardProps } from '../../interfaces/interfaces'
 import { useAuth } from "../../hooks/auth";
 import axios from "axios";
 import Avatar from "../../components/Avatar";
 import Tooltip from "../../components/Tooltip";
+import ModalConfirmation from "../../components/ModalConfirmation";
+import { useToast } from "../../hooks/toast";
+
 
 const User = () => {
 
@@ -29,11 +32,17 @@ const User = () => {
 
   const { signOut, user } = useAuth();
   const router = useRouter()
+  const { addToast } = useToast();
   const { userId } = router.query;
+  const [selectedPlayer, setSelectedPlayer] = useState<PlayerRankPros>()
+  const [selectedPlayerAchievements, setPlayerAchievements] = useState<AchievementData[]>([])
   const [selectedMonth, setSelectedMonth] = useState('Janeiro')
-  const [loadingDeleteItem, setLoadingDeleteItem] = useState<string[]>([])
+  const [selectedCriteria, setSelectedCriteria] = useState<CriteriaData | undefined>()
+  const [selectedAchievement, setSelectedAchievement] = useState<AchievementData | undefined>()
+  const [modalCriteriaOpen, setModalCriteriaOpen] = useState(false);
+  const [modalAchievementOpen, setModalAchievementOpen] = useState(false);
+  const [loadingDeleteItem, setLoadingDeleteItem] = useState(false)
   const [selectedMonthRewards, setSelectedMonthRewards] = useState(0)
-  const [achievementGridArray, setAchievementGridArray] = useState<Number[]>([])
   const playerData = useFetch<PlayerRankPros>(`/api/user/${userId}`);
   const rewardsList = useFetch<RewardProps[]>(`/api/reward`);
   const achievementData = useFetch<AchievementProps[]>('/api/achievement');
@@ -47,35 +56,88 @@ const User = () => {
       setSelectedMonth(months[thisMonth])
       }, []);
 
+  useEffect(()=>{
+    setSelectedPlayer(playerData.data)
+
+  }, [playerData])
 
 
-  const handleDeleteAchievement = async (id:string) => {
+
+  const handleDeleteAchievement = async (id:string | undefined) => {
+    setLoadingDeleteItem(true)
+    if (id === undefined){ return;}
     try {
-      setLoadingDeleteItem([...loadingDeleteItem, id])
+
       const achievement = {achievementId:id}
       await axios.delete(`/api/new-score/achievement/${userId}`, {
         data: achievement
-      })
+      }).then(res=> handleStopLoadingAchievement())
 
     } catch (error) {
       console.log(error);
+      setLoadingDeleteItem(false)
     }
-    const filteredItems = loadingDeleteItem.filter((item) => item !== id);
-    setLoadingDeleteItem(filteredItems)
+    await axios.get(`/api/rank/getRank`);
   }
 
-  const handleDeleteCriteria = async (id:string) => {
+  function handleStopLoadingAchievement () {
+    selectedPlayer && selectedAchievement ? selectedPlayer.score = selectedPlayer.score - selectedAchievement.score : null
+    const filteredItems = selectedPlayer?.achievements.filter((item) => item.id !== selectedAchievement?.id);
+    if(playerData.data && filteredItems){
+      playerData.data.achievements = filteredItems
+    }
+    setLoadingDeleteItem(false)
+    toggleModalAchievement()
+    addToast({
+      type: 'success',
+      title: 'Conquista excluída com sucesso',
+    })
+  }
+
+  function handleStopLoadingCriteria () {
+    selectedPlayer && selectedCriteria ? selectedPlayer.score = selectedPlayer.score - selectedCriteria?.score : null
+    const filteredItems = selectedPlayer?.criterias.filter((item) => item.id !== selectedCriteria?.id);
+    if(playerData.data && filteredItems){
+      playerData.data.criterias = filteredItems
+    }
+    setLoadingDeleteItem(false)
+    toggleModalCriteria()
+    addToast({
+      type: 'success',
+      title: 'Entrega excluída com sucesso',
+    })
+  }
+
+  const handleDeleteCriteria = async (id:string | undefined) => {
     try {
-      setLoadingDeleteItem([...loadingDeleteItem, id])
-      const filteredItems = loadingDeleteItem.filter((item) => item !== id);
+      setLoadingDeleteItem(true)
+
       const criteria = {id}
        await axios.delete(`/api/new-score/criteria/${userId}`, {
         data: criteria
-      }).then(res=> setLoadingDeleteItem(filteredItems))
+      }).then(res=> handleStopLoadingCriteria())
     } catch (error) {
       console.log(error);
     }
+    await axios.get(`/api/rank/getRank`);
+  }
 
+  function handleSelectedCriteria(item: CriteriaData ) {
+    toggleModalCriteria()
+    setSelectedCriteria(item)
+
+  }
+  function handleSelectedAchievement(item: AchievementData ) {
+    toggleModalAchievement()
+    setSelectedAchievement(item)
+
+  }
+
+  function toggleModalCriteria(): void {
+    setModalCriteriaOpen(!modalCriteriaOpen);
+  }
+  function toggleModalAchievement(): void {
+    setModalAchievementOpen(!modalAchievementOpen);
   }
 
   const handleMonthSelection = (index:number) => {
@@ -93,7 +155,47 @@ const User = () => {
   }
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-auto">
+    <div className="h-auto w-auto flex flex-col bg-gray-700">
+      <ModalConfirmation
+            isOpen={modalAchievementOpen}
+            setIsOpen={toggleModalAchievement}
+          >
+            <div className="flex justify-center flex-col">
+              <p className="text-white mx-auto text-justify text-xl my-0">Você deseja realmente excluir a conquista abaixo? Esta ação não poderá ser desfeita.</p>
+              <p className="text-gray-200 mx-auto text-base p-2 text-center my-0">{selectedAchievement?.day}/{selectedAchievement?.month} - {selectedAchievement?.title}</p>
+            <div className="flex flex-row">
+              <button onClick={()=>handleDeleteAchievement(selectedAchievement?.id)} className="rounded-lg h-10 hover:opacity-80 mx-auto my-0 mt-10 w-2/6 bg-green-500 text-white text-center content-center justify-center">
+                {
+                  loadingDeleteItem ?
+                  <svg className="w-6 h-6 animate-spin inline-block mx-0 my-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" /></svg>
+                  : "Confirmar"
+                }
+              </button>
+              <button onClick={()=>toggleModalAchievement()} className="rounded-lg h-10 hover:opacity-80 mx-auto my-0 mt-10 w-2/6 bg-red-500 text-white">Cancelar</button>
+
+            </div>
+            </div>
+          </ModalConfirmation>
+      <ModalConfirmation
+            isOpen={modalCriteriaOpen}
+            setIsOpen={toggleModalCriteria}
+          >
+            <div className="flex justify-center flex-col">
+              <p className="text-white mx-auto text-justify text-xl my-0">Você deseja realmente excluir a entrega abaixo? Esta ação não poderá ser desfeita.</p>
+              <p className="text-gray-200 mx-auto text-base p-2 text-center my-0">{selectedCriteria?.day}/{selectedCriteria?.month} - {selectedCriteria?.description}</p>
+            <div className="flex flex-row">
+              <button onClick={()=>handleDeleteCriteria(selectedCriteria?.id)} className="rounded-lg h-10 hover:opacity-80 mx-auto my-0 mt-10 w-2/6 bg-green-500 text-white">
+              {
+                  loadingDeleteItem ?
+                  <svg className="w-6 h-6 animate-spin inline-block mx-0 my-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" /></svg>
+                  : "Confirmar"
+                }
+              </button>
+              <button onClick={()=>toggleModalCriteria()} className="rounded-lg h-10 hover:opacity-80 mx-auto my-0 mt-10 w-2/6 bg-red-500 text-white">Cancelar</button>
+
+            </div>
+            </div>
+          </ModalConfirmation>
       <div className="md:flex-row flex-col flex md:px-10 mb-3">
       <aside className="bg-gray-800 px-3 mt-6 mx-6 rounded-md flex flex-col flex-shrink-0 md:w-80 md:mr-2 ">
         <section className="p-4 mx-auto my-0 pt-6 mb-4  h-auto justify-center">
@@ -109,7 +211,7 @@ const User = () => {
             </div>
 
             <div className="flex flex-row">
-              <p className="mt-2 text-3xl text-center font-semibold text-gray-400">{playerData.data?.score.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} pts</p>
+              <p className="mt-2 text-3xl text-center font-semibold text-gray-400">{selectedPlayer?.score.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} pts</p>
             </div>
 
 
@@ -121,8 +223,8 @@ const User = () => {
               achievementData.data?.map(item =>(
 
                 <div key={item._id} className={"bg-gray-900 w-full relative place-items-center place-content-center rounded-lg h-14 mx-auto my-0 justify-center content-center align-middle flex " } >
-                  <Tooltip key={item._id} className=" z-30 text-center" title={String(item.title) + "-" + String(item.score)+"pts"}>
-                    <div className={"absolute z-20 w-10 rounded-full opacity-80 h-10 " + (playerData.data?.achievements.find((a) => a.title === item.title) ? "" : "bg-gray-900")}></div>
+                  <Tooltip key={item._id} className="text-center" title={String(item.title) + "-" + String(item.score)+"pts"}>
+                    <div className={"absolute w-10 rounded-full opacity-80 h-10 " + (playerData.data?.achievements.find((a) => a.title === item.title) ? "" : "bg-gray-900")}></div>
                       <img className="w-10 h-10 rounded-full " src={item.image_url} alt={item.title}/>
                     </Tooltip>
                </div>
@@ -176,20 +278,16 @@ const User = () => {
           </div>
 
           <p className="mt-6 text-lg text-left font-semibold text-gray-200 justify-start mb-4 border-gray-400 border-b-2">Conquistas:</p>
-            { playerData.data && playerData.data?.achievements.filter(item=>item.month === selectedMonthRewards).length > 0
-              ? playerData.data?.achievements.filter(item=>item.month === selectedMonthRewards).map(achievement => achievement.day).filter((value, index, self) => self.indexOf(value) === index).map((item,index)=>(
+            { playerData.data && playerData.data.achievements.filter(item=>item.month === selectedMonthRewards).length > 0
+              ? playerData.data.achievements.filter(item=>item.month === selectedMonthRewards).map(achievement => achievement.day).filter((value, index, self) => self.indexOf(value) === index).map((item,index)=>(
               <div key={index}>
                 <details className="text-white flex flex-row mb-5">
                 <summary className="">{item}/{selectedMonthRewards}/2021</summary>
                 {
-                  playerData.data?.achievements.filter(achievement=> achievement.day === item).map((item, index) => (
+                  playerData.data && playerData.data.achievements.filter(achievement=> achievement.day === item).map((item, index) => (
                     <p key={index} className="flex text-gray-400 mt-2">{item.title} - {item.score.toLocaleString('pt-BR', { maximumFractionDigits: 2 })}pts
-                      {
-                        loadingDeleteItem.includes(item.id)
-                        ? <svg className="w-5 h-5 ml-5 animate-spin" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                        : <svg onClick={()=>handleDeleteAchievement(item.id)} className={"w-5 h-5 ml-5 cursor-pointer " + (user.role !== 'PMO' ? "hidden" : "visible")} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                      }
 
+                      <svg onClick={()=>handleSelectedAchievement(item)} className={"w-5 h-5 ml-5 cursor-pointer " + (user.role !== 'PMO' ? "hidden" : "visible")} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                     </p>
                   ))
                 }
@@ -211,12 +309,7 @@ const User = () => {
                 {
                   playerData.data?.criterias.filter(criteria=> criteria.day === item).map((item, index) => (
                     <p key={index} className="flex text-gray-400 mt-2">{item.description} - {item.score.toLocaleString('pt-BR', { maximumFractionDigits: 2 })}pts
-                      {
-                        loadingDeleteItem.includes(item.id)
-                        ? <svg className="w-5 h-5 animate-spin ml-5" fill="none" stroke="#fff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                        : <svg onClick={()=>handleDeleteCriteria(item.id)} className={"w-5 h-5 ml-5 cursor-pointer " + (user.role !== 'PMO' ? "hidden" : "visible")} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                      }
-
+                      <svg onClick={()=>handleSelectedCriteria(item)} className={"w-5 h-5 ml-5 cursor-pointer " + (user.role !== 'PMO' ? "hidden" : "visible")} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                     </p>
                   ))
                 }

@@ -95,7 +95,7 @@ const Nav = () => {
 
           <div className="flex flex-row items-center">
             <p className="mr-5 ml-3 hidden text-lg text-gray-200 md:block">{user ? user.name : null}</p>
-            <div className="z-50 cursor-pointer" onClick={handleShowProfileOptions}>
+            <div className="cursor-pointer" onClick={handleShowProfileOptions}>
               <Avatar name={user ? user.name : "null"} fontSize={1.25}/>
             </div>
             <div>
