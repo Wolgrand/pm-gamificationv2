@@ -25,7 +25,7 @@ const Nav = () => {
   return (
 
 
-    <header className={" flex flex-row  justify-between flex-nowrap bg-gray-800 px-6 py-3  w-full top-0 " + (router.pathname !== "/" ? 'visible' : 'hidden')} style={{minHeight:60}}>
+    <header className={" flex flex-row  justify-between flex-nowrap bg-gray-800 px-6 py-3  top-0 " + (router.pathname !== "/" ? 'visible' : 'hidden')} style={{minHeight:40}}>
       <div className="flex flex-row">
         <div className={"flex items-center flex-shrink-0 text-white mr-6 align-middle h-auto w-20"}>
           <a className="text-white flex no-underline hover:text-white hover:no-underline" href="/">
@@ -34,8 +34,8 @@ const Nav = () => {
         </div>
 
         {router.pathname !== "/home" && (
-          <button onClick={() => router.back()} id="nav-toggle" className="mr-3 sm:block sm:mr-3  items-center  rounded text-white  hover:bg-gray-900 hover:text-gray-300 hover:border-gray-300">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          <button onClick={() => router.back()} id="nav-toggle" className="mr-3 sm:block sm:mr-3  items-center  rounded text-white  hover:bg-gray-900 hover:text-gray-300 hover:border-gray-300 w-10">
+            <svg className="w-6 h-6 my-0 mx-auto " fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
           </button>
         )}
 

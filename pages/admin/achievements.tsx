@@ -226,7 +226,7 @@ const AchievementPanel = () => {
 
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-gray-700 overflow-y-scroll">
+    <div className="h-auto w-screen flex flex-col bg-gray-700 ">
       <aside className={" p-4 text-gray-100 flex flex-col bg-gray-800 transform top-0 left-0 w-80  fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 " + (selectedModalNew ? 'translate-x-0' : '-translate-x-full')} >
         <div className="flex flex-row justify-between align-middle content-between border-gray-200 border-b-2">
           <p className="py-2 text-2xl">{'Adicionar Conquista'}</p>
@@ -238,7 +238,7 @@ const AchievementPanel = () => {
         <Form ref={formRef} className={"sm:w-11/12 mt-8 "} onSubmit={handleAddNewAchievement}>
           <div className="max-w-md mx-auto ">
             <div className="bg-gray-900 flex px-3 py-3  ">
-              {selectedImagePreview ? <img className="flex" src={selectedImagePreview} alt="image"/> : null}
+              {selectedImagePreview ? <img className="flex w-40 h-40 my-0 mx-auto" src={selectedImagePreview} alt="image"/> : null}
             </div>
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around mt-2">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
@@ -276,7 +276,7 @@ const AchievementPanel = () => {
         <Form ref={formRef} className={"sm:w-11/12 mt-8 " } onSubmit={handleUpdateAchievement}>
           <div className="max-w-md mx-auto ">
             <div className="bg-gray-900 flex items-center rounded-xl px-4 py-3 justify-around">
-            {selectedImagePreviewUpdate ? <img className="flex" src={selectedImagePreviewUpdate} alt="image"/> : null}
+            {selectedImagePreviewUpdate ? <img className="flex w-40 h-40 my-0 mx-auto" src={selectedImagePreviewUpdate} alt="image"/> : null}
             </div>
             <div className="bg-gray-900 hidden items-center rounded-xl px-4 py-3 justify-around mt-2 ">
               <svg className="w-6 h-6 mr-3" fill="none" stroke="#D69E3A" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
