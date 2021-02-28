@@ -1,7 +1,9 @@
 
+import { sign } from 'jsonwebtoken';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import {FaPowerOff} from 'react-icons/fa'
 import { useAuth } from '../hooks/auth';
 import Avatar from './Avatar';
 import Logo from './logo';
@@ -25,7 +27,7 @@ const Nav = () => {
   return (
 
 
-    <header className={" flex flex-row  justify-between flex-nowrap bg-gray-800 px-6 py-3  top-0 " + (router.pathname !== "/" ? 'visible' : 'hidden')} style={{minHeight:40}}>
+    <header className={" flex flex-row  justify-between bg-gray-800 px-6 py-3  top-0 " + (router.pathname !== "/" ? 'visible' : 'hidden')} style={{maxHeight:50}}>
       <div className="flex flex-row">
         <div className={"flex items-center flex-shrink-0 text-white mr-6 align-middle h-auto w-20"}>
           <a className="text-white flex no-underline hover:text-white hover:no-underline" href="/">
@@ -95,9 +97,13 @@ const Nav = () => {
 
           <div className="flex flex-row items-center">
             <p className="mr-5 ml-3 hidden text-lg text-gray-200 md:block">{user ? user.name : null}</p>
-            <div className="cursor-pointer" onClick={handleShowProfileOptions}>
-              <Avatar name={user ? user.name : "null"} fontSize={1.25}/>
+            <div className="" >
+              <Avatar name={user ? user.name : "null"} fontSize={1} size={36}/>
             </div>
+            <div  className="cursor-pointer ml-3 px-3 py-3 rounded-md text-gray-500 bg-gray-800 hover:bg-gray-900">
+              <FaPowerOff className="cursor-pointer"/>
+            </div>
+
             <div>
               <svg className={"absolute top-16 sm:mt-5 mt-1 right-0" + (showProfileOptions ? " visible flex" : " hidden") } height='12' width='200' stroke="none" fill='#202A38'>
                 <path d='M150 0 L75 75 L225 75 Z' />
