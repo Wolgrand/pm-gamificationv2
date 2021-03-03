@@ -1,5 +1,7 @@
 import { NextComponentType } from 'next';
+import { useRouter } from 'next/router';
 import React from 'react';
+import { useAuth } from '../../hooks/auth';
 
 import { Container, Letters } from './styles';
 
@@ -11,14 +13,20 @@ interface AvatarProps {
 
 const Avatar= ({name, size, fontSize}:AvatarProps) => {
 
+  const router = useRouter()
   const splitedString = name?.split(" ")
   const avatarLetters = splitedString.length > 1 ? splitedString[0].charAt(0).toUpperCase() + splitedString[1].charAt(0).toUpperCase() : splitedString[0].charAt(0).toUpperCase() + splitedString[0].charAt(1).toUpperCase()
 
+  const handleProfileLink = () => {
+    router.push('/profile')
+  }
+
   return (
-   <Container style={{
+   <Container onClick={()=>handleProfileLink()} style={{
     height:`${size ? size : '48'}px`,
     width:`${size ? size : '48'}px`,
-    fontSize:`${fontSize ? fontSize : '1.5'}rem`
+    fontSize:`${fontSize ? fontSize : '1.5'}rem`,
+    cursor: 'pointer'
   }}>
      <Letters >{avatarLetters}</Letters>
    </Container>

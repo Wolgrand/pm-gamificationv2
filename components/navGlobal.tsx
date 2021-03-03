@@ -23,6 +23,10 @@ const Nav = () => {
     setShowProfileOptions(!showProfileOptions)
   }
 
+  const handleSignOut = () => {
+    signOut()
+  }
+
 
   return (
 
@@ -89,6 +93,15 @@ const Nav = () => {
               </Link>
           </Tooltip>
             </button>
+            <button  className="mr-3 hidden sm:block sm:mr-3  items-center px-3 py-2  rounded text-gray-500  hover:bg-gray-900 hover:text-gray-300 hover:border-gray-300">
+          <Tooltip key={'details'} title={`Informações`}>
+              <Link href="/informations">
+                <a >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                </a>
+              </Link>
+          </Tooltip>
+            </button>
         </div>
 
 
@@ -97,12 +110,13 @@ const Nav = () => {
 
           <div className="flex flex-row items-center">
             <p className="mr-5 ml-3 hidden text-lg text-gray-200 md:block">{user ? user.name : null}</p>
-            <div className="" >
-              <Avatar name={user ? user.name : "null"} fontSize={1} size={36}/>
-            </div>
-            <div  className="cursor-pointer ml-3 px-3 py-3 rounded-md text-gray-500 bg-gray-800 hover:bg-gray-900">
-              <FaPowerOff className="cursor-pointer"/>
-            </div>
+
+            <Avatar name={user ? user.name : "null"} fontSize={1} size={36}/>
+
+
+            <button onClick={()=>handleSignOut()} className="z-10 cursor-pointer ml-3 px-3 py-3 rounded-md text-gray-500 bg-gray-800 hover:bg-gray-900">
+              <FaPowerOff/>
+            </button>
 
             <div>
               <svg className={"absolute top-16 sm:mt-5 mt-1 right-0" + (showProfileOptions ? " visible flex" : " hidden") } height='12' width='200' stroke="none" fill='#202A38'>
@@ -113,7 +127,7 @@ const Nav = () => {
                   <a className="text-gray-500 flex p-3 hover:bg-gray-900 rounded-md" ><svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Meu perfil</a>
                 </Link>
 
-                  <a onClick={()=>signOut()} className="text-gray-500 flex p-3 hover:bg-gray-900 rounded-md cursor-pointer" ><svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>Sair</a>
+                  <a  className="text-gray-500 flex p-3 hover:bg-gray-900 rounded-md cursor-pointer" ><svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>Sair</a>
 
 
               </div>

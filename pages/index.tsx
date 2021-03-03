@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Form } from '@unform/web';
+import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { FormHandles } from '@unform/core';
 import Router from "next/router";
 import { useAuth } from '../hooks/auth';
 import { useToast } from '../hooks/toast';
@@ -73,7 +73,7 @@ export default function Login() {
   );
 
   return (
-    <div className="bg-gray-700 h-screen w-screen w- flex items-stretch p-11">
+    <div className="bg-gray-700 h-screen w-screen flex items-stretch p-11">
       <div className="flex flex-col mx-auto my-0 items-center place-content-center justify-center w-20rem sm:w-11/12">
         <div className="flex w-4/5 sm:w-3/5 md:w-3/5 max-w-md">
           <Logo />
