@@ -120,7 +120,7 @@ export default function Profile() {
         });
       }
     },
-    [addToast, history, updateUser],
+    [addToast, updateUser],
   );
 
   return (
