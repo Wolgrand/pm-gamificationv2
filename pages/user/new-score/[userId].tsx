@@ -137,7 +137,7 @@ const NewScore = () => {
                 image_url: item.image_url,
                 description: item.description,
                 title: item.title,
-                score: playerData.data ? Number(item.score) * playerData.data.multiply : Number(item.score),
+                score: Number(item.score),
               } ).then(
                 addToast({
                   type: 'success',
@@ -166,7 +166,7 @@ const NewScore = () => {
                 month: today.getMonth() + 1 ,
                 day: today.getDate(),
                 description: item.description,
-                score: playerData.data ? Number(item.score) * playerData.data.multiply : Number(item.score) ,
+                score: Number(item.score) ,
               } )
               addToast({
                 type: 'success',
