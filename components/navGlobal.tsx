@@ -52,8 +52,9 @@ const Nav = () => {
 
 
 
-        { user && user.role === 'PMO' ?
         <div className="md:flex flex-row hidden">
+        { user && user.role === 'PMO' ?
+        <>
             <button  className="mr-3 hidden sm:block sm:mr-3  items-center px-3 py-2  rounded text-gray-500  hover:bg-gray-900 hover:text-gray-300 hover:border-gray-300">
           <Tooltip key={'users'} title={`Usuários`}>
               <Link href="/admin/users">
@@ -93,7 +94,13 @@ const Nav = () => {
               </Link>
           </Tooltip>
             </button>
-            <button  className="mr-3 hidden sm:block sm:mr-3  items-center px-3 py-2  rounded text-gray-500  hover:bg-gray-900 hover:text-gray-300 hover:border-gray-300">
+
+            </>
+
+
+          : null
+        }
+        <button  className="mr-3 hidden sm:block sm:mr-3  items-center px-3 py-2  rounded text-gray-500  hover:bg-gray-900 hover:text-gray-300 hover:border-gray-300">
           <Tooltip key={'details'} title={`Informações`}>
               <Link href="/informations">
                 <a >
@@ -103,10 +110,6 @@ const Nav = () => {
           </Tooltip>
             </button>
         </div>
-
-
-          : null
-        }
 
           <div className="flex flex-row items-center">
             <p className="mr-5 ml-3 hidden text-lg text-gray-200 md:block">{user ? user.name : null}</p>
