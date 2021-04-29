@@ -14,7 +14,7 @@ interface CardProps {
   position: number;
   score: number;
   oldPosition: number;
-  achievements: AchievementProps[]
+  achievements: AchievementData[]
 }
 
 const RankCard= ({title, position, score, oldPosition, achievements, key}:CardProps):any => {
@@ -70,7 +70,7 @@ const RankCard= ({title, position, score, oldPosition, achievements, key}:CardPr
 
       <div className="flex-row justify-self-end hidden lg:flex w-1/4">
         {achievements.length >0 ?
-          achievements.sort((a,b) => (a.date < b.date) ? 1 : -1).slice(0,3).map(item=>(
+          achievements.sort((a,b) => a.date && b.date && (a?.date < b?.date) ? 1 : -1).slice(0,3).map(item=>(
               <img className="inline-block -ml-5 rounded-full object-fill w-12 " src={item.image_url} alt={item.title}/>
           ))
 

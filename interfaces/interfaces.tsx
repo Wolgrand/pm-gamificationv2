@@ -18,6 +18,7 @@ export interface AchievementData {
   title: string,
   description: string,
   score: number,
+  date?:string,
 
 }
 export interface CriteriaData {
