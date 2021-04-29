@@ -4,13 +4,17 @@ import { AchievementData } from '../interfaces/interfaces';
 import Avatar from './Avatar';
 import Tooltip from './Tooltip';
 
+interface AchievementProps extends AchievementData {
+  date: string
+}
+
 interface CardProps {
   title: string;
   key:string;
   position: number;
   score: number;
   oldPosition: number;
-  achievements: AchievementData[]
+  achievements: AchievementProps[]
 }
 
 const RankCard= ({title, position, score, oldPosition, achievements, key}:CardProps):any => {
@@ -34,6 +38,11 @@ const RankCard= ({title, position, score, oldPosition, achievements, key}:CardPr
 
   const positionGap = oldPosition - position;
   const achievementsLength = achievements.length;
+
+  achievements.map( achievement =>
+      achievement.date = String(achievement.day).length === 1 ? String(achievement.month)+'0'+String(achievement.day) : String(achievement.month)+String(achievement.day)
+    )
+
 
 
 
@@ -61,7 +70,7 @@ const RankCard= ({title, position, score, oldPosition, achievements, key}:CardPr
 
       <div className="flex-row justify-self-end hidden lg:flex w-1/4">
         {achievements.length >0 ?
-          achievements.slice(0,3).map(item=>(
+          achievements.sort((a,b) => (a.date < b.date) ? 1 : -1).slice(0,3).map(item=>(
               <img className="inline-block -ml-5 rounded-full object-fill w-12 " src={item.image_url} alt={item.title}/>
           ))
 

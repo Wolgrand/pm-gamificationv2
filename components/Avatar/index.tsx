@@ -22,13 +22,14 @@ const Avatar= ({name, size, fontSize}:AvatarProps) => {
   }
 
   return (
-   <Container onClick={()=>handleProfileLink()} style={{
+   <Container className="bg-gray-200 text-center"
+    onClick={()=>handleProfileLink()} style={{
     height:`${size ? size : '48'}px`,
     width:`${size ? size : '48'}px`,
     fontSize:`${fontSize ? fontSize : '1.5'}rem`,
     cursor: 'pointer'
   }}>
-     <Letters >{avatarLetters}</Letters>
+     <Letters className="mx-0 my-auto" >{avatarLetters}</Letters>
    </Container>
     );
 }
