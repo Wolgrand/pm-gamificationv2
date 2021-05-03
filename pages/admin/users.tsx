@@ -218,6 +218,7 @@ const UserPanel = () => {
   const groupOptions = [
     { value: 'Jogador', label: 'Jogador' },
     { value: 'PMO', label: 'PMO' },
+    { value: 'Manager', label: 'Manager' },
   ]
 
   const handleEditUser = (data:UserSuccessResponseType) => {
