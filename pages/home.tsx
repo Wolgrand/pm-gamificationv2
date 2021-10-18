@@ -41,7 +41,7 @@ const Home = () => {
     });
   }, []);
 
-  if(user.role === 'PMO' ){
+  if(user?.role === 'PMO' ){
     return (
       <div className="h-screen w-auto flex flex-col bg-gray-700">
         <main className="bg-gray-700 h-max flex-col flex my-0 ">
