@@ -41,7 +41,7 @@ const Home = () => {
     });
   }, []);
 
-  if(user){
+  if(user.role === 'PMO' ){
     return (
       <div className="h-screen w-auto flex flex-col bg-gray-700">
         <main className="bg-gray-700 h-max flex-col flex my-0 ">
@@ -85,7 +85,25 @@ const Home = () => {
     )
   } else {
 
-    return null;
+    return (
+      <div className="h-screen w-auto flex flex-col bg-gray-700">
+        <main className="bg-gray-700 h-max flex-col flex my-0 ">
+          <div className=" lg:pl-20 pl-5 pt-4">
+            <h1 className="text-gray-200 font-medium md:text-4xl text-2xl">Ranking Geral</h1>
+            <h3 className="text-yellow-500 mt-1 font-medium">{`Hoje | ${getTodayDate} | ${getTodayWeekDay}`} </h3>
+          </div>
+
+
+          <h1 className="text-gray-200 font-medium md:text-4xl text-xl text-center">
+            ⚠
+            Você está tentando acessar a sua pontuação e o ranking de jogadores e departamentos? Para aumentar o suspense o resultado final será apresentado apenas no dia da premiação!
+          </h1>
+
+
+        </main>
+
+      </div>
+    );
   }
 }
 
